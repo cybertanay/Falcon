@@ -1,0 +1,6 @@
+{
+  "name": "Falcon International Traders",
+  "description": "Premium Indian Spices. Global Standards. Exporter of authentic Indian spices including Turmeric, Red Chilli, Cumin, Garlic Powder and custom B2B bulk orders.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
