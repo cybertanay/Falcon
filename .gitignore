@@ -11,3 +11,4 @@ data_store.*.json
 *.sqlite
 *.db
 .supabase/
+.vs/
