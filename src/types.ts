@@ -1,18 +1,18 @@
 export interface ProductSpecification {
-  botanicalName: string;
-  origin: string;
-  form: string;
-  color: string;
-  aroma: string;
-  moistureMax: string;
-  keyActiveComponent?: string; // e.g., Curcumin 2.5% - 5.0%, Capsaicin SHU 20,000 - 90,000
+  botanicalName?: string;
+  origin?: string;
+  form?: string;
+  color?: string;
+  aroma?: string;
+  moistureMax?: string;
+  keyActiveComponent?: string; // e.g. Curcumin 2.5% - 5.0%, Capsaicin SHU 20,000 - 90,000
   astaColorValue?: string;
   extraneousMatterMax?: string;
   totalAshMax?: string;
   meshSize?: string;
-  shelfLife: string;
-  storageConditions: string;
-  minimumOrderQuantity: string;
+  shelfLife?: string;
+  storageConditions?: string;
+  minimumOrderQuantity?: string;
 }
 
 export interface Product {
@@ -37,10 +37,11 @@ export interface Product {
   updatedAt: string;
 }
 
-export type EnquiryStatus = 'New' | 'Contacted' | 'Quotation Sent' | 'Negotiating' | 'Converted' | 'Closed';
+export type EnquiryStatus = 'New' | 'Contacted' | 'Quotation Sent' | 'Negotiating' | 'Converted' | 'Closed' | 'Lost';
 
 export interface Enquiry {
   id: string;
+  enquiryReference: string; // e.g. FAL-2026-00482
   fullName: string;
   companyName: string;
   country: string;
@@ -52,34 +53,24 @@ export interface Enquiry {
   packagingRequirement: string;
   message: string;
   status: EnquiryStatus;
+  assignedStaff?: string;
   internalNotes?: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Testimonial {
-  id: string;
-  clientName: string; // e.g. "[Client Name]" or real
-  company: string;    // e.g. "[Import House Ltd]"
-  country: string;    // e.g. "Germany", "UAE"
-  testimonial: string;
-  published: boolean;
-  rating: number;
+export interface AuditLog {
+  id: string | number;
+  adminEmail: string;
+  action: string;
+  entity: string;
+  entityId: string;
+  oldValue: any;
+  newValue: any;
   createdAt: string;
 }
 
-export interface Certification {
-  id: string;
-  name: string;             // e.g. "[APEDA Registration]", "Spices Board India"
-  issuingAuthority: string; // e.g. "Ministry of Commerce, Govt. of India"
-  certificateNumber: string; // e.g. "[CERT-XXXXX]"
-  validUntil: string;       // e.g. "[YYYY-MM-DD]"
-  documentUrl?: string;
-  published: boolean;
-  description: string;
-}
-
-export interface CompanyInfo {
+export interface CompanySettings {
   name: string;
   tagline: string;
   positioning: string;
@@ -87,15 +78,14 @@ export interface CompanyInfo {
   whatsapp: string;
   phone: string;
   address: string;
+  websiteUrl: string;
   socials: {
-    instagram: string;
-    linkedin: string;
-    whatsapp: string;
+    instagram?: string;
+    linkedin?: string;
+    whatsapp?: string;
   };
-  metrics: {
-    yearsExperience: string; // "[15]+"
-    countriesServed: string;  // "[45]+"
-    monthlyCapacity: string;  // "[5000] MT"
-    qualityCertifications: string; // "[8]+"
-  };
+}
+
+export interface CompanyInfo extends CompanySettings {
+  // Legacy compatibility if needed
 }

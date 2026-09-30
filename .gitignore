@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+data_store.json
+data_store.*.json
+*.sqlite
+*.db
+.supabase/

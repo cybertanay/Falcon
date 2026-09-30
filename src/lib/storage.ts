@@ -1,80 +1,41 @@
-import { Product, Enquiry, Testimonial, Certification } from '../types';
-import { INITIAL_PRODUCTS, INITIAL_TESTIMONIALS, INITIAL_CERTIFICATIONS } from '../data/products';
+import { Product, Enquiry } from '../types';
+import { INITIAL_PRODUCTS } from '../data/products';
 
-const ENQUIRIES_KEY = 'falcon_enquiries_db';
-const PRODUCTS_KEY = 'falcon_products_db';
-const TESTIMONIALS_KEY = 'falcon_testimonials_db';
-const CERTIFICATIONS_KEY = 'falcon_certifications_db';
-
-export function getLocalProducts(): Product[] {
+/**
+ * Fetches published products catalogue from the backend API.
+ * Falls back to initial memory seed if network is offline during dev.
+ */
+export async function getCatalogueProducts(): Promise<Product[]> {
   try {
-    const data = localStorage.getItem(PRODUCTS_KEY);
-    if (data) return JSON.parse(data);
-  } catch (e) {
-    console.error('Error reading local products', e);
+    const res = await fetch('/api/products');
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    }
+  } catch (err) {
+    console.warn('[Data Service] Network request failed, using in-memory catalogue:', err);
   }
-  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(INITIAL_PRODUCTS));
   return INITIAL_PRODUCTS;
 }
 
-export function getLocalEnquiries(): Enquiry[] {
-  try {
-    const data = localStorage.getItem(ENQUIRIES_KEY);
-    if (data) return JSON.parse(data);
-  } catch (e) {
-    console.error('Error reading local enquiries', e);
-  }
-  return [];
-}
-
-export function saveLocalEnquiry(enquiry: Omit<Enquiry, 'id' | 'createdAt' | 'updatedAt' | 'status'>): Enquiry {
-  const existing = getLocalEnquiries();
-  const newEnquiry: Enquiry = {
-    ...enquiry,
-    id: 'enq-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
-    status: 'New',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-  const updated = [newEnquiry, ...existing];
-  localStorage.setItem(ENQUIRIES_KEY, JSON.stringify(updated));
-  return newEnquiry;
-}
-
-export function getLocalTestimonials(): Testimonial[] {
-  try {
-    const data = localStorage.getItem(TESTIMONIALS_KEY);
-    if (data) return JSON.parse(data);
-  } catch (e) {
-    console.error('Error reading local testimonials', e);
-  }
-  localStorage.setItem(TESTIMONIALS_KEY, JSON.stringify(INITIAL_TESTIMONIALS));
-  return INITIAL_TESTIMONIALS;
-}
-
-export function getLocalCertifications(): Certification[] {
-  try {
-    const data = localStorage.getItem(CERTIFICATIONS_KEY);
-    if (data) return JSON.parse(data);
-  } catch (e) {
-    console.error('Error reading local certifications', e);
-  }
-  localStorage.setItem(CERTIFICATIONS_KEY, JSON.stringify(INITIAL_CERTIFICATIONS));
-  return INITIAL_CERTIFICATIONS;
-}
-
-// API wrappers with local fallbacks
+/**
+ * Submits an official B2B quote enquiry to the backend API.
+ * The backend validates, stores in PostgreSQL, assigns FAL reference, and triggers transactional emails.
+ */
 export async function submitQuoteEnquiry(formData: {
   fullName: string;
-  companyName: string;
+  companyName?: string;
   country: string;
   email: string;
-  whatsapp: string;
+  whatsapp?: string;
   productId?: string;
   productName: string;
   estimatedQuantity: string;
-  packagingRequirement: string;
-  message: string;
+  packagingRequirement?: string;
+  message?: string;
+  website_hp?: string;
 }): Promise<{ success: boolean; message: string; enquiry?: Enquiry }> {
   try {
     const res = await fetch('/api/enquiries', {
@@ -82,24 +43,20 @@ export async function submitQuoteEnquiry(formData: {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
     });
-    if (res.ok) {
-      const result = await res.json();
-      if (result.enquiry) {
-        // Also save to localStorage for offline persistence
-        const existing = getLocalEnquiries();
-        localStorage.setItem(ENQUIRIES_KEY, JSON.stringify([result.enquiry, ...existing.filter(e => e.id !== result.enquiry.id)]));
-      }
+    
+    const result = await res.json();
+    if (res.ok && result.success) {
       return result;
     }
+    return {
+      success: false,
+      message: result.error || result.message || 'Submission was not accepted by server. Please check your details.'
+    };
   } catch (err) {
-    console.warn('API fetch unavailable, using client-side store:', err);
+    console.error('[Data Service] Network failure during enquiry submission:', err);
+    return {
+      success: false,
+      message: 'Network connection error. We were unable to reach our export server. Please contact our trade desk directly via WhatsApp or Email.'
+    };
   }
-
-  // Fallback to local save
-  const created = saveLocalEnquiry(formData);
-  return {
-    success: true,
-    message: 'Thank you for contacting Falcon International Traders. Your enquiry has been received and saved successfully.',
-    enquiry: created
-  };
 }

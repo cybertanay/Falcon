@@ -1,21 +1,78 @@
 @import "tailwindcss";
 
 @layer base {
+  :root {
+    --color-forest-dark: #030d0a;
+    --color-forest: #05140f;
+    --color-forest-light: #0b2317;
+    --color-gold: #f2a900;
+    --color-gold-hover: #d97706;
+    --color-ivory: #fdfcf0;
+    --color-muted-olive: #a3b899;
+    --color-border: #154736;
+  }
+
   body {
-    background-color: #05140f;
+    background-color: #030d0a;
     color: #fdfcf0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-mono, .code-tag {
+    font-family: 'Space Grotesk', monospace;
   }
 }
 
-/* Sophisticated Dark scrollbar styling */
+/* Glassmorphism & Depth Panels */
+.glass-panel {
+  background: rgba(8, 32, 24, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(242, 169, 0, 0.18);
+}
+
+.glass-panel-subtle {
+  background: rgba(5, 20, 15, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(21, 71, 54, 0.6);
+}
+
+.glass-navbar {
+  background: rgba(3, 13, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(242, 169, 0, 0.15);
+}
+
+/* Gold Gradient Glows */
+.gold-glow {
+  box-shadow: 0 0 35px -5px rgba(242, 169, 0, 0.25);
+}
+
+.gold-glow-sm {
+  box-shadow: 0 0 15px -3px rgba(242, 169, 0, 0.3);
+}
+
+/* Text Masking & Cinematic Clip Reveals */
+.clip-reveal {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Sophisticated Dark Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #05140f;
+  background: #030d0a;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -25,4 +82,21 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #f2a900;
+}
+
+/* Accessibility: Strict Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .clip-reveal {
+    clip-path: none !important;
+    transform: none !important;
+  }
 }

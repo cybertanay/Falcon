@@ -1,96 +1,103 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Hero } from '../components/Hero';
 import { TrustStrip } from '../components/TrustStrip';
 import { ProductCard } from '../components/ProductCard';
 import { AISpecAssistant } from '../components/AISpecAssistant';
 import { PackagingCustomizer } from '../components/PackagingCustomizer';
+import { AnimatedHeading } from '../components/AnimatedHeading';
 import { Product } from '../types';
-import { COMPANY_INFO, GLOBAL_DESTINATIONS, GENERAL_FAQS } from '../data/company';
-import { ArrowRight, CheckCircle2, ShieldCheck, Globe, Package, Award, ChevronDown, ChevronUp, Sparkles, Phone, Mail, HelpCircle } from 'lucide-react';
+import { GLOBAL_DESTINATIONS, GENERAL_FAQS } from '../data/company';
+import { ArrowRight, ShieldCheck, Globe, Package, CheckCircle2, ChevronDown, ChevronUp, Sparkles, Phone, HelpCircle, FileCheck, Layers } from 'lucide-react';
 
 interface HomePageProps {
   products: Product[];
-  onSelectProduct: (product: Product) => void;
   onRequestQuote: (productName?: string) => void;
-  setActivePage: (page: string) => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ products, onSelectProduct, onRequestQuote, setActivePage }) => {
+export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const featuredProducts = products.filter(p => p.featured).slice(0, 4);
 
   return (
-    <div className="space-y-16 lg:space-y-24 bg-[#07170F] text-white font-sans">
+    <div className="space-y-20 lg:space-y-32 bg-[#030d0a] text-[#fdfcf0] font-sans pb-16">
       
-      {/* 1. HERO SECTION */}
-      <Hero
-        onRequestQuote={() => onRequestQuote()}
-        onExploreProducts={() => {
-          setActivePage('products');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-      />
+      {/* 1. CINEMATIC HERO SECTION */}
+      <Hero onRequestQuote={() => onRequestQuote()} />
 
-      {/* 2. TRUST STRIP */}
+      {/* 2. STATUTORY TRUST STRIP */}
       <TrustStrip />
 
-      {/* 3. FEATURED PRODUCTS RANGE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 uppercase tracking-widest bg-amber-950/60 px-3 py-1 rounded-full border border-amber-500/30">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Pure Indian Origin</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-bold font-serif tracking-tight text-white">
-            Our Premium Spice Range
-          </h2>
-          <p className="text-stone-300 text-sm sm:text-base font-light leading-relaxed">
-            Carefully sourced and processed Indian spices for global food businesses, importers, manufacturers, and private-label distributors.
-          </p>
+      {/* 3. EDITORIAL COMPANY STATEMENT: WE SOURCE. WE SPECIFY. WE EXPORT. */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <div className="inline-flex items-center gap-2 bg-[#082018] border border-[#f2a900]/30 px-3.5 py-1 rounded-full text-xs font-mono text-[#f2a900]">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>FALCON OPERATING PHILOSOPHY</span>
         </div>
 
+        <div className="max-w-4xl mx-auto">
+          <AnimatedHeading as="h2" className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-[#fdfcf0] justify-center leading-tight">
+            WE SOURCE. WE SPECIFY. WE EXPORT.
+          </AnimatedHeading>
+          <p className="text-[#a3b899] text-base sm:text-lg lg:text-xl font-light leading-relaxed pt-4 max-w-3xl mx-auto">
+            Direct origin procurement from India's primary spice hubs. Every consignment is tailored to buyer laboratory specifications, microbiological sterilization standards, and containerized logistics.
+          </p>
+        </div>
+      </section>
+
+      {/* 4. FEATURED PRODUCTS CATALOGUE */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#154736]/60 pb-6">
+          <div className="space-y-2">
+            <span className="text-xs font-mono text-[#f2a900] tracking-widest uppercase block">
+              Core Agro-Commodities
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#fdfcf0]">
+              Export Product Range
+            </h2>
+            <p className="text-[#a3b899] text-sm max-w-xl font-light">
+              Laboratory-tested Indian spice powders and whole seeds meeting European, North American, and Middle Eastern import regulations.
+            </p>
+          </div>
+
+          <Link
+            to="/products"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#f2a900] hover:text-[#fbbf24] transition-colors"
+          >
+            <span>View All Export Products</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* 4-Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
-              onSelectProduct={onSelectProduct}
               onRequestQuote={onRequestQuote}
             />
           ))}
         </div>
-
-        <div className="text-center pt-4">
-          <button
-            onClick={() => {
-              setActivePage('products');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="bg-emerald-900/80 hover:bg-emerald-800 text-amber-300 border border-amber-500/40 font-bold px-8 py-3.5 rounded-lg text-sm transition-all inline-flex items-center gap-2 shadow-lg hover:shadow-amber-900/20"
-          >
-            <span>View All Export Spice Products</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
       </section>
 
-      {/* 4. AI SPECIFICATION & PACKAGING ASSISTANT */}
+      {/* 5. AI SPECIFICATION & PACKAGING ASSISTANT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AISpecAssistant onRequestQuote={onRequestQuote} />
       </section>
 
-      {/* 5. WHY CHOOSE FALCON */}
+      {/* 6. WHY INTERNATIONAL PROCUREMENT TEAMS CHOOSE FALCON */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-semibold text-amber-400 uppercase tracking-widest block">
-            Why Global Procurement Teams Choose Us
+          <span className="text-xs font-mono text-[#f2a900] uppercase tracking-widest block">
+            Procurement Confidence
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold font-serif text-white tracking-tight">
-            Why Global Buyers Choose Falcon
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#fdfcf0]">
+            Engineered for International B2B Trade
           </h2>
-          <p className="text-stone-300 text-sm sm:text-base font-light">
-            Built to serve international B2B importers with strict quality standards, micro-sterilization, custom packaging, and dependable container shipping schedules.
+          <p className="text-[#a3b899] text-sm sm:text-base font-light">
+            We operate exclusively as a B2B trading partner, aligning technical parameters, moisture limits, and export documentation directly with your compliance department.
           </p>
         </div>
 
@@ -98,45 +105,45 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onSelectProduct, o
           {[
             {
               icon: ShieldCheck,
-              title: "Quality Focus",
-              description: "Consistent quality, direct farm-sourcing, steam sterilization, zero Sudan dyes, and strict ASTA color & curcumin verification."
+              title: "Verified Quality Parameters",
+              description: "Lot-wise laboratory testing for moisture, active volatile oils, curcumin, capsaicin, and Sudan dye clearance."
             },
             {
-              icon: Globe,
-              title: "Export-Ready Supply",
-              description: "Products prepared for international bulk supply with complete Phytosanitary clearance, COA, and export documentation."
+              icon: FileCheck,
+              title: "Statutory Documentation",
+              description: "Complete export paperwork: Bill of Lading, Phytosanitary Certificate, Certificate of Origin, and batch COA."
+            },
+            {
+              icon: Layers,
+              title: "Steam Sterilization",
+              description: "Multi-stage hygienic steam sterilization to fulfill EU, US FDA, and Gulf microbiological parameters without radiation."
             },
             {
               icon: Package,
-              title: "Flexible Packaging",
-              description: "Packaging options designed around buyer requirements: 100g retail pouches, 25kg PP bags, 10kg vacuum packs, to 1000kg jumbo sacks."
+              title: "Custom B2B Packaging",
+              description: "From 100g retail foil pouches to 25kg multi-wall paper sacks and 1,000kg jumbo containers with moisture barrier liners."
             },
             {
-              icon: Award,
-              title: "OEM & Private Label",
-              description: "Full support for food brands building their own custom private-label spice range with retail barcode and artwork printing."
-            },
-            {
-              icon: Phone,
-              title: "Reliable Communication",
-              description: "Clear and transparent communication from initial sample request and specification negotiation to vessel departure and B/L surrender."
+              icon: Globe,
+              title: "Global Port Logistics",
+              description: "Containerized sea freight (FCL/LCL) through Mumbai and Cochin ports to major destination discharge terminals."
             },
             {
               icon: CheckCircle2,
-              title: "Global Reach",
-              description: "Regularly supplying buyers across Middle East, Europe, North America, Africa, and Asia-Pacific ports."
+              title: "OEM & Private Label",
+              description: "Full private-label branding with custom barcode, nutrition panels, and multi-lingual customer packaging artwork."
             }
           ].map((item, idx) => {
             const Icon = item.icon;
             return (
-              <div key={idx} className="bg-[#0B2317] p-6 rounded-xl border border-emerald-900/60 hover:border-amber-500/40 transition-all space-y-3 group">
-                <div className="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+              <div key={idx} className="bg-[#05140f] p-7 rounded-2xl border border-[#154736]/60 hover:border-[#f2a900]/40 transition-all space-y-3 group text-left">
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-[#f2a900] group-hover:scale-110 transition-transform">
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold font-serif text-white tracking-tight">
+                <h3 className="text-lg font-serif font-bold text-[#fdfcf0] tracking-tight">
                   {item.title}
                 </h3>
-                <p className="text-stone-300 text-sm font-light leading-relaxed">
+                <p className="text-[#a3b899] text-xs sm:text-sm font-light leading-relaxed">
                   {item.description}
                 </p>
               </div>
@@ -145,40 +152,40 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onSelectProduct, o
         </div>
       </section>
 
-      {/* 6. INTERACTIVE PRIVATE LABEL & PACKAGING VISUALIZER */}
+      {/* 7. INTERACTIVE PACKAGING CUSTOMIZER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <PackagingCustomizer onRequestQuote={() => onRequestQuote('Private Label OEM')} />
+        <PackagingCustomizer onRequestQuote={() => onRequestQuote('Private Label OEM Packaging')} />
       </section>
 
-      {/* 7. GLOBAL EXPORT DESTINATIONS & LOGISTICS */}
-      <section className="bg-[#0B2518] border-y border-amber-900/40 py-16 px-4 sm:px-6 lg:px-8 font-sans relative overflow-hidden">
-        <div className="max-w-7xl mx-auto space-y-10 relative z-10">
+      {/* 8. GLOBAL EXPORT DESTINATIONS & PORTS */}
+      <section className="bg-[#05140f] border-y border-[#154736]/60 py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto space-y-12 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-semibold text-amber-400 uppercase tracking-widest block">
-              International Container Logistics
+            <span className="text-xs font-mono text-[#f2a900] uppercase tracking-widest block">
+              International Sea Freight Logistics
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold font-serif text-white">
-              Global Export Capability & Destinations
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#fdfcf0]">
+              Global Shipping & Destination Ports
             </h2>
-            <p className="text-stone-300 text-sm font-light">
+            <p className="text-[#a3b899] text-sm font-light">
               Supplying bulk containerized spice consignments (FCL & LCL) through major Indian export hubs directly to international ports.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {GLOBAL_DESTINATIONS.map((dest) => (
-              <div key={dest.region} className="bg-[#07170F] p-5 rounded-xl border border-emerald-900/60 space-y-2">
-                <div className="flex items-center justify-between border-b border-emerald-900/80 pb-2">
-                  <span className="font-bold font-serif text-amber-300 text-base flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-amber-400" />
+              <div key={dest.region} className="bg-[#030d0a] p-6 rounded-2xl border border-[#154736]/60 space-y-3 text-left">
+                <div className="flex items-center justify-between border-b border-[#154736]/60 pb-3">
+                  <span className="font-serif font-bold text-[#f2a900] text-base flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-[#f2a900]" />
                     {dest.region}
                   </span>
-                  <span className="text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">
-                    {dest.code} PORTS
+                  <span className="text-[10px] font-mono font-bold bg-amber-500/15 text-[#f2a900] px-2.5 py-1 rounded border border-amber-500/30">
+                    {dest.code}
                   </span>
                 </div>
-                <p className="text-xs text-stone-300 leading-relaxed pt-1">
-                  <span className="text-stone-400 font-medium">Major Discharge Ports:</span> {dest.ports}
+                <p className="text-xs text-[#a3b899] leading-relaxed">
+                  <span className="text-[#fdfcf0] font-medium">Major Discharge Ports:</span> {dest.ports}
                 </p>
               </div>
             ))}
@@ -186,40 +193,40 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onSelectProduct, o
         </div>
       </section>
 
-      {/* 8. FAQ ACCORDION */}
+      {/* 9. BUYER FAQ ACCORDION */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 uppercase tracking-widest bg-amber-950/60 px-3 py-1 rounded-full border border-amber-500/30">
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono text-[#f2a900] uppercase tracking-widest bg-[#05140f] px-3.5 py-1 rounded-full border border-[#f2a900]/30">
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>Buyer Guidance</span>
+            <span>Buyer Inquiries</span>
           </div>
-          <h2 className="text-3xl font-bold font-serif text-white">
-            Frequently Asked Questions
+          <h2 className="text-3xl font-serif font-bold text-[#fdfcf0]">
+            Frequently Asked Export Questions
           </h2>
-          <p className="text-stone-300 text-sm font-light">
-            Answers to common B2B export queries regarding MOQ, packaging, sample dispatch, and export documentation.
+          <p className="text-[#a3b899] text-sm font-light">
+            Answers regarding MOQ, custom packaging, express laboratory sample dispatch, and export documentation.
           </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 text-left">
           {GENERAL_FAQS.map((faq, idx) => (
             <div
               key={idx}
-              className="bg-[#0B2317] rounded-xl border border-emerald-900/60 overflow-hidden"
+              className="bg-[#05140f] rounded-xl border border-[#154736]/60 overflow-hidden"
             >
               <button
                 onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                className="w-full p-5 text-left font-semibold text-white font-serif text-base flex items-center justify-between hover:text-amber-300 transition-colors"
+                className="w-full p-5 text-left font-serif font-semibold text-[#fdfcf0] text-base flex items-center justify-between hover:text-[#f2a900] transition-colors"
               >
                 <span>{faq.question}</span>
                 {openFaqIndex === idx ? (
-                  <ChevronUp className="w-5 h-5 text-amber-400 shrink-0" />
+                  <ChevronUp className="w-5 h-5 text-[#f2a900] shrink-0" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-stone-400 shrink-0" />
+                  <ChevronDown className="w-5 h-5 text-[#a3b899] shrink-0" />
                 )}
               </button>
               {openFaqIndex === idx && (
-                <div className="px-5 pb-5 text-sm text-stone-300 leading-relaxed font-light border-t border-emerald-950/80 pt-3">
+                <div className="px-5 pb-5 text-sm text-[#a3b899] leading-relaxed font-light border-t border-[#154736]/40 pt-3">
                   {faq.answer}
                 </div>
               )}
@@ -228,36 +235,33 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onSelectProduct, o
         </div>
       </section>
 
-      {/* 9. BOTTOM CTA BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="bg-gradient-to-r from-[#0C2B1C] via-[#0D3823] to-[#0C2B1C] p-8 sm:p-12 rounded-2xl border border-amber-500/40 text-center space-y-6 shadow-2xl relative overflow-hidden">
+      {/* 10. FINAL CONVERSION BANNER */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-r from-[#05140f] via-[#0b2317] to-[#05140f] p-8 sm:p-14 rounded-3xl border border-[#f2a900]/40 text-center space-y-6 shadow-2xl relative overflow-hidden">
           <div className="max-w-2xl mx-auto space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-white tracking-tight">
-              Ready to Import Premium Indian Spices?
+            <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#fdfcf0] tracking-tight">
+              Ready to Import Indian Spices with Confidence?
             </h2>
-            <p className="text-stone-300 text-sm sm:text-base font-light">
-              Contact our international trade team today for custom product specifications, sample express dispatch, and competitive bulk FOB/CIF pricing.
+            <p className="text-[#a3b899] text-sm sm:text-base font-light">
+              Connect with our international export desk for tailored specification sheets, laboratory sample dispatches, and competitive container freight quotations.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => onRequestQuote()}
-              className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-bold px-8 py-3.5 rounded-lg text-base shadow-lg transition-all flex items-center gap-2"
+              className="bg-gradient-to-r from-[#f2a900] to-[#d97706] hover:from-[#e09b00] hover:to-[#b45309] text-[#030d0a] font-bold px-8 py-4 rounded-xl text-base shadow-xl transition-all flex items-center gap-2"
             >
               <span>Request Custom Quotation</span>
               <ArrowRight className="w-5 h-5" />
             </button>
 
-            <a
-              href={COMPANY_INFO.socials.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/60 font-semibold px-6 py-3.5 rounded-lg text-base transition-all flex items-center gap-2"
+            <Link
+              to="/contact"
+              className="bg-[#030d0a] hover:bg-[#082018] text-[#fdfcf0] border border-[#154736] font-semibold px-7 py-4 rounded-xl text-base transition-all"
             >
-              <Phone className="w-5 h-5 text-emerald-400" />
-              <span>Instant WhatsApp Enquiry</span>
-            </a>
+              <span>Contact Trade Desk</span>
+            </Link>
           </div>
         </div>
       </section>

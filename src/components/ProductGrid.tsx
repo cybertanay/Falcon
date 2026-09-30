@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from 'react';
-import { Search, LayoutGrid, List, SlidersHorizontal, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, LayoutGrid, List, SlidersHorizontal, ArrowRight, FileText } from 'lucide-react';
 import { Product } from '../types';
 import { ProductCard } from './ProductCard';
 
 interface ProductGridProps {
   products: Product[];
-  onSelectProduct: (product: Product) => void;
   onRequestQuote: (productName?: string) => void;
 }
 
-export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectProduct, onRequestQuote }) => {
+export const ProductGrid: React.FC<ProductGridProps> = ({ products, onRequestQuote }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
@@ -22,7 +22,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectProd
       const matchesSearch = 
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.shortDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.specifications.botanicalName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.specifications?.botanicalName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.origin.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;
     });
@@ -32,24 +32,24 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectProd
     <div className="space-y-8 font-sans">
       
       {/* Search and Category Filter Toolbar */}
-      <div className="bg-[#0B2317] p-4 sm:p-6 rounded-xl border border-emerald-900/60 shadow-lg space-y-4">
+      <div className="bg-[#05140f] p-4 sm:p-6 rounded-2xl border border-[#154736]/70 shadow-xl space-y-4">
         
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
-            <Search className="w-5 h-5 absolute left-3.5 top-3 text-amber-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-[#f2a900]" />
             <input
               type="text"
-              placeholder="Search spices by name, botanical species, or origin..."
+              placeholder="Search spices by commodity, botanical species, or origin..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#07170F] text-white pl-11 pr-4 py-2.5 rounded-lg border border-emerald-800/60 focus:border-amber-400 focus:outline-none text-sm placeholder-stone-500"
+              className="w-full bg-[#030d0a] text-[#fdfcf0] pl-10 pr-4 py-2.5 rounded-xl border border-[#154736] focus:border-[#f2a900] focus:outline-none text-xs sm:text-sm placeholder-[#a3b899]/50"
             />
             {searchTerm && (
               <button 
                 onClick={() => setSearchTerm('')} 
-                className="absolute right-3 top-3 text-stone-400 hover:text-white text-xs"
+                className="absolute right-3 top-3 text-[#a3b899] hover:text-[#fdfcf0] text-xs"
               >
                 Clear
               </button>
@@ -58,14 +58,14 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectProd
 
           {/* View Mode Toggle */}
           <div className="flex items-center gap-2 self-end lg:self-auto">
-            <span className="text-xs text-stone-400 hidden sm:inline">View Mode:</span>
-            <div className="bg-[#07170F] p-1 rounded-lg border border-emerald-800/60 flex items-center gap-1">
+            <span className="text-xs text-[#a3b899] hidden sm:inline">View:</span>
+            <div className="bg-[#030d0a] p-1 rounded-xl border border-[#154736] flex items-center gap-1">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded text-xs font-medium transition-all ${
+                className={`p-1.5 rounded-lg text-xs font-medium transition-all ${
                   viewMode === 'grid' 
-                    ? 'bg-amber-500 text-stone-950 font-bold shadow' 
-                    : 'text-stone-400 hover:text-white'
+                    ? 'bg-[#f2a900] text-[#030d0a] font-bold shadow' 
+                    : 'text-[#a3b899] hover:text-[#fdfcf0]'
                 }`}
                 title="Grid View"
               >
@@ -73,10 +73,10 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectProd
               </button>
               <button
                 onClick={() => setViewMode('table')}
-                className={`p-1.5 rounded text-xs font-medium transition-all ${
+                className={`p-1.5 rounded-lg text-xs font-medium transition-all ${
                   viewMode === 'table' 
-                    ? 'bg-amber-500 text-stone-950 font-bold shadow' 
-                    : 'text-stone-400 hover:text-white'
+                    ? 'bg-[#f2a900] text-[#030d0a] font-bold shadow' 
+                    : 'text-[#a3b899] hover:text-[#fdfcf0]'
                 }`}
                 title="B2B Specification Table View"
               >
@@ -88,16 +88,16 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectProd
         </div>
 
         {/* Category Pill Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 no-scrollbar">
-          <SlidersHorizontal className="w-4 h-4 text-amber-400 shrink-0 mr-1" />
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar">
+          <SlidersHorizontal className="w-4 h-4 text-[#f2a900] shrink-0 mr-1" />
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === cat
-                  ? 'bg-amber-500 text-stone-950 shadow-md shadow-amber-950/40'
-                  : 'bg-[#07170F] text-stone-300 hover:text-amber-300 border border-emerald-800/40'
+                  ? 'bg-[#f2a900] text-[#030d0a] shadow-md shadow-amber-950/40'
+                  : 'bg-[#030d0a] text-[#a3b899] hover:text-[#f2a900] border border-[#154736]/60'
               }`}
             >
               {cat}
@@ -109,16 +109,16 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectProd
 
       {/* Product Display Grid or B2B Table */}
       {filteredProducts.length === 0 ? (
-        <div className="bg-[#0A2015] p-12 rounded-xl text-center border border-emerald-900/60 space-y-4">
-          <p className="text-stone-400 text-base">
-            No spice products matched your filter search query.
+        <div className="bg-[#05140f] p-12 rounded-2xl text-center border border-[#154736]/60 space-y-4">
+          <p className="text-[#a3b899] text-base">
+            No export commodities matched your filter query.
           </p>
           <button
             onClick={() => {
               setSearchTerm('');
               setSelectedCategory('All');
             }}
-            className="bg-amber-500 hover:bg-amber-400 text-stone-950 font-semibold px-4 py-2 rounded text-xs"
+            className="bg-[#f2a900] hover:bg-[#d97706] text-[#030d0a] font-semibold px-5 py-2.5 rounded-lg text-xs shadow"
           >
             Reset Filters
           </button>
@@ -129,60 +129,60 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ products, onSelectProd
             <ProductCard
               key={product.id}
               product={product}
-              onSelectProduct={onSelectProduct}
               onRequestQuote={onRequestQuote}
             />
           ))}
         </div>
       ) : (
         /* B2B Table View */
-        <div className="overflow-x-auto bg-[#0B2317] rounded-xl border border-emerald-900/60 shadow-lg">
-          <table className="w-full text-left text-sm text-stone-300">
-            <thead className="bg-[#07170F] text-amber-400 font-serif text-xs uppercase tracking-wider border-b border-emerald-900/80">
+        <div className="overflow-x-auto bg-[#05140f] rounded-2xl border border-[#154736]/60 shadow-xl">
+          <table className="w-full text-left text-sm text-[#fdfcf0]">
+            <thead className="bg-[#030d0a] text-[#f2a900] font-serif text-xs uppercase tracking-wider border-b border-[#154736]/80">
               <tr>
-                <th className="py-3.5 px-4">Spice Product</th>
-                <th className="py-3.5 px-4">Botanical Name</th>
-                <th className="py-3.5 px-4">Origin</th>
-                <th className="py-3.5 px-4">Key Specification</th>
-                <th className="py-3.5 px-4">MOQ</th>
-                <th className="py-3.5 px-4 text-right">Actions</th>
+                <th className="py-4 px-5">Spice Commodity</th>
+                <th className="py-4 px-5">Botanical Species</th>
+                <th className="py-4 px-5">Origin</th>
+                <th className="py-4 px-5">Active Spec</th>
+                <th className="py-4 px-5">MOQ</th>
+                <th className="py-4 px-5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-emerald-900/40 font-sans">
+            <tbody className="divide-y divide-[#154736]/40 font-sans">
               {filteredProducts.map((product) => (
-                <tr key={product.id} className="hover:bg-emerald-950/50 transition-colors">
-                  <td className="py-3.5 px-4 font-bold text-white flex items-center gap-3">
+                <tr key={product.id} className="hover:bg-[#0b2317]/50 transition-colors">
+                  <td className="py-4 px-5 font-bold text-[#fdfcf0] flex items-center gap-3">
                     <img
                       src={product.image}
                       alt={product.name}
-                      referrerPolicy="no-referrer"
-                      className="w-10 h-10 rounded object-cover shrink-0 border border-amber-500/30"
+                      className="w-10 h-10 rounded-lg object-cover shrink-0 border border-[#f2a900]/30"
                     />
-                    <span>{product.name}</span>
+                    <Link to={`/products/${product.slug}`} className="hover:text-[#f2a900] transition-colors">
+                      {product.name}
+                    </Link>
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-xs text-amber-200/80">
-                    {product.specifications.botanicalName}
+                  <td className="py-4 px-5 font-mono text-xs text-[#a3b899]">
+                    {product.specifications?.botanicalName || 'Botanical Standard'}
                   </td>
-                  <td className="py-3.5 px-4 text-xs text-stone-300">
+                  <td className="py-4 px-5 text-xs text-[#a3b899]">
                     {product.origin}
                   </td>
-                  <td className="py-3.5 px-4 text-xs text-amber-300 font-medium">
-                    {product.specifications.keyActiveComponent || product.form}
+                  <td className="py-4 px-5 text-xs text-[#f2a900] font-medium font-mono">
+                    {product.specifications?.keyActiveComponent || product.form}
                   </td>
-                  <td className="py-3.5 px-4 text-xs font-semibold text-amber-400">
+                  <td className="py-4 px-5 text-xs font-semibold text-[#f2a900]">
                     {product.minimumOrderQuantity}
                   </td>
-                  <td className="py-3.5 px-4 text-right">
+                  <td className="py-4 px-5 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => onSelectProduct(product)}
-                        className="text-xs bg-emerald-900/60 hover:bg-emerald-800 text-stone-200 px-3 py-1.5 rounded border border-emerald-700/50"
+                      <Link
+                        to={`/products/${product.slug}`}
+                        className="text-xs bg-[#082018] hover:bg-[#0e3529] text-[#fdfcf0] px-3 py-1.5 rounded-lg border border-[#154736]"
                       >
                         Specs
-                      </button>
+                      </Link>
                       <button
                         onClick={() => onRequestQuote(product.name)}
-                        className="text-xs bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-3 py-1.5 rounded shadow"
+                        className="text-xs bg-[#f2a900] hover:bg-[#d97706] text-[#030d0a] font-bold px-3 py-1.5 rounded-lg shadow"
                       >
                         Quote
                       </button>

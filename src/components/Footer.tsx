@@ -1,31 +1,26 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Globe, ShieldCheck, ArrowUpRight, Lock } from 'lucide-react';
-import { COMPANY_INFO, GLOBAL_DESTINATIONS } from '../data/company';
+import { Link } from 'react-router-dom';
+import { Mail, Globe, ShieldCheck, ArrowUpRight, Lock, Phone } from 'lucide-react';
+import { COMPANY_INFO } from '../data/company';
 
 interface FooterProps {
-  setActivePage: (page: string) => void;
   onRequestQuote: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ setActivePage, onRequestQuote }) => {
-  const handlePageClick = (pageId: string) => {
-    setActivePage(pageId);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
+export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
   return (
-    <footer className="bg-[#030d0a] text-[#a3b899] font-sans border-t border-[#154736] relative overflow-hidden">
-      {/* Background Decorative Accent */}
-      <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-[#f2a900]/5 blur-3xl pointer-events-none"></div>
+    <footer className="bg-[#030d0a] text-[#a3b899] font-sans border-t border-[#154736]/70 relative overflow-hidden">
+      {/* Background Subtle Amber Glow */}
+      <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-[#f2a900]/5 blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-[#154736]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-[#154736]/60">
           
           {/* Col 1 & 2: Company Overview */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 group">
               <div className="w-9 h-9 rounded-md bg-gradient-to-br from-[#f2a900] to-[#b37a00] p-0.5 shadow-md flex items-center justify-center">
-                <div className="w-full h-full bg-[#05140f] rounded-[5px] flex items-center justify-center">
+                <div className="w-full h-full bg-[#030d0a] rounded-[5px] flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-[#f2a900]" stroke="currentColor" strokeWidth="2">
                     <path d="M12 2L2 7l10 5 10-5-10-5z" />
                     <path d="M2 17l10 5 10-5" />
@@ -34,178 +29,167 @@ export const Footer: React.FC<FooterProps> = ({ setActivePage, onRequestQuote })
                 </div>
               </div>
               <div>
-                <span className="text-xl font-bold text-[#fdfcf0] font-serif tracking-tight block">
+                <span className="text-xl font-bold text-[#fdfcf0] font-serif tracking-tight block group-hover:text-[#f2a900] transition-colors">
                   Falcon <span className="text-[#f2a900] font-normal">International</span>
                 </span>
-                <span className="text-[10px] tracking-widest text-[#a3b899] uppercase block">
+                <span className="text-[10px] tracking-widest text-[#a3b899] uppercase font-mono block">
                   TRADERS
                 </span>
               </div>
-            </div>
+            </Link>
 
-            <p className="text-[#a3b899]/90 text-sm leading-relaxed max-w-md">
+            <p className="text-[#a3b899] text-xs sm:text-sm leading-relaxed max-w-md font-light">
               {COMPANY_INFO.positioning}
             </p>
 
-            <div className="pt-2 flex items-center gap-2 text-xs text-[#f2a900] font-medium bg-[#082018] p-3 rounded-lg border border-[#154736] inline-block">
-              <ShieldCheck className="w-4 h-4 text-[#f2a900] shrink-0 inline mr-1" />
-              <span>Direct Wholesale • Micro-sterilized • Phytosanitary Clearance</span>
+            <div className="pt-2 flex items-center gap-2 text-xs text-[#f2a900] font-medium bg-[#05140f] p-3 rounded-lg border border-[#154736]/70 max-w-md">
+              <ShieldCheck className="w-4 h-4 text-[#f2a900] shrink-0" />
+              <span>Direct Wholesale • Micro-sterilization • Statutory Phytosanitary COA</span>
             </div>
           </div>
 
-          {/* Col 3: Quick Navigation */}
+          {/* Col 3: Navigation */}
           <div className="space-y-3">
-            <h3 className="text-[#fdfcf0] font-serif font-semibold text-base tracking-wide border-b border-[#154736] pb-2">
-              Quick Links
+            <h3 className="text-[#fdfcf0] font-serif font-semibold text-sm tracking-wide border-b border-[#154736]/60 pb-2">
+              B2B Navigation
             </h3>
-            <ul className="space-y-2 text-sm text-[#a3b899]">
+            <ul className="space-y-2 text-xs sm:text-sm text-[#a3b899]">
               <li>
-                <button onClick={() => handlePageClick('home')} className="hover:text-[#f2a900] transition-colors">
+                <Link to="/" className="hover:text-[#f2a900] transition-colors">
                   Home
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handlePageClick('products')} className="hover:text-[#f2a900] transition-colors">
-                  Spice Products
-                </button>
+                <Link to="/products" className="hover:text-[#f2a900] transition-colors">
+                  Product Catalogue
+                </Link>
               </li>
               <li>
-                <button onClick={() => handlePageClick('about')} className="hover:text-[#f2a900] transition-colors">
+                <Link to="/about" className="hover:text-[#f2a900] transition-colors">
                   About Falcon
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handlePageClick('quality')} className="hover:text-[#f2a900] transition-colors">
-                  Quality & Certifications
-                </button>
+                <Link to="/quality" className="hover:text-[#f2a900] transition-colors">
+                  Quality & Standards
+                </Link>
               </li>
               <li>
-                <button onClick={() => handlePageClick('export')} className="hover:text-[#f2a900] transition-colors">
-                  Export & Packaging
-                </button>
+                <Link to="/export" className="hover:text-[#f2a900] transition-colors">
+                  Export Journey
+                </Link>
               </li>
               <li>
-                <button onClick={() => handlePageClick('privatelabel')} className="hover:text-[#f2a900] transition-colors">
-                  Private Label & OEM
-                </button>
+                <Link to="/private-label" className="hover:text-[#f2a900] transition-colors">
+                  Private Label OEM
+                </Link>
               </li>
               <li>
-                <button onClick={() => handlePageClick('contact')} className="hover:text-[#f2a900] transition-colors">
-                  Contact Us
-                </button>
+                <Link to="/contact" className="hover:text-[#f2a900] transition-colors">
+                  Contact Trade Desk
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Major Spice Categories */}
+          {/* Col 4: Featured Commodities */}
           <div className="space-y-3">
-            <h3 className="text-[#fdfcf0] font-serif font-semibold text-base tracking-wide border-b border-[#154736] pb-2">
-              Export Range
+            <h3 className="text-[#fdfcf0] font-serif font-semibold text-sm tracking-wide border-b border-[#154736]/60 pb-2">
+              Export Spices
             </h3>
-            <ul className="space-y-2 text-sm text-[#a3b899]">
-              <li className="flex items-center gap-1.5 hover:text-[#f2a900]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#f2a900]"></span>
-                <span>Turmeric Powder (2.5%-5.0% Curcumin)</span>
+            <ul className="space-y-2 text-xs sm:text-sm text-[#a3b899]">
+              <li>
+                <Link to="/products/turmeric-powder" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                  <span>Turmeric Powder</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#154736]" />
+                </Link>
               </li>
-              <li className="flex items-center gap-1.5 hover:text-[#f2a900]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c41e3a]"></span>
-                <span>Red Chilli (Teja S17 / Byadgi)</span>
+              <li>
+                <Link to="/products/red-chilli-powder" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                  <span>Red Chilli Powder</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#154736]" />
+                </Link>
               </li>
-              <li className="flex items-center gap-1.5 hover:text-[#f2a900]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#e69d00]"></span>
-                <span>Cumin Seeds & Powder</span>
+              <li>
+                <Link to="/products/cumin-seeds-powder" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                  <span>Cumin Seeds & Powder</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#154736]" />
+                </Link>
               </li>
-              <li className="flex items-center gap-1.5 hover:text-[#f2a900]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#fdfcf0]"></span>
-                <span>Dehydrated Garlic Powder</span>
+              <li>
+                <Link to="/products/dehydrated-garlic" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                  <span>Dehydrated Garlic</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#154736]" />
+                </Link>
               </li>
-              <li className="flex items-center gap-1.5 hover:text-[#f2a900]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#154736]"></span>
-                <span>Green Cardamom & Black Pepper</span>
+              <li>
+                <Link to="/products/black-pepper" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                  <span>Tellicherry Black Pepper</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#154736]" />
+                </Link>
+              </li>
+              <li>
+                <Link to="/products/green-cardamom" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                  <span>Green Cardamom Pods</span>
+                  <ArrowUpRight className="w-3 h-3 text-[#154736]" />
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 5: Export Contact Details */}
+          {/* Col 5: Trade Desk Contact */}
           <div className="space-y-3">
-            <h3 className="text-[#fdfcf0] font-serif font-semibold text-base tracking-wide border-b border-[#154736] pb-2">
-              B2B Enquiries
+            <h3 className="text-[#fdfcf0] font-serif font-semibold text-sm tracking-wide border-b border-[#154736]/60 pb-2">
+              Export Desk
             </h3>
-            <div className="space-y-3 text-sm text-[#a3b899]">
-              <div className="flex items-start gap-2.5">
-                <Mail className="w-4 h-4 text-[#f2a900] shrink-0 mt-1" />
-                <div>
-                  <span className="text-xs text-[#a3b899]/70 block">Official Business Email</span>
-                  <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#fdfcf0] hover:text-[#f2a900] text-xs font-mono">
-                    {COMPANY_INFO.email}
-                  </a>
-                </div>
+            <div className="space-y-3 text-xs text-[#a3b899]">
+              <p className="leading-relaxed">
+                <span className="text-[#fdfcf0] font-medium block mb-1">Hub Location:</span>
+                {COMPANY_INFO.address}
+              </p>
+              <p>
+                <span className="text-[#fdfcf0] font-medium block mb-0.5">Commercial Inquiry:</span>
+                <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#f2a900] hover:underline">
+                  {COMPANY_INFO.email}
+                </a>
+              </p>
+              <div className="pt-2">
+                <button
+                  onClick={onRequestQuote}
+                  className="w-full bg-[#0b2317] hover:bg-[#154736] text-[#f2a900] border border-[#f2a900]/40 font-semibold py-2 px-3 rounded-lg text-xs transition-colors"
+                >
+                  Request Official Quotation
+                </button>
               </div>
-
-              <div className="flex items-start gap-2.5">
-                <Phone className="w-4 h-4 text-[#f2a900] shrink-0 mt-1" />
-                <div>
-                  <span className="text-xs text-[#a3b899]/70 block">WhatsApp / Export Desk</span>
-                  <a href={COMPANY_INFO.socials.whatsapp} target="_blank" rel="noopener noreferrer" className="text-[#fdfcf0] hover:text-[#f2a900] text-xs font-mono">
-                    {COMPANY_INFO.whatsapp}
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#f2a900] shrink-0 mt-1" />
-                <div>
-                  <span className="text-xs text-[#a3b899]/70 block">Export Operations</span>
-                  <span className="text-xs text-[#fdfcf0]/80 block">
-                    {COMPANY_INFO.address}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={onRequestQuote}
-                className="w-full bg-[#f2a900]/10 hover:bg-[#f2a900]/20 text-[#f2a900] border border-[#f2a900]/30 font-medium text-xs py-2 px-3 rounded text-center transition-all flex items-center justify-center gap-1.5 mt-2"
-              >
-                <span>Request Custom Specification</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
             </div>
           </div>
+
         </div>
 
-        {/* Global Markets Served Tag Strip */}
-        <div className="py-6 border-b border-[#154736]">
-          <span className="text-xs font-semibold text-[#f2a900] uppercase tracking-widest block mb-3">
-            Global Trade Destinations We Serve
-          </span>
-          <div className="flex flex-wrap gap-2">
-            {GLOBAL_DESTINATIONS.map((dest) => (
-              <div key={dest.region} className="bg-[#082018] border border-[#154736] text-[#fdfcf0] text-xs py-1 px-2.5 rounded flex items-center gap-2">
-                <Globe className="w-3 h-3 text-[#f2a900]" />
-                <span className="font-medium text-[#f2a900]">{dest.region}:</span>
-                <span className="text-[#a3b899] text-[11px]">{dest.ports}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Copyright and Legal Section */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#a3b899]/70">
-          <div>
-            © 2026 Falcon International Traders. All rights reserved. Premium Indian Spice Exporter.
-          </div>
+        {/* Bottom Bar & Legal */}
+        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#a3b899]/70">
+          <p>© {new Date().getFullYear()} Falcon International Traders. All rights reserved.</p>
+          
           <div className="flex items-center gap-6">
-            <button onClick={() => handlePageClick('privacy')} className="hover:text-[#f2a900] transition-colors">
+            <Link to="/privacy" className="hover:text-[#f2a900] transition-colors">
               Privacy Policy
-            </button>
-            <button onClick={() => handlePageClick('terms')} className="hover:text-[#f2a900] transition-colors">
+            </Link>
+            <Link to="/terms" className="hover:text-[#f2a900] transition-colors">
               Terms & Conditions
-            </button>
-            <button onClick={() => handlePageClick('admin')} className="hover:text-[#f2a900] transition-colors flex items-center gap-1">
+            </Link>
+            <a href="/sitemap.xml" className="hover:text-[#f2a900] transition-colors" target="_blank" rel="noopener noreferrer">
+              Sitemap
+            </a>
+            <Link to="/admin/login" className="hover:text-[#f2a900] transition-colors flex items-center gap-1 opacity-60 hover:opacity-100">
               <Lock className="w-3 h-3" />
-              <span>Admin Dashboard</span>
-            </button>
+              <span>Admin Portal</span>
+            </Link>
           </div>
+        </div>
+
+        {/* Editorial Subtext */}
+        <div className="text-center pt-8 text-[11px] font-mono tracking-widest text-[#a3b899]/40 uppercase">
+          FROM INDIA TO GLOBAL PORTS — QUALITY ASSURED BULK COMMODITIES
         </div>
       </div>
     </footer>

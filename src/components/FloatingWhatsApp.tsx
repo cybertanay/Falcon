@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Phone, X, MessageSquare, ArrowRight, ShieldCheck } from 'lucide-react';
 import { COMPANY_INFO } from '../data/company';
+import { trackEvent } from '../lib/analytics';
 
 export const FloatingWhatsApp: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const defaultMessage = "Hello Falcon International Traders, I am interested in your spice products and would like to discuss a bulk order.";
-
-  const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(defaultMessage)}`;
+  const cleanNumber = COMPANY_INFO.whatsapp.replace(/[^0-9]/g, '');
+  const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(defaultMessage)}`;
 
   return (
     <div className="fixed bottom-6 right-6 z-40 font-sans">
@@ -41,6 +42,7 @@ export const FloatingWhatsApp: React.FC = () => {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackEvent('whatsapp_click', { placement: 'floating_widget' })}
             className="w-full bg-[#154736] hover:bg-[#1c5d47] text-[#fdfcf0] font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg transition-all border border-[#f2a900]/30"
           >
             <Phone className="w-4 h-4 text-[#f2a900]" />

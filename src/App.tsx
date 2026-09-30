@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { QuoteModal } from './components/QuoteModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { ScrollToTop } from './components/ScrollToTop';
 
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
@@ -12,39 +15,29 @@ import { QualityPage } from './pages/QualityPage';
 import { ExportPage } from './pages/ExportPage';
 import { PrivateLabelPage } from './pages/PrivateLabelPage';
 import { ContactPage } from './pages/ContactPage';
-import { AdminDashboard } from './pages/AdminDashboard';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsConditionsPage } from './pages/TermsConditionsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
+// Admin Architecture
+import { AdminLogin } from './pages/admin/AdminLogin';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminOverview } from './pages/admin/AdminOverview';
+import { AdminProducts } from './pages/admin/AdminProducts';
+import { AdminEnquiries } from './pages/admin/AdminEnquiries';
+import { AdminSettings } from './pages/admin/AdminSettings';
+import { AdminAuditLog } from './pages/admin/AdminAuditLog';
+
 import { Product } from './types';
-import { getLocalProducts } from './lib/storage';
+import { getCatalogueProducts } from './lib/storage';
 
 export default function App() {
-  const [activePage, setActivePage] = useState<string>('home');
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [quoteInitialProduct, setQuoteInitialProduct] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    // Initial products load from server API or local store fallback
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch('/api/products');
-        if (res.ok) {
-          const data = await res.json();
-          setProducts(data);
-          return;
-        }
-      } catch (e) {
-        console.warn('API fetch products error:', e);
-      }
-      setProducts(getLocalProducts());
-    };
-
-    fetchProducts();
+    getCatalogueProducts().then(setProducts);
   }, []);
 
   const handleOpenQuoteModal = (productName?: string) => {
@@ -52,124 +45,57 @@ export default function App() {
     setIsQuoteModalOpen(true);
   };
 
-  const handleSelectProduct = (product: Product) => {
-    setSelectedProduct(product);
-    setActivePage('product-detail');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const renderCurrentPage = () => {
-    switch (activePage) {
-      case 'home':
-        return (
-          <HomePage
-            products={products}
-            onSelectProduct={handleSelectProduct}
-            onRequestQuote={handleOpenQuoteModal}
-            setActivePage={setActivePage}
-          />
-        );
-      case 'products':
-        return (
-          <ProductsPage
-            products={products}
-            onSelectProduct={handleSelectProduct}
-            onRequestQuote={handleOpenQuoteModal}
-          />
-        );
-      case 'product-detail':
-        return selectedProduct ? (
-          <ProductDetailPage
-            product={selectedProduct}
-            onBack={() => {
-              setActivePage('products');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            onRequestQuote={handleOpenQuoteModal}
-          />
-        ) : (
-          <ProductsPage
-            products={products}
-            onSelectProduct={handleSelectProduct}
-            onRequestQuote={handleOpenQuoteModal}
-          />
-        );
-      case 'about':
-        return (
-          <AboutPage
-            onRequestQuote={() => handleOpenQuoteModal()}
-            setActivePage={setActivePage}
-          />
-        );
-      case 'quality':
-        return (
-          <QualityPage
-            onRequestQuote={handleOpenQuoteModal}
-          />
-        );
-      case 'export':
-        return (
-          <ExportPage
-            onRequestQuote={() => handleOpenQuoteModal()}
-          />
-        );
-      case 'privatelabel':
-        return (
-          <PrivateLabelPage
-            onRequestQuote={handleOpenQuoteModal}
-          />
-        );
-      case 'contact':
-        return (
-          <ContactPage />
-        );
-      case 'admin':
-        return (
-          <AdminDashboard
-            products={products}
-            setProducts={setProducts}
-          />
-        );
-      case 'privacy':
-        return <PrivacyPolicyPage />;
-      case 'terms':
-        return <TermsConditionsPage />;
-      default:
-        return <NotFoundPage onGoHome={() => setActivePage('home')} />;
-    }
-  };
+  const PublicLayout: React.FC = () => (
+    <div className="min-h-screen bg-[#030d0a] text-[#fdfcf0] flex flex-col font-sans selection:bg-[#f2a900] selection:text-[#030d0a]">
+      <Navbar onRequestQuote={handleOpenQuoteModal} />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer onRequestQuote={() => handleOpenQuoteModal()} />
+      <FloatingWhatsApp />
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-[#05140f] text-[#fdfcf0] flex flex-col font-sans selection:bg-[#f2a900] selection:text-[#05140f]">
-      
-      {/* Sticky Navigation Bar */}
-      <Navbar
-        activePage={activePage}
-        setActivePage={setActivePage}
-        onRequestQuote={handleOpenQuoteModal}
-      />
+    <BrowserRouter>
+      <ScrollToTop />
 
-      {/* Main Content Area */}
-      <main className="flex-1">
-        {renderCurrentPage()}
-      </main>
+      <Routes>
+        {/* Public Website Routes */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<HomePage products={products} onRequestQuote={handleOpenQuoteModal} />} />
+          <Route path="/products" element={<ProductsPage products={products} onRequestQuote={handleOpenQuoteModal} />} />
+          <Route path="/products/:slug" element={<ProductDetailPage products={products} onRequestQuote={handleOpenQuoteModal} />} />
+          <Route path="/about" element={<AboutPage onRequestQuote={() => handleOpenQuoteModal()} />} />
+          <Route path="/quality" element={<QualityPage onRequestQuote={handleOpenQuoteModal} />} />
+          <Route path="/export" element={<ExportPage onRequestQuote={() => handleOpenQuoteModal()} />} />
+          <Route path="/private-label" element={<PrivateLabelPage onRequestQuote={handleOpenQuoteModal} />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms" element={<TermsConditionsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
 
-      {/* Footer */}
-      <Footer
-        setActivePage={setActivePage}
-        onRequestQuote={() => handleOpenQuoteModal()}
-      />
+        {/* Admin Staff Authentication */}
+        <Route path="/admin/login" element={<AdminLogin />} />
 
-      {/* Floating WhatsApp Widget */}
-      <FloatingWhatsApp />
+        {/* Protected Modular Admin Hierarchy */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminOverview />} />
+          <Route path="dashboard" element={<AdminOverview />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="enquiries" element={<AdminEnquiries />} />
+          <Route path="settings" element={<AdminSettings />} />
+          <Route path="audit-logs" element={<AdminAuditLog />} />
+        </Route>
+      </Routes>
 
-      {/* Request a Quote Modal */}
+      {/* Global Interactive B2B Quotation Modal */}
       <QuoteModal
         isOpen={isQuoteModalOpen}
         onClose={() => setIsQuoteModalOpen(false)}
         initialProduct={quoteInitialProduct}
       />
-
-    </div>
+    </BrowserRouter>
   );
 }

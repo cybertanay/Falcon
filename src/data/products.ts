@@ -1,4 +1,4 @@
-import { Product, Certification, Testimonial } from '../types';
+import { Product } from '../types';
 
 export const INITIAL_PRODUCTS: Product[] = [
   {
@@ -297,83 +297,23 @@ export const INITIAL_PRODUCTS: Product[] = [
   }
 ];
 
-export const INITIAL_TESTIMONIALS: Testimonial[] = [
+// Export Quality Commitments (Statutory clearances provided per consignment)
+export const EXPORT_COMPLIANCE_STANDARDS = [
   {
-    id: "test-1",
-    clientName: "[Client Name]",
-    company: "[Leading Food Ingredient Distributor]",
-    country: "United Arab Emirates",
-    testimonial: "Falcon International Traders has delivered exceptional consignment quality of Turmeric powder and Cumin seeds to Jebel Ali. Documentation, steam sterilization COA, and vessel timelines were flawless.",
-    published: true,
-    rating: 5,
-    createdAt: new Date().toISOString()
+    title: "Phytosanitary & Export Clearance",
+    description: "Consignment-wise statutory inspection certificates and quarantine clearances issued through authorized port inspection authorities."
   },
   {
-    id: "test-2",
-    clientName: "[Procurement Director]",
-    company: "[Private Label Seasoning Brand]",
-    country: "Germany",
-    testimonial: "We contracted Falcon for OEM custom packaged 250g stand-up pouches of Red Chilli powder and Garlic powder. The print finish and batch heat consistency matched our German retail standards perfectly.",
-    published: true,
-    rating: 5,
-    createdAt: new Date().toISOString()
+    title: "Laboratory Certificate of Analysis (COA)",
+    description: "Every shipment is accompanied by batch laboratory analytical certificates verifying moisture, purity, active components, and microbiological counts."
   },
   {
-    id: "test-3",
-    clientName: "[Supply Chain Manager]",
-    company: "[Industrial Sauce & Food Manufacturer]",
-    country: "United Kingdom",
-    testimonial: "Reliable bulk exporter from India. Their response time for custom specification sheets and sample express dispatches made the vendor onboarding quick and stress-free.",
-    published: true,
-    rating: 5,
-    createdAt: new Date().toISOString()
+    title: "Steam Sterilization & Micro-Reduction",
+    description: "Multi-stage hygienic steam sterilization to satisfy stringent EU, US FDA, and Gulf microbiological parameters without chemical fumigants."
+  },
+  {
+    title: "Fumigation & Origin Documentation",
+    description: "Authorized methyl bromide / phosphine container fumigation with statutory certificate and Chamber of Commerce Certificate of Origin."
   }
 ];
 
-export const INITIAL_CERTIFICATIONS: Certification[] = [
-  {
-    id: "cert-apeda",
-    name: "[APEDA Registration]",
-    issuingAuthority: "Agricultural & Processed Food Products Export Development Authority (Govt. of India)",
-    certificateNumber: "[APEDA-REG-IND-98421]",
-    validUntil: "[2028-12-31]",
-    description: "Official registration authority certifying compliance for international food and spice exports from India.",
-    published: true
-  },
-  {
-    id: "cert-spices-board",
-    name: "[Spices Board India Certificate of Export]",
-    issuingAuthority: "Spices Board India, Ministry of Commerce & Industry",
-    certificateNumber: "[CRE-SB-IND-7731]",
-    validUntil: "[2027-11-30]",
-    description: "Mandatory quality certification ensuring all spice batches meet specified export standard grades.",
-    published: true
-  },
-  {
-    id: "cert-iso22000",
-    name: "[ISO 22000:2018 Food Safety Management]",
-    issuingAuthority: "International Accreditation Forum (IAF)",
-    certificateNumber: "[ISO-FSMS-22000-8812]",
-    validUntil: "[2028-06-30]",
-    description: "Global food safety system certification for processing, hygienic packing, and spice warehousing.",
-    published: true
-  },
-  {
-    id: "cert-haccp",
-    name: "[HACCP Compliance]",
-    issuingAuthority: "Food Safety Inspection Service",
-    certificateNumber: "[HACCP-QC-55410]",
-    validUntil: "[2027-08-31]",
-    description: "Hazard Analysis Critical Control Point system governing micro-contamination safety.",
-    published: true
-  },
-  {
-    id: "cert-halal",
-    name: "[HALAL & Kosher Certification]",
-    issuingAuthority: "Global Halal Trust & Kosher Alliance",
-    certificateNumber: "[HAL-KSH-99201]",
-    validUntil: "[2027-10-15]",
-    description: "Dietary compliance verification for international retail and foodservice markets in the Middle East & Southeast Asia.",
-    published: true
-  }
-];
