@@ -173,7 +173,6 @@ export const ThreeUIChromaticHeading: React.FC<ThreeUIChromaticHeadingProps> = (
       aria-label={`${line1} ${line2}`}
       onClick={interactive ? runAnimation : undefined}
       className={`font-serif font-bold tracking-tight select-none cursor-default ${className}`}
-      title={interactive ? 'Click to replay ThreeUI chromatic animation' : undefined}
     >
       {linesData.map((line, lineIndex) => (
         <span

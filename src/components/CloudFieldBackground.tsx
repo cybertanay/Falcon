@@ -82,25 +82,25 @@ export const CloudFieldBackground: React.FC = () => {
         return val;
       }
 
-      float meteor(vec2 uv, float t){
-        float cycle = mod(t * 0.12, 1.0);
-        float seed = floor(t * 0.12);
-        float h = hash(seed * 7.31);
-        float h2 = hash(seed * 13.17);
-        if(h > 0.35) return 0.0;
-        vec2 start = vec2(0.2 + h2 * 0.6, 0.75 + h * 0.2);
-        vec2 dir = normalize(vec2(1.0, -0.55 - h * 0.25));
-        float progress = smoothstep(0.0, 0.7, cycle);
-        vec2 pos = start + dir * progress * 0.45;
-        vec2 toP = uv - pos;
-        float along = dot(toP, dir);
-        float perp = length(toP - dir * along);
-        float trail = smoothstep(0.0, -0.12, along) * smoothstep(-0.18, -0.04, along);
-        float core = smoothstep(0.003, 0.0, perp) * trail;
-        float glow = smoothstep(0.012, 0.0, perp) * trail * 0.3;
-        float fade = smoothstep(0.0, 0.1, cycle) * smoothstep(0.8, 0.55, cycle);
-        return (core + glow) * fade;
-      }
+      // float meteor(vec2 uv, float t){
+      //   float cycle = mod(t * 0.12, 1.0);
+      //   float seed = floor(t * 0.12);
+      //   float h = hash(seed * 7.31);
+      //   float h2 = hash(seed * 13.17);
+      //   if(h > 0.35) return 0.0;
+      //   vec2 start = vec2(0.2 + h2 * 0.6, 0.75 + h * 0.2);
+      //   vec2 dir = normalize(vec2(1.0, -0.55 - h * 0.25));
+      //   float progress = smoothstep(0.0, 0.7, cycle);
+      //   vec2 pos = start + dir * progress * 0.45;
+      //   vec2 toP = uv - pos;
+      //   float along = dot(toP, dir);
+      //   float perp = length(toP - dir * along);
+      //   float trail = smoothstep(0.0, -0.12, along) * smoothstep(-0.18, -0.04, along);
+      //   float core = smoothstep(0.003, 0.0, perp) * trail;
+      //   float glow = smoothstep(0.012, 0.0, perp) * trail * 0.3;
+      //   float fade = smoothstep(0.0, 0.1, cycle) * smoothstep(0.8, 0.55, cycle);
+      //   return (core + glow) * fade;
+      // }
 
       float stars(vec2 uv, float density){
         vec2 cell = floor(uv * density);
@@ -220,8 +220,8 @@ export const CloudFieldBackground: React.FC = () => {
 
         // Mint starlight & meteors
         col += vec3(0.85, 0.98, 0.90) * starField * starMask;
-        float met = meteor(uv * vec2(aspect, 1.0), u_time);
-        col += vec3(0.80, 0.98, 0.88) * met * starMask;
+        // float met = meteor(uv * vec2(aspect, 1.0), u_time);
+        // col += vec3(0.80, 0.98, 0.88) * met * starMask;
 
         // Vignette
         float vig = 1.0 - 0.25 * pow(length((uv - 0.5) * vec2(1.1, 1.5)), 2.0);
