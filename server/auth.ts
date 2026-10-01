@@ -102,7 +102,7 @@ export function requireRole(...allowedRoles: Array<'super_admin' | 'admin' | 'sa
 
 /**
  * CSRF Protection middleware for state-changing admin actions (POST, PUT, PATCH, DELETE).
- * Verifies request origin and standard custom header presence.
+ * Enforces origin validation against trusted hosts and requires trusted custom headers.
  */
 export function requireCsrfProtection(req: Request, res: Response, next: NextFunction) {
   const method = req.method.toUpperCase();
@@ -110,31 +110,43 @@ export function requireCsrfProtection(req: Request, res: Response, next: NextFun
     return next();
   }
 
-  // Requests that include custom headers like X-Requested-With or X-Falcon-Admin cannot be triggered by simple HTML forms
-  const customHeader = req.headers['x-requested-with'] || req.headers['x-falcon-admin'];
-  const origin = req.headers['origin'] || req.headers['referer'];
+  const customHeader = req.headers['x-falcon-admin'] || req.headers['x-requested-with'];
+  const origin = (req.headers['origin'] || req.headers['referer']) as string | undefined;
 
-  // In non-production, allow requests if customHeader is missing to facilitate local testing
-  if (!isProduction) {
-    return next();
-  }
+  const appUrl = process.env.APP_URL || 'http://localhost:3000';
+  const allowedHosts = new Set<string>();
 
-  if (customHeader) {
-    return next();
-  }
+  try {
+    allowedHosts.add(new URL(appUrl).host);
+  } catch (e) {}
+  allowedHosts.add('localhost:3000');
+  allowedHosts.add('localhost:5173');
+  allowedHosts.add('127.0.0.1:3000');
+  allowedHosts.add('127.0.0.1:5173');
 
-  const appUrl = process.env.APP_URL;
-  if (origin && appUrl) {
+  // If an Origin or Referer header is present, verify its host is explicitly allowed
+  if (origin) {
     try {
       const originHost = new URL(origin).host;
-      const appHost = new URL(appUrl).host;
-      if (originHost === appHost) {
-        return next();
+      if (!allowedHosts.has(originHost)) {
+        return res.status(403).json({
+          error: `Forbidden: Cross-site request rejected. Origin '${originHost}' is not authorized.`
+        });
       }
-    } catch (e) {}
+    } catch (e) {
+      return res.status(403).json({
+        error: 'Forbidden: Malformed Origin or Referer header.'
+      });
+    }
   }
 
-  return res.status(403).json({
-    error: 'Forbidden: CSRF validation failed. Missing expected security verification headers.'
-  });
+  // Require either a trusted custom header or valid same-origin
+  if (!customHeader && (!origin || !allowedHosts.has(new URL(origin).host))) {
+    return res.status(403).json({
+      error: 'Forbidden: CSRF validation failed. Missing expected security verification headers (e.g. X-Falcon-Admin).'
+    });
+  }
+
+  next();
 }
+

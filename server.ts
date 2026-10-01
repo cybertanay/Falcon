@@ -126,12 +126,14 @@ async function startServer() {
     'http://localhost:5173',
     'http://127.0.0.1:3000',
     'http://127.0.0.1:5173'
-  ];
+  ].filter(Boolean);
 
   app.use(cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || !isProduction) {
+      const isAllowed = allowedOrigins.includes(origin) ||
+        (!isProduction && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')));
+      if (isAllowed) {
         callback(null, true);
       } else {
         callback(new Error('Blocked by CORS policy for untrusted origin.'));
@@ -142,6 +144,14 @@ async function startServer() {
 
   app.use(cookieParser());
   app.use(express.json({ limit: '10mb' }));
+
+  // Sensitive API Cache-Control (prohibit caching admin and enquiry data)
+  app.use(['/api/admin', '/api/enquiries'], (_req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    next();
+  });
 
   // Static uploads
   app.use('/uploads', express.static(UPLOADS_DIR));

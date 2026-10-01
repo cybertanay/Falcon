@@ -115,6 +115,13 @@ CREATE TABLE IF NOT EXISTS company_settings (
 -- ------------------------------------------------------------------------------
 CREATE SEQUENCE IF NOT EXISTS enquiry_ref_seq START WITH 500;
 
+-- Atomic sequence helper callable by Supabase client
+CREATE OR REPLACE FUNCTION get_next_enquiry_seq()
+RETURNS BIGINT LANGUAGE sql SECURITY DEFINER AS $$
+  SELECT nextval('enquiry_ref_seq');
+$$;
+
+
 -- ------------------------------------------------------------------------------
 -- 7. ROW LEVEL SECURITY (RLS) POLICIES FOR SUPABASE
 -- ------------------------------------------------------------------------------

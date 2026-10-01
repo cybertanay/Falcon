@@ -11,8 +11,8 @@ export const enquirySchema = z.object({
   estimatedQuantity: z.string().trim().min(1, 'Please specify estimated order quantity').max(100),
   packagingRequirement: z.string().trim().max(150).optional().default('Standard Export Packaging'),
   message: z.string().trim().max(2000, 'Message cannot exceed 2000 characters').optional().default(''),
-  // Anti-bot honeypot field - must be empty
-  website_hp: z.string().max(0, 'Spam detected').optional()
+  // Anti-bot honeypot field - processed by server handler for silent dropping
+  website_hp: z.string().optional()
 });
 
 export const enquiryStatusUpdateSchema = z.object({

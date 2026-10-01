@@ -296,7 +296,13 @@ export class DatabaseAdapter {
 
     if (this.isSupabaseConfigured && this.supabase) {
       try {
-        // Query next value of atomic sequence if available, or compute from exact DB row count
+        // 1. Try atomic PostgreSQL sequence function first (guarantees zero race conditions)
+        const { data: seqVal, error: seqError } = await this.supabase.rpc('get_next_enquiry_seq');
+        if (!seqError && seqVal) {
+          return `FAL-${year}-${String(seqVal).padStart(5, '0')}`;
+        }
+
+        // 2. Fallback: Query exact row count
         const { count, error } = await this.supabase
           .from('enquiries')
           .select('*', { count: 'exact', head: true });
