@@ -1,12 +1,18 @@
 import { CompanySettings } from '../types';
 
+/**
+ * Baseline Company Information (Placeholders)
+ * NOTE FOR HUMAN HANDOFF: These contact details and links are placeholder templates
+ * that must be verified and updated with Falcon's official corporate registration
+ * details during production onboarding.
+ */
 export const COMPANY_INFO: CompanySettings = {
   name: "Falcon International Traders",
   tagline: "Indian Agro-Commodities & Spice Export Trading Desk",
   positioning: "International B2B food and spice exporter supplying wholesale commodities, technical ingredient grades, and private-label packaging to verified global importers and food manufacturers.",
   email: "export@falconspices.com",
-  whatsapp: "+91 98765 43210", // Pending company official number verification
-  phone: "+91 98765 43210",
+  whatsapp: "+91 98765 43210", // Pending official verified corporate WhatsApp number
+  phone: "+91 98765 43210", // Pending official corporate telephone line
   address: "Navi Mumbai / Cochin Port Hub, India",
   websiteUrl: "https://falconinternationaltraders.com",
   socials: {
