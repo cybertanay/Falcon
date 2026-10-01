@@ -4,6 +4,7 @@ import { ArrowRight, ShieldCheck, Globe, Phone, FileText, Sparkles, CheckCircle2
 import { HeroScene } from './HeroScene';
 import { AnimatedHeading } from './AnimatedHeading';
 import { COMPANY_INFO } from '../data/company';
+import { ThreeUIChromaticHeading } from './ThreeUIChromaticHeading';
 
 interface HeroProps {
   onRequestQuote: () => void;
@@ -31,14 +32,14 @@ export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
               <span>B2B INDIAN SPICES & AGRICULTURAL EXPORT</span>
             </div>
 
-            {/* Kinetic Main Headline */}
+            {/* ThreeUI Chromatic Kinetic Headline applied directly to INDIA'S INGREDIENTS. THE WORLD'S MARKETS. */}
             <div className="space-y-1">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#fdfcf0] tracking-tight leading-[1.08]">
-                INDIA'S INGREDIENTS. <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f2a900] via-[#fbbf24] to-[#d97706]">
-                  THE WORLD'S MARKETS.
-                </span>
-              </h1>
+              <ThreeUIChromaticHeading
+                line1="INDIA'S INGREDIENTS."
+                line2="THE WORLD'S MARKETS."
+                className="text-3xl sm:text-5xl lg:text-6xl"
+                interactive={true}
+              />
             </div>
 
             {/* Supporting Statement */}

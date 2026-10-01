@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Globe, Menu, X, ArrowRight, Lock, Phone } from 'lucide-react';
 import { COMPANY_INFO } from '../data/company';
+import { AnimatedTopDock, type DockItem } from '../shaders/animated-top-dock/AnimatedTopDock';
 
 interface NavbarProps {
   onRequestQuote: (productName?: string) => void;
@@ -11,6 +12,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestQuote }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,6 +36,78 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestQuote }) => {
     { to: '/private-label', label: 'Private Label' },
     { to: '/contact', label: 'Contact' },
   ];
+
+  const activeId = (() => {
+    const p = location.pathname;
+    if (p === '/') return 'home';
+    if (p.startsWith('/products')) return 'products';
+    if (p.startsWith('/about')) return 'about';
+    if (p.startsWith('/quality')) return 'quality';
+    if (p.startsWith('/export')) return 'export';
+    if (p.startsWith('/private-label')) return 'private-label';
+    if (p.startsWith('/contact')) return 'contact';
+    return 'home';
+  })();
+
+  const dockNavItems: readonly DockItem[] = [
+    {
+      id: 'home',
+      label: 'HOME',
+      to: '/',
+      onClick: () => navigate('/'),
+      icon: <path d="M2.5 7.5L8 3l5.5 4.5v5.5a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1V7.5z" />
+    },
+    {
+      id: 'products',
+      label: 'PRODUCTS',
+      to: '/products',
+      onClick: () => navigate('/products'),
+      icon: <><path d="M8 1.9 14.1 5v6L8 14.1 1.9 11V5z" /><path d="M1.9 5 8 8.1 14.1 5M8 8.1v6" /></>
+    },
+    {
+      id: 'about',
+      label: 'ABOUT',
+      to: '/about',
+      onClick: () => navigate('/about'),
+      icon: <><circle cx="8" cy="8" r="5.8" /><path d="M8 5.5v3M8 10.5h.01" /></>
+    },
+    {
+      id: 'quality',
+      label: 'QUALITY',
+      to: '/quality',
+      onClick: () => navigate('/quality'),
+      icon: <path d="M8 1.8l1.9 4 4.3.6-3.1 3 .7 4.3L8 11.6l-3.8 2.1.7-4.3-3.1-3 4.3-.6z" />
+    },
+    {
+      id: 'export',
+      label: 'EXPORT',
+      to: '/export',
+      onClick: () => navigate('/export'),
+      icon: <><circle cx="8" cy="8" r="5.9" /><path d="M2.2 8h11.6M8 2.1c1.5 1.8 2.3 3.8 2.3 5.9s-.8 4.1-2.3 5.9c-1.5-1.8-2.3-3.8-2.3-5.9s.8-4.1 2.3-5.9" /></>
+    },
+    {
+      id: 'private-label',
+      label: 'PRIVATE LABEL',
+      to: '/private-label',
+      onClick: () => navigate('/private-label'),
+      icon: <><path d="M3.4 2.4h5.4l3.8 3.8v7.4H3.4z" /><path d="M8.8 2.4v3.8h3.8M5.9 9h4.2M5.9 11.2h3" /></>
+    },
+    {
+      id: 'contact',
+      label: 'CONTACT',
+      to: '/contact',
+      onClick: () => navigate('/contact'),
+      icon: <><path d="M2.5 4h11a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" /><path d="M2.5 5l5.5 3.5L13.5 5" /></>
+    },
+  ];
+
+  const FalconBrandMark = (
+    <div className="w-full h-full bg-[#030d0a] rounded flex items-center justify-center p-0.5">
+      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-[#f2a900]" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+      </svg>
+    </div>
+  );
 
   return (
     <header className="sticky top-0 z-50 w-full font-sans">
@@ -76,66 +150,75 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestQuote }) => {
         </div>
       </div>
 
-      {/* Main Glassmorphic Navigation */}
-      <nav className={`w-full transition-all duration-300 ${
+      {/* Desktop Dynamic ThreeUI AnimatedTopDock (variant="modern") */}
+      <div className={`hidden lg:block w-full navbar-dock transition-all duration-300 ${
+        isScrolled ? 'glass-navbar py-2 shadow-2xl' : 'bg-[#05140f]/95 py-3 border-b border-[#154736]/50'
+      }`}>
+        <AnimatedTopDock
+          variant="modern"
+          proximity={122}
+          spring={0.19}
+          damping={0.70}
+          widthGrowth={17}
+          heightGrowth={16}
+          drop={3.5}
+          customItems={dockNavItems}
+          activeId={activeId}
+          brandWord="FALCON"
+          brandMark={FalconBrandMark}
+          brandHref="/"
+          onBrandClick={() => navigate('/')}
+          actionGhost={{
+            label: "Staff Portal",
+            onClick: () => navigate('/admin/login')
+          }}
+          actionCta={{
+            label: "Request Quote",
+            onClick: () => onRequestQuote()
+          }}
+          hideStage={true}
+        />
+      </div>
+
+      {/* Mobile Glassmorphic Navigation Bar */}
+      <nav className={`lg:hidden w-full transition-all duration-300 ${
         isScrolled 
           ? 'glass-navbar py-3 shadow-2xl' 
           : 'bg-[#05140f]/90 backdrop-blur-md py-4 border-b border-[#154736]/50'
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           
           {/* Brand Logo */}
           <Link to="/" className="flex items-center gap-3 group text-left">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#f2a900] via-[#d97706] to-[#b45309] p-0.5 shadow-md flex items-center justify-center transition-transform group-hover:scale-105">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#f2a900] via-[#d97706] to-[#b45309] p-0.5 shadow-md flex items-center justify-center">
               <div className="w-full h-full bg-[#030d0a] rounded-[7px] flex items-center justify-center p-1.5">
-                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-[#f2a900]" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 text-[#f2a900]" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>
               </div>
             </div>
             <div>
-              <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-[#fdfcf0] block leading-tight group-hover:text-[#f2a900] transition-colors">
+              <span className="font-serif text-lg font-bold tracking-tight text-[#fdfcf0] block leading-tight">
                 FALCON
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-[#f2a900] font-mono block">
+              <span className="text-[9px] tracking-widest uppercase text-[#f2a900] font-mono block">
                 International Traders
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                  `px-3 py-1.5 rounded-md text-xs xl:text-sm font-medium transition-all relative ${
-                    isActive
-                      ? 'text-[#f2a900] bg-amber-500/10'
-                      : 'text-[#a3b899] hover:text-[#fdfcf0] hover:bg-[#0b2317]/50'
-                  }`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
-          </div>
-
-          {/* CTA & Mobile Toggle */}
-          <div className="flex items-center gap-3">
+          {/* Mobile Actions */}
+          <div className="flex items-center gap-2">
             <button
               onClick={() => onRequestQuote()}
-              className="bg-gradient-to-r from-[#f2a900] to-[#d97706] hover:from-[#e09b00] hover:to-[#b45309] text-[#030d0a] font-bold px-4 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm shadow-md transition-all flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-gradient-to-r from-[#f2a900] to-[#d97706] text-[#030d0a] font-bold px-3.5 py-1.5 rounded-lg text-xs shadow transition-all"
             >
-              <span>Request Quote</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>Quote</span>
             </button>
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-[#a3b899] hover:text-[#fdfcf0] bg-[#0b2317] rounded-lg border border-[#154736]"
+              className="p-2 text-[#a3b899] hover:text-[#fdfcf0] bg-[#0b2317] rounded-lg border border-[#154736]"
               aria-label="Toggle Navigation Menu"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
