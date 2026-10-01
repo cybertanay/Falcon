@@ -10,6 +10,7 @@
     "start": "node dist/server.js",
     "test": "tsx test/backend.test.ts",
     "test:security": "tsx test/security_audit.ts",
+    "clean:test-data": "tsx test/cleanup_test_data.ts",
     "clean": "rm -rf dist server.js server.cjs",
     "lint": "tsc --noEmit"
   },

@@ -71,10 +71,29 @@ const authLimiter = rateLimit({
   message: { error: 'Too many authentication attempts. Please try again in 15 minutes.' }
 });
 
+// In production (NODE_ENV === 'production'):
+//   - Rate limiting is strictly and unconditionally enforced at 20 enquiries/hour per IP.
+//   - Disabling rate limits is strictly forbidden in production.
+// In non-production (development / test):
+//   - Default threshold is set to 100/hour (or ENQUIRY_RATE_LIMIT_MAX) so automated suites do not block manual testing.
+//   - Developers can set ENQUIRY_RATE_LIMIT_ENABLED=false in their local environment for unlimited QA testing.
+const isEnquiryRateLimitEnabled = isProduction
+  ? true
+  : process.env.ENQUIRY_RATE_LIMIT_ENABLED !== 'false';
+
+const enquiryRateLimitMax = isProduction
+  ? 20
+  : (process.env.ENQUIRY_RATE_LIMIT_MAX ? parseInt(process.env.ENQUIRY_RATE_LIMIT_MAX, 10) : 100);
+
 const enquiryLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
-  max: 20,
-  message: { error: 'Enquiry submission rate limit reached. Please reach our export desk via WhatsApp or Email.' }
+  max: enquiryRateLimitMax,
+  skip: () => !isEnquiryRateLimitEnabled,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: 'Temporary enquiry submission limit reached for this network (maximum 20 enquiries per hour). Your entered information has been preserved. Please wait a short while or connect directly with our trade desk via WhatsApp or Email.'
+  }
 });
 
 const aiLimiter = rateLimit({
