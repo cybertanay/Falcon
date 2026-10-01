@@ -13,7 +13,11 @@ export const AdminLayout: React.FC = () => {
   useEffect(() => {
     const token = getAuthToken();
     fetch('/api/admin/session', {
-      headers: { 'Authorization': `Bearer ${token}` }
+      credentials: 'include',
+      headers: {
+        'X-Falcon-Admin': '1',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      }
     })
       .then(res => {
         if (res.ok) return res.json();
@@ -31,7 +35,11 @@ export const AdminLayout: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/admin/logout', { method: 'POST' });
+      await fetch('/api/admin/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'X-Falcon-Admin': '1' }
+      });
     } catch (e) {}
     sessionStorage.removeItem('falcon_admin_token');
     navigate('/admin/login');

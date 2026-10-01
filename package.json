@@ -1,12 +1,14 @@
 {
-  "name": "react-example",
+  "name": "falcon-international-traders",
+  "description": "Falcon International Traders - B2B Food & Spice Export Platform",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --packages=external --sourcemap --outfile=dist/server.js",
     "start": "node dist/server.js",
+    "test": "tsx test/backend.test.ts",
     "clean": "rm -rf dist server.js server.cjs",
     "lint": "tsc --noEmit"
   },

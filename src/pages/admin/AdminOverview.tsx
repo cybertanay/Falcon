@@ -12,11 +12,17 @@ export const AdminOverview: React.FC = () => {
 
   useEffect(() => {
     const token = getAuthToken();
-    const headers = { 'Authorization': `Bearer ${token}` };
+    const reqOptions: RequestInit = {
+      credentials: 'include',
+      headers: {
+        'X-Falcon-Admin': '1',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      }
+    };
 
     Promise.all([
-      fetch('/api/enquiries', { headers }).then(r => r.ok ? r.json() : []),
-      fetch('/api/products?all=true', { headers }).then(r => r.ok ? r.json() : [])
+      fetch('/api/enquiries', reqOptions).then(r => r.ok ? r.json() : []),
+      fetch('/api/admin/products', reqOptions).then(r => r.ok ? r.json() : [])
     ])
       .then(([enqData, prodData]) => {
         setEnquiries(enqData || []);

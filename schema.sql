@@ -102,12 +102,27 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_entity ON audit_logs(entity, entity_id
 CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);
 
 -- ------------------------------------------------------------------------------
--- 5. ROW LEVEL SECURITY (RLS) POLICIES FOR SUPABASE
+-- 5. COMPANY SETTINGS TABLE
+-- ------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS company_settings (
+    id VARCHAR(50) PRIMARY KEY DEFAULT 'global',
+    data JSONB NOT NULL DEFAULT '{}'::jsonb,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- ------------------------------------------------------------------------------
+-- 6. ENQUIRY REFERENCE SEQUENCE (Atomic & Database-Backed)
+-- ------------------------------------------------------------------------------
+CREATE SEQUENCE IF NOT EXISTS enquiry_ref_seq START WITH 500;
+
+-- ------------------------------------------------------------------------------
+-- 7. ROW LEVEL SECURITY (RLS) POLICIES FOR SUPABASE
 -- ------------------------------------------------------------------------------
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enquiries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE company_settings ENABLE ROW LEVEL SECURITY;
 
 -- Products: Anyone can read published products; service role / authenticated admin can read/write all
 CREATE POLICY "Public read published products" ON products
@@ -129,3 +144,11 @@ CREATE POLICY "Service role full access admin_users" ON admin_users
 
 CREATE POLICY "Service role full access audit_logs" ON audit_logs
     FOR ALL USING (auth.role() = 'service_role');
+
+-- Company Settings: Public can read, only service role can update
+CREATE POLICY "Public read company settings" ON company_settings
+    FOR SELECT USING (true);
+
+CREATE POLICY "Service role full access company settings" ON company_settings
+    FOR ALL USING (auth.role() = 'service_role');
+

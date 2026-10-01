@@ -21,9 +21,11 @@ export const AdminEnquiries: React.FC = () => {
     const token = getAuthToken();
     return fetch(url, {
       ...options,
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'X-Falcon-Admin': '1',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         ...(options.headers || {})
       }
     });

@@ -1,7 +1,8 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -11,14 +12,24 @@ import { GoogleGenAI } from '@google/genai';
 import { createServer as createViteServer } from 'vite';
 
 import { dbAdapter } from './server/db';
-import { requireAdmin, signAdminToken, AuthenticatedRequest } from './server/auth';
+import {
+  requireAdmin,
+  requireRole,
+  requireCsrfProtection,
+  signAdminToken,
+  AuthenticatedRequest
+} from './server/auth';
 import { sendEnquiryEmails } from './server/email';
+import { uploadProductImage } from './server/storage';
 import {
   enquirySchema,
   enquiryStatusUpdateSchema,
   aiSpecRequestSchema,
+  aiRecommendationOutputSchema,
   adminLoginSchema,
-  productMutationSchema
+  productMutationSchema,
+  productUpdateSchema,
+  companySettingsSchema
 } from './server/validators';
 
 dotenv.config();
@@ -26,8 +37,32 @@ dotenv.config();
 const currentFilename = fileURLToPath(import.meta.url);
 const currentDirname = path.dirname(currentFilename);
 
+const isProduction = process.env.NODE_ENV === 'production';
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const APP_URL = process.env.APP_URL || `http://localhost:${PORT}`;
+
+// --- PRODUCTION STARTUP INTEGRITY CHECK ---
+if (isProduction) {
+  const requiredEnvVars = [
+    'SESSION_SECRET',
+    'ADMIN_EMAIL',
+    'ADMIN_PASSWORD',
+    'SUPABASE_URL',
+    'SUPABASE_SERVICE_ROLE_KEY'
+  ];
+
+  const missing = requiredEnvVars.filter(v => !process.env[v] || process.env[v]!.trim() === '');
+  if (missing.length > 0) {
+    console.error(`[FATAL BOOTSTRAP ERROR] Missing mandatory production environment variables: ${missing.join(', ')}`);
+    console.error('Server execution halted to prevent operating in an unauthenticated or insecure state.');
+    process.exit(1);
+  }
+
+  if (process.env.ADMIN_PASSWORD!.length < 12) {
+    console.error('[FATAL BOOTSTRAP ERROR] ADMIN_PASSWORD must be at least 12 characters in production.');
+    process.exit(1);
+  }
+}
 
 // Rate Limiters
 const authLimiter = rateLimit({
@@ -62,7 +97,7 @@ function getGeminiClient(): GoogleGenAI | null {
   return aiClient;
 }
 
-// Upload directory setup
+// Static upload directory
 const UPLOADS_DIR = path.join(currentDirname, 'public', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -71,12 +106,20 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 async function startServer() {
   const app = express();
 
-  // Basic security headers
+  // 1. Request correlation ID
+  app.use((req, res, next) => {
+    const reqId = (req.headers['x-request-id'] as string) || crypto.randomUUID();
+    res.setHeader('X-Request-Id', reqId);
+    (req as any).id = reqId;
+    next();
+  });
+
+  // 2. Strict Security Headers
   app.use(helmet({
-    contentSecurityPolicy: false // Allows Vite HMR in dev and inline scripts if required
+    contentSecurityPolicy: false // Allows Vite HMR in dev and client-side styling
   }));
 
-  // Strict CORS configuration
+  // 3. Strict CORS configuration
   const allowedOrigins = [
     APP_URL,
     'http://localhost:3000',
@@ -87,9 +130,8 @@ async function startServer() {
 
   app.use(cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, server-to-server)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      if (allowedOrigins.indexOf(origin) !== -1 || !isProduction) {
         callback(null, true);
       } else {
         callback(new Error('Blocked by CORS policy for untrusted origin.'));
@@ -99,17 +141,18 @@ async function startServer() {
   }));
 
   app.use(cookieParser());
-  app.use(express.json({ limit: '10mb' })); // Support base64 image uploads
+  app.use(express.json({ limit: '10mb' }));
 
-  // Serve static uploads
+  // Static uploads
   app.use('/uploads', express.static(UPLOADS_DIR));
 
-  // Health check
+  // Health check endpoint
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
       service: 'Falcon International Traders API',
-      database: dbAdapter.isSupabaseConfigured ? 'PostgreSQL (Supabase)' : 'Local Store (PostgreSQL-Compatible)',
+      database: dbAdapter.isSupabaseConfigured ? 'PostgreSQL (Supabase Authoritative)' : 'Local Store Mock',
+      environment: process.env.NODE_ENV || 'development',
       timestamp: new Date().toISOString()
     });
   });
@@ -117,85 +160,124 @@ async function startServer() {
   // --------------------------------------------------------------------------
   // 1. PRODUCTS API
   // --------------------------------------------------------------------------
-  
-  // Public list: only published products unless admin explicitly requests all
-  app.get('/api/products', async (req, res) => {
+
+  // Public list: ALWAYS strictly returns only published products. (No public ?all=true bypass!)
+  app.get('/api/products', async (_req, res, next) => {
     try {
-      const showAll = req.query.all === 'true';
-      const products = await dbAdapter.getProducts({ publishedOnly: !showAll });
+      const products = await dbAdapter.getProducts({ publishedOnly: true });
       res.json(products);
     } catch (err) {
-      console.error('Error fetching products:', err);
-      res.status(500).json({ error: 'Failed to retrieve products catalogue.' });
+      next(err);
     }
   });
 
-  // Public product detail
-  app.get('/api/products/:slug', async (req, res) => {
+  // Public product detail: MUST be published. Unpublished products return 404.
+  app.get('/api/products/:slug', async (req, res, next) => {
     try {
-      const product = await dbAdapter.getProductBySlug(req.params.slug);
+      const product = await dbAdapter.getProductBySlug(req.params.slug, { publishedOnly: true });
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found or currently not published.' });
+      }
+      res.json(product);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  // Protected: Admin catalogue list (returns all products including unpublished)
+  app.get('/api/admin/products', requireAdmin, async (_req: AuthenticatedRequest, res, next) => {
+    try {
+      const products = await dbAdapter.getProducts({ publishedOnly: false });
+      res.json(products);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  // Protected: Admin product detail by ID or slug (including unpublished)
+  app.get('/api/admin/products/:id', requireAdmin, async (req: AuthenticatedRequest, res, next) => {
+    try {
+      const product = await dbAdapter.getProductBySlug(req.params.id, { publishedOnly: false });
       if (!product) {
         return res.status(404).json({ error: 'Product not found.' });
       }
       res.json(product);
     } catch (err) {
-      console.error('Error retrieving product:', err);
-      res.status(500).json({ error: 'Failed to retrieve product details.' });
+      next(err);
     }
   });
 
-  // Protected: Create product
-  app.post('/api/products', requireAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const parsed = productMutationSchema.safeParse(req.body);
-      if (!parsed.success) {
-        return res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
+  // Protected: Create product (Admin & Super Admin only)
+  app.post(
+    '/api/products',
+    requireAdmin,
+    requireRole('admin', 'super_admin'),
+    requireCsrfProtection,
+    async (req: AuthenticatedRequest, res, next) => {
+      try {
+        const parsed = productMutationSchema.safeParse(req.body);
+        if (!parsed.success) {
+          return res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
+        }
+        const adminEmail = req.admin!.email;
+        const created = await dbAdapter.createProduct(parsed.data as any, adminEmail, req.ip);
+        res.status(201).json(created);
+      } catch (err) {
+        next(err);
       }
-      const adminEmail = req.admin?.email || 'admin@falconspices.com';
-      const created = await dbAdapter.createProduct(parsed.data as any, adminEmail);
-      res.status(201).json(created);
-    } catch (err) {
-      console.error('Error creating product:', err);
-      res.status(500).json({ error: 'Failed to create product.' });
     }
-  });
+  );
 
-  // Protected: Update product
-  app.put('/api/products/:id', requireAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const adminEmail = req.admin?.email || 'admin@falconspices.com';
-      const updated = await dbAdapter.updateProduct(req.params.id, req.body, adminEmail);
-      if (!updated) {
-        return res.status(404).json({ error: 'Product not found.' });
+  // Protected: Update product (Admin & Super Admin only)
+  app.put(
+    '/api/products/:id',
+    requireAdmin,
+    requireRole('admin', 'super_admin'),
+    requireCsrfProtection,
+    async (req: AuthenticatedRequest, res, next) => {
+      try {
+        const parsed = productUpdateSchema.safeParse(req.body);
+        if (!parsed.success) {
+          return res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
+        }
+        const adminEmail = req.admin!.email;
+        const updated = await dbAdapter.updateProduct(req.params.id, parsed.data as any, adminEmail, req.ip);
+        if (!updated) {
+          return res.status(404).json({ error: 'Product not found.' });
+        }
+        res.json(updated);
+      } catch (err) {
+        next(err);
       }
-      res.json(updated);
-    } catch (err) {
-      console.error('Error updating product:', err);
-      res.status(500).json({ error: 'Failed to update product.' });
     }
-  });
+  );
 
-  // Protected: Delete product
-  app.delete('/api/products/:id', requireAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const adminEmail = req.admin?.email || 'admin@falconspices.com';
-      const deleted = await dbAdapter.deleteProduct(req.params.id, adminEmail);
-      if (!deleted) {
-        return res.status(404).json({ error: 'Product not found.' });
+  // Protected: Delete product (SUPER ADMIN ONLY)
+  app.delete(
+    '/api/products/:id',
+    requireAdmin,
+    requireRole('super_admin'),
+    requireCsrfProtection,
+    async (req: AuthenticatedRequest, res, next) => {
+      try {
+        const adminEmail = req.admin!.email;
+        const deleted = await dbAdapter.deleteProduct(req.params.id, adminEmail, req.ip);
+        if (!deleted) {
+          return res.status(404).json({ error: 'Product not found.' });
+        }
+        res.json({ success: true, message: 'Product permanently deleted.' });
+      } catch (err) {
+        next(err);
       }
-      res.json({ success: true, message: 'Product deleted successfully.' });
-    } catch (err) {
-      console.error('Error deleting product:', err);
-      res.status(500).json({ error: 'Failed to delete product.' });
     }
-  });
+  );
 
   // --------------------------------------------------------------------------
   // 2. ENQUIRIES / LEADS API
   // --------------------------------------------------------------------------
 
   // Public: Submit quote enquiry
-  app.post('/api/enquiries', enquiryLimiter, async (req, res) => {
+  app.post('/api/enquiries', enquiryLimiter, async (req, res, next) => {
     try {
       const validation = enquirySchema.safeParse(req.body);
       if (!validation.success) {
@@ -207,7 +289,7 @@ async function startServer() {
 
       // Honeypot spam check
       if (enquiryData.website_hp && enquiryData.website_hp.length > 0) {
-        console.warn('[Spam Detection] Honeypot field filled. Dropping silently.');
+        console.warn('[Spam Detection] Honeypot field filled. Dropping enquiry silently.');
         return res.status(200).json({
           success: true,
           message: 'Enquiry received.',
@@ -215,7 +297,7 @@ async function startServer() {
         });
       }
 
-      // Save enquiry to database
+      // Save enquiry to authoritative database (errors propagate as 500)
       const createdEnquiry = await dbAdapter.createEnquiry(enquiryData);
 
       // Asynchronously trigger two-way email notification via Resend
@@ -230,75 +312,85 @@ async function startServer() {
         estimatedQuantity: createdEnquiry.estimatedQuantity,
         packagingRequirement: createdEnquiry.packagingRequirement,
         message: createdEnquiry.message
-      }).catch(e => console.error('Enquiry email trigger failure:', e));
+      }).catch(e => console.error('[Email Notification Failure]:', e?.message));
 
       return res.status(201).json({
         success: true,
-        message: 'Thank you for contacting Falcon International Traders. Your enquiry has been officially logged.',
+        message: 'Thank you for contacting Falcon International Traders. Your enquiry has been officially logged in our trade system.',
         enquiry: createdEnquiry
       });
     } catch (err) {
-      console.error('Error processing enquiry submission:', err);
-      return res.status(500).json({
-        success: false,
-        error: 'Unable to process enquiry at this moment. Please reach our export team directly via WhatsApp or Email.'
-      });
+      next(err);
     }
   });
 
-  // Protected: Get all enquiries
-  app.get('/api/enquiries', requireAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const status = req.query.status as string | undefined;
-      const search = req.query.search as string | undefined;
-      const enquiries = await dbAdapter.getEnquiries({ status, search });
-      res.json(enquiries);
-    } catch (err) {
-      console.error('Error retrieving enquiries:', err);
-      res.status(500).json({ error: 'Failed to retrieve enquiries.' });
+  // Protected: Get all enquiries (Sales, Admin, Super Admin)
+  app.get(
+    '/api/enquiries',
+    requireAdmin,
+    requireRole('sales', 'admin', 'super_admin'),
+    async (req: AuthenticatedRequest, res, next) => {
+      try {
+        const status = req.query.status as string | undefined;
+        const search = req.query.search as string | undefined;
+        const enquiries = await dbAdapter.getEnquiries({ status, search });
+        res.json(enquiries);
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 
-  // Protected: Update enquiry (status, notes, assignedStaff)
-  app.patch('/api/enquiries/:id', requireAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const parsed = enquiryStatusUpdateSchema.safeParse(req.body);
-      if (!parsed.success) {
-        return res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
+  // Protected: Update enquiry (Sales, Admin, Super Admin)
+  app.patch(
+    '/api/enquiries/:id',
+    requireAdmin,
+    requireRole('sales', 'admin', 'super_admin'),
+    requireCsrfProtection,
+    async (req: AuthenticatedRequest, res, next) => {
+      try {
+        const parsed = enquiryStatusUpdateSchema.safeParse(req.body);
+        if (!parsed.success) {
+          return res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
+        }
+        const adminEmail = req.admin!.email;
+        const updated = await dbAdapter.updateEnquiry(req.params.id, parsed.data, adminEmail, req.ip);
+        if (!updated) {
+          return res.status(404).json({ error: 'Enquiry not found.' });
+        }
+        res.json(updated);
+      } catch (err) {
+        next(err);
       }
-      const adminEmail = req.admin?.email || 'admin@falconspices.com';
-      const updated = await dbAdapter.updateEnquiry(req.params.id, parsed.data, adminEmail);
-      if (!updated) {
-        return res.status(404).json({ error: 'Enquiry not found.' });
-      }
-      res.json(updated);
-    } catch (err) {
-      console.error('Error updating enquiry:', err);
-      res.status(500).json({ error: 'Failed to update enquiry.' });
     }
-  });
+  );
 
-  // Protected: Delete enquiry
-  app.delete('/api/enquiries/:id', requireAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const adminEmail = req.admin?.email || 'admin@falconspices.com';
-      const deleted = await dbAdapter.deleteEnquiry(req.params.id, adminEmail);
-      if (!deleted) {
-        return res.status(404).json({ error: 'Enquiry not found.' });
+  // Protected: Delete enquiry (Admin & Super Admin only)
+  app.delete(
+    '/api/enquiries/:id',
+    requireAdmin,
+    requireRole('admin', 'super_admin'),
+    requireCsrfProtection,
+    async (req: AuthenticatedRequest, res, next) => {
+      try {
+        const adminEmail = req.admin!.email;
+        const deleted = await dbAdapter.deleteEnquiry(req.params.id, adminEmail, req.ip);
+        if (!deleted) {
+          return res.status(404).json({ error: 'Enquiry not found.' });
+        }
+        res.json({ success: true, message: 'Enquiry deleted.' });
+      } catch (err) {
+        next(err);
       }
-      res.json({ success: true, message: 'Enquiry deleted.' });
-    } catch (err) {
-      console.error('Error deleting enquiry:', err);
-      res.status(500).json({ error: 'Failed to delete enquiry.' });
     }
-  });
+  );
 
   // --------------------------------------------------------------------------
   // 3. ADMIN AUTHENTICATION
   // --------------------------------------------------------------------------
 
-  // Admin login endpoint
-  app.post('/api/admin/login', authLimiter, async (req, res) => {
+  // Admin login: Sets HttpOnly cookie; NEVER exposes raw JWT token in JSON response
+  app.post('/api/admin/login', authLimiter, async (req, res, next) => {
     try {
       const parsed = adminLoginSchema.safeParse(req.body);
       if (!parsed.success) {
@@ -318,36 +410,40 @@ async function startServer() {
         role: adminUser.role
       });
 
-      // Set HttpOnly cookie
+      // Set secure HttpOnly cookie
       res.cookie('falcon_admin_token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProduction,
         sameSite: 'lax',
         maxAge: 8 * 60 * 60 * 1000 // 8 hours
       });
 
+      // Return user profile WITHOUT leaking the raw JWT token in JSON
       return res.json({
         success: true,
-        token,
         admin: {
           id: adminUser.id,
           email: adminUser.email,
+          name: adminUser.name || 'Admin',
           role: adminUser.role
         }
       });
     } catch (err) {
-      console.error('Admin login error:', err);
-      return res.status(500).json({ error: 'An unexpected authentication error occurred.' });
+      next(err);
     }
   });
 
-  // Admin logout endpoint
-  app.post('/api/admin/logout', (req, res) => {
-    res.clearCookie('falcon_admin_token');
+  // Admin logout: Clears HttpOnly cookie
+  app.post('/api/admin/logout', (_req, res) => {
+    res.clearCookie('falcon_admin_token', {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax'
+    });
     res.json({ success: true, message: 'Logged out successfully.' });
   });
 
-  // Session verification endpoint
+  // Session verification: Reads cookie
   app.get('/api/admin/session', requireAdmin, (req: AuthenticatedRequest, res) => {
     res.json({
       valid: true,
@@ -355,98 +451,105 @@ async function startServer() {
     });
   });
 
-  // Protected: Audit logs
-  app.get('/api/admin/audit-logs', requireAdmin, async (_req: AuthenticatedRequest, res) => {
-    try {
-      const logs = await dbAdapter.getAuditLogs();
-      res.json(logs);
-    } catch (err) {
-      res.status(500).json({ error: 'Failed to retrieve audit logs.' });
+  // Protected: Audit logs (Admin and Super Admin only)
+  app.get(
+    '/api/admin/audit-logs',
+    requireAdmin,
+    requireRole('admin', 'super_admin'),
+    async (_req: AuthenticatedRequest, res, next) => {
+      try {
+        const logs = await dbAdapter.getAuditLogs();
+        res.json(logs);
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 
   // --------------------------------------------------------------------------
-  // 4. IMAGE UPLOAD API
+  // 4. IMAGE UPLOAD API (Supabase Storage / Magic Bytes Checked)
   // --------------------------------------------------------------------------
 
-  app.post('/api/admin/upload-image', requireAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const { imageData, filename } = req.body;
-      if (!imageData || typeof imageData !== 'string') {
-        return res.status(400).json({ error: 'Base64 image data string is required.' });
+  app.post(
+    '/api/admin/upload-image',
+    requireAdmin,
+    requireRole('admin', 'super_admin'),
+    requireCsrfProtection,
+    async (req: AuthenticatedRequest, res, next) => {
+      try {
+        const { imageData, filename } = req.body;
+        if (!imageData || typeof imageData !== 'string') {
+          return res.status(400).json({ error: 'Base64 image data string is required.' });
+        }
+
+        const uploadResult = await uploadProductImage(
+          imageData,
+          filename || 'spice_product',
+          dbAdapter.supabase
+        );
+
+        const adminEmail = req.admin!.email;
+        await dbAdapter.logAudit({
+          adminEmail,
+          action: 'IMAGE_UPLOAD',
+          entity: 'image',
+          entityId: uploadResult.filename,
+          oldValue: null,
+          newValue: {
+            url: uploadResult.url,
+            sizeBytes: uploadResult.sizeBytes,
+            provider: uploadResult.storageProvider
+          },
+          ipAddress: req.ip
+        });
+
+        return res.status(201).json({
+          success: true,
+          url: uploadResult.url
+        });
+      } catch (err: any) {
+        return res.status(400).json({ error: err.message || 'Failed to upload image.' });
       }
-
-      // Check format (e.g. data:image/jpeg;base64,...)
-      const matches = imageData.match(/^data:image\/([a-zA-Z0-9]+);base64,(.+)$/);
-      if (!matches) {
-        return res.status(400).json({ error: 'Invalid image format. Must be base64 data URI.' });
-      }
-
-      const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1];
-      const buffer = Buffer.from(matches[2], 'base64');
-
-      // 5MB limit
-      if (buffer.length > 5 * 1024 * 1024) {
-        return res.status(400).json({ error: 'Image exceeds maximum allowable size of 5MB.' });
-      }
-
-      const cleanFilename = (filename || 'spice-product')
-        .replace(/[^a-zA-Z0-9_-]/g, '_')
-        .substring(0, 30);
-      const safeName = `${cleanFilename}_${Date.now()}.${ext}`;
-      const filePath = path.join(UPLOADS_DIR, safeName);
-
-      fs.writeFileSync(filePath, buffer);
-
-      const publicUrl = `/uploads/${safeName}`;
-
-      const adminEmail = req.admin?.email || 'admin@falconspices.com';
-      await dbAdapter.logAudit({
-        adminEmail,
-        action: 'IMAGE_UPLOAD',
-        entity: 'image',
-        entityId: safeName,
-        oldValue: null,
-        newValue: { publicUrl, sizeBytes: buffer.length }
-      });
-
-      return res.status(201).json({
-        success: true,
-        url: publicUrl
-      });
-    } catch (err) {
-      console.error('Image upload error:', err);
-      return res.status(500).json({ error: 'Failed to upload image.' });
     }
-  });
+  );
 
   // --------------------------------------------------------------------------
-  // 5. COMPANY SETTINGS API
+  // 5. COMPANY SETTINGS API (PostgreSQL Backed)
   // --------------------------------------------------------------------------
 
   // Public: Get company settings
-  app.get('/api/company-settings', async (_req, res) => {
+  app.get('/api/company-settings', async (_req, res, next) => {
     try {
       const settings = await dbAdapter.getCompanySettings();
       res.json(settings);
     } catch (err) {
-      res.status(500).json({ error: 'Failed to retrieve company settings.' });
+      next(err);
     }
   });
 
-  // Protected: Update company settings
-  app.put('/api/admin/settings', requireAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-      const adminEmail = req.admin?.email || 'admin@falconspices.com';
-      const updated = await dbAdapter.updateCompanySettings(req.body, adminEmail);
-      res.json(updated);
-    } catch (err) {
-      res.status(500).json({ error: 'Failed to update company settings.' });
+  // Protected: Update company settings (SUPER ADMIN ONLY)
+  app.put(
+    '/api/admin/settings',
+    requireAdmin,
+    requireRole('super_admin'),
+    requireCsrfProtection,
+    async (req: AuthenticatedRequest, res, next) => {
+      try {
+        const parsed = companySettingsSchema.safeParse(req.body);
+        if (!parsed.success) {
+          return res.status(400).json({ error: 'Validation failed', details: parsed.error.flatten() });
+        }
+        const adminEmail = req.admin!.email;
+        const updated = await dbAdapter.updateCompanySettings(parsed.data, adminEmail, req.ip);
+        res.json(updated);
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 
   // --------------------------------------------------------------------------
-  // 6. GEMINI AI SPECIFICATIONS & PACKAGING ADVISOR
+  // 6. GEMINI AI SPECIFICATIONS ADVISOR (Hardened with Timeout & Zod Validation)
   // --------------------------------------------------------------------------
 
   app.post('/api/ai-spec-recommendation', aiLimiter, async (req, res) => {
@@ -462,18 +565,18 @@ async function startServer() {
     if (!ai) {
       return res.status(503).json({
         success: false,
-        error: 'AI Specification Assistant is currently unconfigured or unavailable. Please contact our export team directly for tailored specifications.'
+        error: 'AI Specification Assistant is currently unconfigured or unavailable. Please contact our export desk directly at export@falconspices.com or via WhatsApp for verified technical specifications.'
       });
     }
 
     try {
       const prompt = `You are a technical Indian spice export specialist for Falcon International Traders.
-A B2B buyer is requesting specification advice:
+A B2B commercial food buyer is requesting specification advice:
 - Product Interest: ${productInterest}
 - Destination Market / Port: ${targetMarket}
-- Buyer Specific Requirement: ${requirement}
+- Specific Requirement: ${requirement}
 
-Respond ONLY with a valid JSON object matching this exact schema:
+Respond ONLY with a valid, single JSON object matching this exact schema:
 {
   "recommendedGrade": "string specifying standard export quality grade or active component range",
   "moisture": "string e.g. Max 10.0%",
@@ -481,42 +584,61 @@ Respond ONLY with a valid JSON object matching this exact schema:
   "packaging": "string describing ideal export packaging",
   "microbiology": "string describing sterilization/microbiological requirement (e.g. steam sterilized)",
   "notes": "string with concise export logistics or handling guidance",
-  "disclaimer": "AI-generated recommendations are for preliminary guidance only and should be verified against applicable destination-country regulations and customer specifications."
+  "disclaimer": "AI recommendations provide preliminary technical guidance only. Every commercial consignment is verified against accredited Certificate of Analysis (COA) testing according to destination regulatory limits."
 }`;
 
-      const response = await ai.models.generateContent({
+      // 10-second timeout protection to avoid hanging upstream requests
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('AI generation request timed out after 10000ms')), 10000);
+      });
+
+      const generatePromise = ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt
       });
 
+      const response = await Promise.race([generatePromise, timeoutPromise]);
       const responseText = response.text || '';
-      
+
       const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const parsedJson = JSON.parse(jsonMatch[0]);
-        return res.json({
-          success: true,
-          recommendation: parsedJson
+      if (!jsonMatch) {
+        console.warn('[AI Service] Gemini did not return a valid JSON object structure.');
+        return res.status(503).json({
+          success: false,
+          error: 'AI Specification Assistant was unable to generate an authoritative recommendation. Please contact our technical export desk directly for verified batch specifications.'
+        });
+      }
+
+      let parsedJson: any;
+      try {
+        parsedJson = JSON.parse(jsonMatch[0]);
+      } catch (jsonErr) {
+        console.warn('[AI Service] Failed to parse JSON from Gemini response.');
+        return res.status(503).json({
+          success: false,
+          error: 'AI output validation error. Please contact our technical export desk for verified batch specifications.'
+        });
+      }
+
+      // Strictly validate Gemini's JSON output with Zod
+      const validatedOutput = aiRecommendationOutputSchema.safeParse(parsedJson);
+      if (!validatedOutput.success) {
+        console.warn('[AI Service] Gemini JSON output failed Zod schema validation:', validatedOutput.error.flatten());
+        return res.status(503).json({
+          success: false,
+          error: 'AI generated output did not conform to export technical standards. Please contact our technical export desk directly for verified batch specifications.'
         });
       }
 
       return res.json({
         success: true,
-        recommendation: {
-          recommendedGrade: `Export Standard Prime Grade for ${productInterest}`,
-          moisture: "Standard destination limit",
-          meshSize: "Standard export mesh",
-          packaging: "Multi-wall Kraft paper or vacuum barrier bags",
-          microbiology: "Micro-sterilization per destination regulations",
-          notes: responseText.trim(),
-          disclaimer: "AI-generated recommendations are for preliminary guidance only and should be verified against applicable destination-country regulations and customer specifications."
-        }
+        recommendation: validatedOutput.data
       });
-    } catch (err) {
-      console.error('Gemini AI spec recommendation error:', err);
+    } catch (err: any) {
+      console.error('[AI Service Error]:', err?.message || err);
       return res.status(503).json({
         success: false,
-        error: 'AI Specification Assistant was unable to process your request. Please contact our export desk for direct technical specification assistance.'
+        error: 'AI Specification Assistant is temporarily unavailable. Please reach our technical export team directly at export@falconspices.com or via WhatsApp.'
       });
     }
   });
@@ -547,28 +669,31 @@ Sitemap: ${APP_URL}/sitemap.xml
         '/quality',
         '/export',
         '/private-label',
-        '/contact',
-        '/privacy',
-        '/terms'
+        '/contact'
       ];
-
-      const staticUrls = staticPages.map(page => `  <url>
-    <loc>${APP_URL}${page}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>${page === '' ? '1.0' : '0.8'}</priority>
-  </url>`).join('\n');
-
-      const productUrls = products.map(p => `  <url>
-    <loc>${APP_URL}/products/${p.slug}</loc>
-    <lastmod>${p.updatedAt ? p.updatedAt.split('T')[0] : new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>`).join('\n');
 
       const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${staticUrls}
-${productUrls}
+${staticPages
+  .map(
+    path => `  <url>
+    <loc>${APP_URL}${path}</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>${path === '' ? 'daily' : 'weekly'}</changefreq>
+    <priority>${path === '' ? '1.0' : '0.8'}</priority>
+  </url>`
+  )
+  .join('\n')}
+${products
+  .map(
+    p => `  <url>
+    <loc>${APP_URL}/products/${p.slug}</loc>
+    <lastmod>${(p.updatedAt || p.createdAt || new Date().toISOString()).split('T')[0]}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>`
+  )
+  .join('\n')}
 </urlset>`;
 
       res.type('application/xml');
@@ -579,29 +704,49 @@ ${productUrls}
   });
 
   // --------------------------------------------------------------------------
-  // 8. STATIC & VITE MIDDLEWARE
+  // 8. CENTRALIZED ERROR HANDLING MIDDLEWARE (Never leaks stack traces)
   // --------------------------------------------------------------------------
+  app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
+    const reqId = (req as any).id || 'unknown';
+    console.error(`[Error Handler] [Request ${reqId}]:`, err?.message || err);
 
-  if (process.env.NODE_ENV === 'production') {
-    const distPath = path.join(currentDirname, 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (_req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+    if (res.headersSent) return;
+
+    const statusCode = err.status || err.statusCode || 500;
+    const clientMessage =
+      isProduction && statusCode === 500
+        ? 'Internal Server Error. Please contact support or retry shortly.'
+        : err.message || 'An unexpected error occurred.';
+
+    res.status(statusCode).json({
+      error: clientMessage,
+      requestId: reqId
     });
-  } else {
+  });
+
+  // --------------------------------------------------------------------------
+  // 9. VITE SSR / CLIENT SPA SERVING
+  // --------------------------------------------------------------------------
+  if (!isProduction) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa'
     });
     app.use(vite.middlewares);
+  } else {
+    const distPath = path.join(currentDirname, 'dist');
+    app.use(express.static(distPath));
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(distPath, 'index.html'));
+    });
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Falcon International Traders server running on http://0.0.0.0:${PORT}`);
+    console.info(`[Falcon Server] Running at ${APP_URL} in ${process.env.NODE_ENV || 'development'} mode.`);
   });
 }
 
 startServer().catch(err => {
-  console.error('Fatal server startup error:', err);
+  console.error('[Fatal Error starting server]:', err);
   process.exit(1);
 });

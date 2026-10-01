@@ -42,9 +42,11 @@ export const AdminSettings: React.FC = () => {
     try {
       const res = await fetch('/api/admin/settings', {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'X-Falcon-Admin': '1',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
         body: JSON.stringify(settings)
       });

@@ -12,7 +12,11 @@ export const AdminAuditLog: React.FC = () => {
     setLoading(true);
     const token = getAuthToken();
     fetch('/api/admin/audit-logs', {
-      headers: { 'Authorization': `Bearer ${token}` }
+      credentials: 'include',
+      headers: {
+        'X-Falcon-Admin': '1',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      }
     })
       .then(res => res.ok ? res.json() : [])
       .then(data => setLogs(data))

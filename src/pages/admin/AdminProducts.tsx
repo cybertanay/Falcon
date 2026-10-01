@@ -40,9 +40,11 @@ export const AdminProducts: React.FC = () => {
     const token = getAuthToken();
     return fetch(url, {
       ...options,
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'X-Falcon-Admin': '1',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         ...(options.headers || {})
       }
     });
@@ -50,7 +52,7 @@ export const AdminProducts: React.FC = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await authFetch('/api/products?all=true');
+      const res = await authFetch('/api/admin/products');
       if (res.ok) {
         const data = await res.json();
         setProducts(data);
