@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextAnimationCollection, AnimatedTopDock } from "@designcodeio/threeui";
+import { PortalFieldCollection } from "../shaders/neuform-isolated/NeuformIsolatedEffects";
 import "@designcodeio/threeui/style.css";
 
 /**
@@ -39,3 +40,21 @@ export function TopDockScene() {
     </div>
   );
 }
+
+/**
+ * ThreeUI PortalFieldCollection - Cloud Field (cloud-field)
+ * Canonical usage according to ThreeUI exact specification
+ */
+export function CloudFieldScene() {
+  return (
+    <div className="shader-frame w-full h-[500px]">
+      <PortalFieldCollection
+        variant="cloud-field"
+        hue={0}
+        saturation={1.00}
+        brightness={1.00}
+      />
+    </div>
+  );
+}
+

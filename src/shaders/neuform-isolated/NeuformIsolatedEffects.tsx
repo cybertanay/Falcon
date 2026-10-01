@@ -2003,22 +2003,25 @@ export const DataField = createEffectComponent(EFFECTS.vertex9);
 export const TopologyField = createEffectComponent(EFFECTS.topology);
 export const VoidField = createEffectComponent(EFFECTS.voidField);
 
-export type TextAnimationCollectionProps = NeuformIsolatedEffectProps & {
-  variant?: "threeui-intro" | "particle-wordmark" | "audio-wordmark" | "gallery-heading" | string;
+export type PortalFieldCollectionProps = NeuformIsolatedEffectProps & {
+  variant?: "cloud-field" | "cloud" | "dimensional" | "vertex9" | "topology" | "void" | string;
 };
 
-export function TextAnimationCollection({
-  variant = "threeui-intro",
+export function PortalFieldCollection({
+  variant = "cloud-field",
   ...props
-}: TextAnimationCollectionProps) {
-  if (variant === "threeui-intro") {
-    return <ThreeUIIntro {...props} />;
+}: PortalFieldCollectionProps) {
+  if (variant === "cloud-field" || variant === "cloud") {
+    return <CloudField {...props} />;
   }
-  if (variant === "particle-wordmark") {
-    return <ParticleWordmark {...props} />;
+  if (variant === "dimensional") {
+    return <DimensionalField {...props} />;
   }
-  if (variant === "audio-wordmark") {
-    return <AudioWordmark {...props} />;
+  if (variant === "vertex9") {
+    return <DataField {...props} />;
   }
-  return <ThreeUIIntro {...props} />;
+  if (variant === "topology") {
+    return <TopologyField {...props} />;
+  }
+  return <CloudField {...props} />;
 }

@@ -31,7 +31,7 @@ export const TrustStrip: React.FC = () => {
   ];
 
   return (
-    <div className="bg-[#082018] border-y border-[#154736] py-6 px-4 font-sans relative">
+    <div className="bg-[#082018]/70 backdrop-blur-md border-y border-[#154736]/60 py-6 px-4 font-sans relative">
       <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
         {items.map((item, idx) => {
           const Icon = item.icon;

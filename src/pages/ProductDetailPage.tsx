@@ -116,7 +116,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
   };
 
   return (
-    <div className="bg-[#030d0a] text-[#fdfcf0] py-12 px-4 sm:px-6 lg:px-8 space-y-14 font-sans max-w-7xl mx-auto text-left">
+    <div className="bg-transparent text-[#fdfcf0] py-12 px-4 sm:px-6 lg:px-8 space-y-14 font-sans max-w-7xl mx-auto text-left">
       
       {/* Inject Structured Data */}
       <script

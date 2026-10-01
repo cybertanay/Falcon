@@ -64,7 +64,7 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#05140f] text-[#fdfcf0] py-12 px-4 sm:px-6 lg:px-8 space-y-16 font-sans max-w-7xl mx-auto">
+    <div className="bg-transparent text-[#fdfcf0] py-12 px-4 sm:px-6 lg:px-8 space-y-16 font-sans max-w-7xl mx-auto">
       
       {/* Title */}
       <div className="text-center max-w-3xl mx-auto space-y-4">

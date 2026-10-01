@@ -6,6 +6,7 @@ import { Footer } from './components/Footer';
 import { QuoteModal } from './components/QuoteModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { ScrollToTop } from './components/ScrollToTop';
+import { CloudFieldBackground } from './components/CloudFieldBackground';
 
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
@@ -46,9 +47,11 @@ export default function App() {
   };
 
   const PublicLayout: React.FC = () => (
-    <div className="min-h-screen bg-[#030d0a] text-[#fdfcf0] flex flex-col font-sans selection:bg-[#f2a900] selection:text-[#030d0a]">
+    <div className="min-h-screen bg-[#030d0a] text-[#fdfcf0] flex flex-col font-sans selection:bg-[#f2a900] selection:text-[#030d0a] relative">
+      {/* ThreeUI Strata Cloud Field Ambient Background (Green to Black Luxury Palette) */}
+      <CloudFieldBackground />
       <Navbar onRequestQuote={handleOpenQuoteModal} />
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         <Outlet />
       </main>
       <Footer onRequestQuote={() => handleOpenQuoteModal()} />

@@ -10,7 +10,7 @@ interface ProductsPageProps {
 
 export const ProductsPage: React.FC<ProductsPageProps> = ({ products, onRequestQuote }) => {
   return (
-    <div className="bg-[#030d0a] text-[#fdfcf0] py-16 px-4 sm:px-6 lg:px-8 space-y-14 font-sans max-w-7xl mx-auto">
+    <div className="bg-transparent text-[#fdfcf0] py-16 px-4 sm:px-6 lg:px-8 space-y-14 font-sans max-w-7xl mx-auto">
       
       {/* Page Header */}
       <div className="text-center max-w-3xl mx-auto space-y-4">

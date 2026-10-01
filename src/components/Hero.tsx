@@ -12,7 +12,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
   return (
-    <section className="relative bg-[#030d0a] text-[#fdfcf0] overflow-hidden py-16 sm:py-24 lg:py-32 font-sans border-b border-[#154736]/60">
+    <section className="relative bg-transparent text-[#fdfcf0] overflow-hidden py-16 sm:py-24 lg:py-32 font-sans border-b border-[#154736]/40">
       
       {/* 1. Interactive WebGL Three.js Particle Atmosphere */}
       <HeroScene />

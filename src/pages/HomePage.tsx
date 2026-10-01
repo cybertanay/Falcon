@@ -21,7 +21,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
   const featuredProducts = products.filter(p => p.featured).slice(0, 4);
 
   return (
-    <div className="space-y-20 lg:space-y-32 bg-[#030d0a] text-[#fdfcf0] font-sans pb-16">
+    <div className="space-y-20 lg:space-y-32 bg-transparent text-[#fdfcf0] font-sans pb-16">
       
       {/* 1. CINEMATIC HERO SECTION */}
       <Hero onRequestQuote={() => onRequestQuote()} />
@@ -136,7 +136,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
           ].map((item, idx) => {
             const Icon = item.icon;
             return (
-              <div key={idx} className="bg-[#05140f] p-7 rounded-2xl border border-[#154736]/60 hover:border-[#f2a900]/40 transition-all space-y-3 group text-left">
+              <div key={idx} className="bg-[#05140f]/80 backdrop-blur-md p-7 rounded-2xl border border-[#154736]/60 hover:border-[#f2a900]/40 transition-all space-y-3 group text-left">
                 <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-[#f2a900] group-hover:scale-110 transition-transform">
                   <Icon className="w-6 h-6" />
                 </div>
@@ -158,7 +158,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
       </section>
 
       {/* 8. GLOBAL EXPORT DESTINATIONS & PORTS */}
-      <section className="bg-[#05140f] border-y border-[#154736]/60 py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section className="bg-[#05140f]/70 backdrop-blur-md border-y border-[#154736]/60 py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="max-w-7xl mx-auto space-y-12 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs font-mono text-[#f2a900] uppercase tracking-widest block">
@@ -174,7 +174,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {GLOBAL_DESTINATIONS.map((dest) => (
-              <div key={dest.region} className="bg-[#030d0a] p-6 rounded-2xl border border-[#154736]/60 space-y-3 text-left">
+              <div key={dest.region} className="bg-[#030d0a]/70 backdrop-blur-sm p-6 rounded-2xl border border-[#154736]/60 space-y-3 text-left">
                 <div className="flex items-center justify-between border-b border-[#154736]/60 pb-3">
                   <span className="font-serif font-bold text-[#f2a900] text-base flex items-center gap-2">
                     <Globe className="w-4 h-4 text-[#f2a900]" />
@@ -196,7 +196,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
       {/* 9. BUYER FAQ ACCORDION */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-1.5 text-xs font-mono text-[#f2a900] uppercase tracking-widest bg-[#05140f] px-3.5 py-1 rounded-full border border-[#f2a900]/30">
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono text-[#f2a900] uppercase tracking-widest bg-[#05140f]/80 backdrop-blur-sm px-3.5 py-1 rounded-full border border-[#f2a900]/30">
             <HelpCircle className="w-3.5 h-3.5" />
             <span>Buyer Inquiries</span>
           </div>
@@ -212,7 +212,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
           {GENERAL_FAQS.map((faq, idx) => (
             <div
               key={idx}
-              className="bg-[#05140f] rounded-xl border border-[#154736]/60 overflow-hidden"
+              className="bg-[#05140f]/80 backdrop-blur-md rounded-xl border border-[#154736]/60 overflow-hidden"
             >
               <button
                 onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
@@ -237,7 +237,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
 
       {/* 10. FINAL CONVERSION BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-[#05140f] via-[#0b2317] to-[#05140f] p-8 sm:p-14 rounded-3xl border border-[#f2a900]/40 text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="bg-gradient-to-r from-[#05140f]/90 via-[#0b2317]/90 to-[#05140f]/90 backdrop-blur-md p-8 sm:p-14 rounded-3xl border border-[#f2a900]/40 text-center space-y-6 shadow-2xl relative overflow-hidden">
           <div className="max-w-2xl mx-auto space-y-3">
             <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#fdfcf0] tracking-tight">
               Ready to Import Indian Spices with Confidence?

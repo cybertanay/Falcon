@@ -19,7 +19,7 @@ export const QualityPage: React.FC<QualityPageProps> = ({ onRequestQuote }) => {
   ];
 
   return (
-    <div className="bg-[#030d0a] text-[#fdfcf0] py-16 px-4 sm:px-6 lg:px-8 space-y-20 font-sans max-w-7xl mx-auto text-left">
+    <div className="bg-transparent text-[#fdfcf0] py-16 px-4 sm:px-6 lg:px-8 space-y-20 font-sans max-w-7xl mx-auto text-left">
       
       {/* Title Header */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
