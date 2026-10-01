@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -7,6 +7,7 @@ import { QuoteModal } from './components/QuoteModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { ScrollToTop } from './components/ScrollToTop';
 import { CloudFieldBackground } from './components/CloudFieldBackground';
+import { HomePredictiveBackground } from './components/HomePredictiveBackground';
 
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
@@ -46,18 +47,23 @@ export default function App() {
     setIsQuoteModalOpen(true);
   };
 
-  const PublicLayout: React.FC = () => (
-    <div className="min-h-screen bg-[#030d0a] text-[#fdfcf0] flex flex-col font-sans selection:bg-[#f2a900] selection:text-[#030d0a] relative">
-      {/* ThreeUI Strata Cloud Field Ambient Background (Green to Black Luxury Palette) */}
-      <CloudFieldBackground />
-      <Navbar onRequestQuote={handleOpenQuoteModal} />
-      <main className="flex-1 relative z-10">
-        <Outlet />
-      </main>
-      <Footer onRequestQuote={() => handleOpenQuoteModal()} />
-      <FloatingWhatsApp />
-    </div>
-  );
+  const PublicLayout: React.FC = () => {
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+
+    return (
+      <div className="min-h-screen bg-[#020b08] text-[#fdfcf0] flex flex-col font-sans selection:bg-[#f2a900] selection:text-[#030d0a] relative">
+        {/* ThreeUI Predictive Arc on Home Page; ThreeUI Strata Cloud Field on all other pages */}
+        {isHomePage ? <HomePredictiveBackground /> : <CloudFieldBackground />}
+        <Navbar onRequestQuote={handleOpenQuoteModal} />
+        <main className="flex-1 relative z-10">
+          <Outlet />
+        </main>
+        <Footer onRequestQuote={() => handleOpenQuoteModal()} />
+        <FloatingWhatsApp />
+      </div>
+    );
+  };
 
   return (
     <BrowserRouter>
