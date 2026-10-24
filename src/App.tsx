@@ -32,6 +32,27 @@ import { AdminAuditLog } from './pages/admin/AdminAuditLog';
 import { Product } from './types';
 import { getCatalogueProducts } from './lib/storage';
 
+// Defined outside App so it is not re-created (and the whole page remounted) on every App render;
+// remounting lost scroll position and broke focus return when the quote modal closed.
+const PublicLayout: React.FC<{ onRequestQuote: (productName?: string) => void }> = ({ onRequestQuote }) => (
+  <div className="min-h-screen bg-[#030d0a] text-[#fdfcf0] flex flex-col font-sans selection:bg-[#f2a900] selection:text-[#030d0a] relative">
+    {/* ThreeUI Strata Cloud Field Ambient Background (Green to Black Luxury Palette) */}
+    <CloudFieldBackground />
+    <a
+      href="#main-content"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-[#f2a900] focus:text-[#030d0a] focus:px-4 focus:py-2 focus:rounded-lg focus:font-bold"
+    >
+      Skip to main content
+    </a>
+    <Navbar onRequestQuote={onRequestQuote} />
+    <main id="main-content" tabIndex={-1} className="flex-1 relative z-10 focus:outline-none">
+      <Outlet />
+    </main>
+    <Footer onRequestQuote={() => onRequestQuote()} />
+    <FloatingWhatsApp />
+  </div>
+);
+
 export default function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
@@ -46,26 +67,13 @@ export default function App() {
     setIsQuoteModalOpen(true);
   };
 
-  const PublicLayout: React.FC = () => (
-    <div className="min-h-screen bg-[#030d0a] text-[#fdfcf0] flex flex-col font-sans selection:bg-[#f2a900] selection:text-[#030d0a] relative">
-      {/* ThreeUI Strata Cloud Field Ambient Background (Green to Black Luxury Palette) */}
-      <CloudFieldBackground />
-      <Navbar onRequestQuote={handleOpenQuoteModal} />
-      <main className="flex-1 relative z-10">
-        <Outlet />
-      </main>
-      <Footer onRequestQuote={() => handleOpenQuoteModal()} />
-      <FloatingWhatsApp />
-    </div>
-  );
-
   return (
     <BrowserRouter>
       <ScrollToTop />
 
       <Routes>
         {/* Public Website Routes */}
-        <Route element={<PublicLayout />}>
+        <Route element={<PublicLayout onRequestQuote={handleOpenQuoteModal} />}>
           <Route path="/" element={<HomePage products={products} onRequestQuote={handleOpenQuoteModal} />} />
           <Route path="/products" element={<ProductsPage products={products} onRequestQuote={handleOpenQuoteModal} />} />
           <Route path="/products/:slug" element={<ProductDetailPage products={products} onRequestQuote={handleOpenQuoteModal} />} />

@@ -599,7 +599,7 @@ async function startServer() {
     if (!ai) {
       return res.status(503).json({
         success: false,
-        error: 'AI Specification Assistant is currently unconfigured or unavailable. Please contact our export desk directly at export@falconspices.com or via WhatsApp for verified technical specifications.'
+        error: 'AI Specification Assistant is currently unavailable. Please use the enquiry form to ask our export desk for technical specifications.'
       });
     }
 
@@ -674,7 +674,7 @@ Respond ONLY with a valid, single JSON object matching this exact schema:
       console.error('[AI Service Error]:', err?.message || err);
       return res.status(503).json({
         success: false,
-        error: 'AI Specification Assistant is temporarily unavailable. Please reach our technical export team directly at export@falconspices.com or via WhatsApp.'
+        error: 'AI Specification Assistant is temporarily unavailable. Please use the enquiry form to reach our export team.'
       });
     }
   });

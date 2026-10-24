@@ -64,16 +64,18 @@ export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
                 <span>Explore Products</span>
               </Link>
 
-              <a
-                href={COMPANY_INFO.socials.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#05140f] hover:bg-[#0b2317] text-[#f2a900] border border-[#154736] font-medium px-4 py-4 rounded-lg flex items-center justify-center gap-2 text-sm transition-all"
-                title="Direct WhatsApp Export Enquiry"
-              >
-                <Phone className="w-4 h-4 text-[#f2a900]" />
-                <span className="hidden sm:inline">WhatsApp Desk</span>
-              </a>
+              {COMPANY_INFO.socials.whatsapp && (
+                <a
+                  href={COMPANY_INFO.socials.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#05140f] hover:bg-[#0b2317] text-[#f2a900] border border-[#154736] font-medium px-4 py-4 rounded-lg flex items-center justify-center gap-2 text-sm transition-all"
+                  aria-label="Contact the export desk on WhatsApp (opens in a new tab)"
+                >
+                  <Phone className="w-4 h-4 text-[#f2a900]" aria-hidden="true" />
+                  <span className="hidden sm:inline">WhatsApp Desk</span>
+                </a>
+              )}
             </div>
 
             {/* Trust Highlights Strip */}

@@ -7,10 +7,10 @@ export const AdminSettings: React.FC = () => {
     name: 'Falcon International Traders',
     tagline: 'Indian Agro-Commodities & Spice Export Trading Desk',
     positioning: '',
-    email: 'export@falconspices.com',
-    whatsapp: '+91 98765 43210',
-    phone: '+91 98765 43210',
-    address: 'Navi Mumbai / Cochin Port Hub, India',
+    email: '',
+    whatsapp: '',
+    phone: '',
+    address: '',
     websiteUrl: 'https://falconinternationaltraders.com',
     socials: {}
   });

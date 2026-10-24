@@ -20,7 +20,10 @@ interface EnquiryEmailPayload {
  */
 export async function sendEnquiryEmails(payload: EnquiryEmailPayload): Promise<{ success: boolean; customerNotified: boolean; businessNotified: boolean }> {
   const apiKey = process.env.RESEND_API_KEY;
-  const businessEmail = process.env.BUSINESS_EMAIL || 'export@falconspices.com';
+  // No fallback addresses: sending from or to an unverified mailbox is worse than not sending.
+  const businessEmail = (process.env.BUSINESS_EMAIL || '').trim();
+  const fromAddress = (process.env.EMAIL_FROM_ADDRESS || '').trim();
+  const whatsappNumber = (process.env.WHATSAPP_NUMBER || '').trim();
 
   // Sanitize all inputs to prevent HTML injection
   const safeRef = xss(payload.reference);
@@ -39,6 +42,11 @@ export async function sendEnquiryEmails(payload: EnquiryEmailPayload): Promise<{
     return { success: true, customerNotified: false, businessNotified: false };
   }
 
+  if (!businessEmail || !fromAddress) {
+    console.warn(`[Email Service] BUSINESS_EMAIL or EMAIL_FROM_ADDRESS not set. Skipping email for enquiry ref ${safeRef}; the enquiry is still stored.`);
+    return { success: false, customerNotified: false, businessNotified: false };
+  }
+
   let customerNotified = false;
   let businessNotified = false;
 
@@ -51,7 +59,7 @@ export async function sendEnquiryEmails(payload: EnquiryEmailPayload): Promise<{
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Falcon Website Leads <export@falconspices.com>',
+        from: `Falcon Website Leads <${fromAddress}>`,
         to: [businessEmail],
         reply_to: safeEmail,
         subject: `[New B2B Quote Lead: ${safeRef}] ${safeProduct} - ${safeCompany} (${safeCountry})`,
@@ -100,7 +108,7 @@ export async function sendEnquiryEmails(payload: EnquiryEmailPayload): Promise<{
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Falcon International Traders <export@falconspices.com>',
+        from: `Falcon International Traders <${fromAddress}>`,
         to: [safeEmail],
         subject: `[Quote Request Received: ${safeRef}] Falcon International Traders`,
         html: `
@@ -125,7 +133,7 @@ export async function sendEnquiryEmails(payload: EnquiryEmailPayload): Promise<{
               <ul style="padding-left: 20px; margin-top: 0; color: #555555;">
                 <li>Our export desk will review your requirements and reply by email.</li>
                 <li>This confirmation is not a quotation or an accepted order. Prices, specifications and terms apply only once confirmed in a written quotation and sales contract.</li>
-                <li>If your order requires immediate coordination or sample dispatch, you can reply directly to this email or contact us via WhatsApp at +91 98765 43210.</li>
+                <li>You can reply directly to this email${whatsappNumber ? ` or contact us on WhatsApp at ${xss(whatsappNumber)}` : ''}.</li>
               </ul>
 
               <p style="margin-top: 24px;">Sincerely,<br><strong>Export Sales Team</strong><br>Falcon International Traders</p>

@@ -1,23 +1,48 @@
 import { CompanySettings } from '../types';
 
 /**
- * Baseline Company Information (Placeholders)
- * NOTE FOR HUMAN HANDOFF: These contact details and links are placeholder templates
- * that must be verified and updated with Falcon's official corporate registration
- * details during production onboarding.
+ * Public contact details.
+ *
+ * The values previously hard-coded here (+91 98765 43210, export@falconspices.com,
+ * "Navi Mumbai / Cochin Port Hub") were unverified placeholders. They are now read
+ * from build-time environment variables so that nothing unverified is published.
+ * Leave a variable empty until Falcon management has confirmed the value: the UI
+ * then shows a "pending verification" notice and hides links that need it.
+ *
+ * Read both from Vite (browser bundle) and from process.env (server imports this file).
  */
+function publicEnv(key: string): string {
+  const viteEnv = (import.meta as any).env as Record<string, string | undefined> | undefined;
+  const nodeEnv = typeof process !== 'undefined' ? process.env : undefined;
+  return (viteEnv?.[key] ?? nodeEnv?.[key] ?? '').trim();
+}
+
+const contactEmail = publicEnv('VITE_PUBLIC_CONTACT_EMAIL');
+const whatsappNumber = publicEnv('VITE_PUBLIC_WHATSAPP_NUMBER');
+const phoneNumber = publicEnv('VITE_PUBLIC_PHONE_NUMBER');
+const businessAddress = publicEnv('VITE_PUBLIC_BUSINESS_ADDRESS');
+
+/** Shown wherever a contact detail has not been verified yet. */
+export const CONTACT_PENDING_TEXT = 'Contact details pending verification';
+
+/** Builds a wa.me link, or '' when no verified WhatsApp number is configured. */
+export function whatsappLink(message: string): string {
+  const digits = whatsappNumber.replace(/[^0-9]/g, '');
+  if (!digits) return '';
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+}
+
 export const COMPANY_INFO: CompanySettings = {
   name: "Falcon International Traders",
   tagline: "Indian Agro-Commodities & Spice Export Trading Desk",
-  positioning: "International B2B food and spice exporter supplying wholesale commodities, technical ingredient grades, and private-label packaging to verified global importers and food manufacturers.",
-  email: "export@falconspices.com",
-  whatsapp: "+91 98765 43210", // Pending official verified corporate WhatsApp number
-  phone: "+91 98765 43210", // Pending official corporate telephone line
-  address: "Navi Mumbai / Cochin Port Hub, India",
-  websiteUrl: "https://falconinternationaltraders.com",
+  positioning: "International B2B food and spice exporter supplying wholesale commodities, technical ingredient grades, and private-label packaging to global importers and food manufacturers.",
+  email: contactEmail,
+  whatsapp: whatsappNumber,
+  phone: phoneNumber,
+  address: businessAddress,
+  websiteUrl: publicEnv('VITE_PUBLIC_SITE_URL') || "https://falconinternationaltraders.com",
   socials: {
-    linkedin: "https://linkedin.com/company/falcon-international-traders",
-    whatsapp: "https://wa.me/919876543210?text=Hello%20Falcon%20International%20Traders,%20I%20am%20interested%20in%20discussing%20a%20B2B%20export%20inquiry."
+    whatsapp: whatsappLink("Hello Falcon International Traders, I am interested in discussing a B2B export inquiry.")
   }
 };
 

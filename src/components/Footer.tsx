@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Globe, ShieldCheck, ArrowUpRight, Lock, Phone } from 'lucide-react';
-import { COMPANY_INFO } from '../data/company';
+import { COMPANY_INFO, CONTACT_PENDING_TEXT } from '../data/company';
 
 interface FooterProps {
   onRequestQuote: () => void;
@@ -143,15 +143,21 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
               Export Desk
             </h3>
             <div className="space-y-3 text-xs text-[#a3b899]">
-              <p className="leading-relaxed">
-                <span className="text-[#fdfcf0] font-medium block mb-1">Hub Location:</span>
-                {COMPANY_INFO.address}
-              </p>
+              {COMPANY_INFO.address && (
+                <p className="leading-relaxed">
+                  <span className="text-[#fdfcf0] font-medium block mb-1">Address:</span>
+                  {COMPANY_INFO.address}
+                </p>
+              )}
               <p>
                 <span className="text-[#fdfcf0] font-medium block mb-0.5">Commercial Inquiry:</span>
-                <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#f2a900] hover:underline">
-                  {COMPANY_INFO.email}
-                </a>
+                {COMPANY_INFO.email ? (
+                  <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#f2a900] hover:underline">
+                    {COMPANY_INFO.email}
+                  </a>
+                ) : (
+                  <span>{CONTACT_PENDING_TEXT}. Please use the enquiry form.</span>
+                )}
               </p>
               <div className="pt-2">
                 <button

@@ -1,6 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { Product } from '../types';
-import { COMPANY_INFO } from '../data/company';
+import { COMPANY_INFO, CONTACT_PENDING_TEXT } from '../data/company';
 import { trackEvent } from './analytics';
 
 export function generateProductSpecPDF(product: Product): boolean {
@@ -34,7 +34,8 @@ export function generateProductSpecPDF(product: Product): boolean {
     doc.setFontSize(9);
     doc.setTextColor(163, 184, 153);
     doc.text('Agricultural Commodities & Indian Spices Export Desk', margin, 24);
-    doc.text('Navi Mumbai / Cochin Port Hub, India | export@falconspices.com', margin, 29);
+    const contactLine = [COMPANY_INFO.address, COMPANY_INFO.email].filter(Boolean).join(' | ') || CONTACT_PENDING_TEXT;
+    doc.text(contactLine, margin, 29);
 
     // Document Meta (Right aligned)
     const docDate = new Date().toISOString().split('T')[0];
