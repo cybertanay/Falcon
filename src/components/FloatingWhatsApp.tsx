@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Phone, X, MessageSquare, ArrowRight, ShieldCheck } from 'lucide-react';
-import { COMPANY_INFO } from '../data/company';
+import { COMPANY_INFO, whatsappLink } from '../data/company';
 import { trackEvent } from '../lib/analytics';
 
 export const FloatingWhatsApp: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const defaultMessage = "Hello Falcon International Traders, I am interested in your spice products and would like to discuss a bulk order.";
-  const cleanNumber = COMPANY_INFO.whatsapp.replace(/[^0-9]/g, '');
-  const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(defaultMessage)}`;
+  const whatsappUrl = whatsappLink(defaultMessage);
+
+  // Without a verified WhatsApp number there is nothing to link to.
+  if (!whatsappUrl) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-40 font-sans">
@@ -20,7 +22,7 @@ export const FloatingWhatsApp: React.FC = () => {
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-[#f2a900] animate-ping"></div>
               <span className="text-xs font-bold text-[#f2a900] uppercase tracking-wider">
-                Export Desk Online
+                Export Desk on WhatsApp
               </span>
             </div>
             <button

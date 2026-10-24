@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Globe, ShieldCheck, ArrowUpRight, Lock, Phone } from 'lucide-react';
-import { COMPANY_INFO } from '../data/company';
+import { COMPANY_INFO, CONTACT_PENDING_TEXT } from '../data/company';
 
 interface FooterProps {
   onRequestQuote: () => void;
@@ -44,7 +44,7 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
 
             <div className="pt-2 flex items-center gap-2 text-xs text-[#f2a900] font-medium bg-[#05140f] p-3 rounded-lg border border-[#154736]/70 max-w-md">
               <ShieldCheck className="w-4 h-4 text-[#f2a900] shrink-0" />
-              <span>Direct Wholesale • Micro-sterilization • Statutory Phytosanitary COA</span>
+              <span>B2B Wholesale • Specifications Per Order • Export Documentation</span>
             </div>
           </div>
 
@@ -117,19 +117,19 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
                 </Link>
               </li>
               <li>
-                <Link to="/products/dehydrated-garlic" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                <Link to="/products/garlic-powder-dehydrated" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
                   <span>Dehydrated Garlic</span>
                   <ArrowUpRight className="w-3 h-3 text-[#154736]" />
                 </Link>
               </li>
               <li>
-                <Link to="/products/black-pepper" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                <Link to="/products/black-pepper-tellicherry" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
                   <span>Tellicherry Black Pepper</span>
                   <ArrowUpRight className="w-3 h-3 text-[#154736]" />
                 </Link>
               </li>
               <li>
-                <Link to="/products/green-cardamom" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                <Link to="/products/green-cardamom-bold" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
                   <span>Green Cardamom Pods</span>
                   <ArrowUpRight className="w-3 h-3 text-[#154736]" />
                 </Link>
@@ -143,15 +143,21 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
               Export Desk
             </h3>
             <div className="space-y-3 text-xs text-[#a3b899]">
-              <p className="leading-relaxed">
-                <span className="text-[#fdfcf0] font-medium block mb-1">Hub Location:</span>
-                {COMPANY_INFO.address}
-              </p>
+              {COMPANY_INFO.address && (
+                <p className="leading-relaxed">
+                  <span className="text-[#fdfcf0] font-medium block mb-1">Address:</span>
+                  {COMPANY_INFO.address}
+                </p>
+              )}
               <p>
                 <span className="text-[#fdfcf0] font-medium block mb-0.5">Commercial Inquiry:</span>
-                <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#f2a900] hover:underline">
-                  {COMPANY_INFO.email}
-                </a>
+                {COMPANY_INFO.email ? (
+                  <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#f2a900] hover:underline">
+                    {COMPANY_INFO.email}
+                  </a>
+                ) : (
+                  <span>{CONTACT_PENDING_TEXT}. Please use the enquiry form.</span>
+                )}
               </p>
               <div className="pt-2">
                 <button
@@ -167,7 +173,7 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
         </div>
 
         {/* Bottom Bar & Legal */}
-        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#a3b899]/70">
+        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#a3b899]">
           <p>© {new Date().getFullYear()} Falcon International Traders. All rights reserved.</p>
           
           <div className="flex items-center gap-6">
@@ -176,6 +182,9 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
             </Link>
             <Link to="/terms" className="hover:text-[#f2a900] transition-colors">
               Terms & Conditions
+            </Link>
+            <Link to="/order-policy" className="hover:text-[#f2a900] transition-colors">
+              Order & Claims Policy
             </Link>
             <a href="/sitemap.xml" className="hover:text-[#f2a900] transition-colors" target="_blank" rel="noopener noreferrer">
               Sitemap
@@ -188,8 +197,8 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
         </div>
 
         {/* Editorial Subtext */}
-        <div className="text-center pt-8 text-[11px] font-mono tracking-widest text-[#a3b899]/40 uppercase">
-          FROM INDIA TO GLOBAL PORTS — QUALITY ASSURED BULK COMMODITIES
+        <div className="text-center pt-8 text-[11px] font-mono tracking-widest text-[#a3b899] uppercase">
+          FROM INDIA TO GLOBAL PORTS — B2B BULK COMMODITIES
         </div>
       </div>
     </footer>

@@ -1,38 +1,112 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FileText } from 'lucide-react';
+import { LegalPage, Pending, Fact, H2, List } from '../components/LegalPage';
+import { LEGAL_FACTS } from '../data/legal';
+import { COMPANY_INFO } from '../data/company';
 
-export const TermsConditionsPage: React.FC = () => {
-  return (
-    <div className="bg-transparent text-[#fdfcf0] py-16 px-4 sm:px-6 lg:px-8 space-y-8 font-sans max-w-4xl mx-auto text-left">
-      <div className="space-y-3 border-b border-[#154736]/70 pb-6">
-        <div className="inline-flex items-center gap-1.5 text-xs font-mono text-[#f2a900] uppercase tracking-widest bg-[#05140f] px-3.5 py-1 rounded-full border border-[#f2a900]/30">
-          <FileText className="w-3.5 h-3.5" />
-          <span>INTERNATIONAL TRADE TERMS</span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-bold font-serif text-[#fdfcf0]">Terms & Conditions</h1>
-        <p className="text-[#a3b899] text-xs font-mono">Last Verified: 2026 • Falcon International Traders</p>
-      </div>
+/**
+ * Website Terms & Conditions for a B2B export enquiry website.
+ * These terms govern use of the website only. Sales are governed by the written
+ * quotation and sales contract agreed for each order (see OrderPolicyPage).
+ */
+export const TermsConditionsPage: React.FC = () => (
+  <LegalPage icon={FileText} eyebrow="Website Terms" title="Terms & Conditions">
+    <p>
+      These terms apply to your use of this website. Please read them with our{' '}
+      <Link to="/privacy" className="text-[#f2a900] underline">Privacy Policy</Link> and our{' '}
+      <Link to="/order-policy" className="text-[#f2a900] underline">Order, Cancellation &amp; Claims Policy</Link>.
+    </p>
 
-      <div className="space-y-6 text-sm text-[#a3b899] leading-relaxed font-light">
-        <p>
-          Falcon International Traders conducts international B2B agro-commodity trade in accordance with standard international trading customs and agreed commercial contracts.
-        </p>
+    <H2 id="who-we-are">1. About us</H2>
+    <p>
+      This website is operated by <Fact value={LEGAL_FACTS.legalEntityName} missing="registered legal name of the business" />,
+      trading as Falcon International Traders, registered address{' '}
+      <Fact value={LEGAL_FACTS.registeredAddress} missing="registered business address" />.
+      {' '}Contact: {COMPANY_INFO.email ? <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#f2a900] underline">{COMPANY_INFO.email}</a> : <Pending>business contact email</Pending>}.
+    </p>
 
-        <h2 className="text-lg font-bold font-serif text-[#fdfcf0] pt-2">1. International Quotations & Incoterms</h2>
-        <p>
-          Price quotations issued by Falcon International Traders are based on agreed Incoterms 2020 (FOB Nhava Sheva / Cochin, or CIF Destination Port). Formal contracts and Proforma Invoices (PI) govern final binding contract terms.
-        </p>
+    <H2 id="purpose">2. Purpose of the website</H2>
+    <p>
+      The website provides general information about the agricultural commodities and spices we may supply
+      and lets business buyers send enquiries. It is intended for businesses, not consumers. Nothing on the
+      website is an offer to sell that you can accept by submitting a form.
+    </p>
 
-        <h2 className="text-lg font-bold font-serif text-[#fdfcf0] pt-2">2. Product Specifications & COA</h2>
-        <p>
-          Shipments are certified against agreed technical parameters (Curcumin %, Scoville Heat Units, ASTA value, moisture %, mesh size). Batch Certificates of Analysis (COA) and Statutory Phytosanitary Certificates are furnished for every export container.
-        </p>
+    <H2 id="enquiries">3. Enquiries, quotations and orders</H2>
+    <List>
+      <li>Submitting an enquiry form does not create an order or a contract, and does not oblige either of us to trade.</li>
+      <li>A quotation is an invitation to agree terms. It is valid only for the period and on the terms stated in it, and is subject to availability.</li>
+      <li>An order is accepted only when both parties confirm it in writing, for example by a signed sales contract or our written order confirmation (such as a proforma invoice accepted by both sides).</li>
+      <li>The agreed sales contract governs price, specification, quantity, packaging, Incoterms, delivery, payment, inspection, documents, claims and liability. If anything on this website differs from the contract, the contract prevails.</li>
+    </List>
 
-        <h2 className="text-lg font-bold font-serif text-[#fdfcf0] pt-2">3. Minimum Order Quantity (MOQ) & Trade Terms</h2>
-        <p>
-          Standard export minimum order quantities start at 1 Metric Ton (1,000 kg) up to Full Container Loads (FCL 20ft / 40ft). Payment terms are confirmed via Irrevocable Letter of Credit (L/C at sight) or confirmed Telegraphic Transfer (T/T) per sales contract.
-        </p>
-      </div>
-    </div>
-  );
-};
+    <H2 id="product-info">4. Product information and specifications</H2>
+    <p>
+      Product descriptions, specification tables, downloadable specification sheets and images on this website
+      are indicative only. Agricultural products vary naturally by crop, season and origin. Images may be
+      illustrative and may not show the actual goods supplied. Binding specifications, test methods and
+      tolerances are only those written into the agreed sales contract.
+    </p>
+    <p>
+      Guidance produced by the AI specification advisor is generated automatically, may be inaccurate, and is
+      not a specification, quotation or advice you should rely on.
+    </p>
+
+    <H2 id="prices">5. Prices, minimum quantities and packaging</H2>
+    <p>
+      The website does not publish prices. Any minimum order quantities, sample sizes and packaging formats
+      shown are indicative and are confirmed in each quotation.
+    </p>
+
+    <H2 id="compliance">6. Import requirements and certificates</H2>
+    <p>
+      The buyer is responsible for confirming that goods, labels and documents meet the import, food-safety and
+      labelling requirements of the destination country, and for any import licences, permits, duties and
+      taxes, unless the sales contract says otherwise. Certificates, test reports and treatments are provided
+      only where agreed in the sales contract or required by law. Nothing on this website is a guarantee that
+      goods will be approved for import, meet a particular regulation, or arrive by a particular date.
+    </p>
+
+    <H2 id="use">7. Permitted use of the website</H2>
+    <List>
+      <li>You may view and print pages for your own business purposes.</li>
+      <li>You must not misuse the website, including by attempting unauthorised access, introducing malicious code, submitting false or automated enquiries, or scraping content at scale.</li>
+      <li>The staff dashboard is for authorised Falcon personnel only.</li>
+    </List>
+
+    <H2 id="ip">8. Intellectual property</H2>
+    <p>
+      The website content, design and Falcon name and logo belong to us or our licensors. Third-party
+      materials are used under their own licences. You may not copy or reuse website content for commercial
+      purposes without our written permission.
+    </p>
+
+    <H2 id="availability">9. Availability and third-party services</H2>
+    <p>
+      We aim to keep the website available but do not promise it will be uninterrupted or error-free. The
+      website relies on third-party services (such as hosting, database, email and AI providers) and links to
+      third-party sites such as WhatsApp, which we do not control and for which we are not responsible.
+    </p>
+
+    <H2 id="liability">10. Liability</H2>
+    <p>
+      The website and its information are provided for general information. To the extent permitted by law, we
+      are not liable for losses arising from reliance on website content rather than on an agreed sales
+      contract. Nothing in these terms excludes or limits liability that cannot lawfully be excluded or limited.{' '}
+      <Pending>liability wording to be settled by legal counsel</Pending>
+    </p>
+
+    <H2 id="law">11. Governing law and disputes</H2>
+    <p>
+      <Pending>governing law and dispute resolution for these website terms, to be decided by management and
+      legal counsel. Governing law, jurisdiction or arbitration for sales are set in each sales contract</Pending>
+    </p>
+
+    <H2 id="changes">12. Changes to these terms</H2>
+    <p>
+      We may update these terms from time to time. The version shown on this page, with its "last updated"
+      date, applies to your use of the website from that date.
+    </p>
+  </LegalPage>
+);

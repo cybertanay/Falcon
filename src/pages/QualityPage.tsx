@@ -8,14 +8,14 @@ interface QualityPageProps {
 
 export const QualityPage: React.FC<QualityPageProps> = ({ onRequestQuote }) => {
   const sopSteps = [
-    { title: "Mandi & Origin Sourcing", desc: "Rigorous vetting of agricultural growers and primary spice mandi networks based on botanical purity and origin traceability." },
-    { title: "Raw Material Inward Inspection", desc: "Physical testing for moisture %, extraneous matter, seed size grading, and initial ASTA color screening." },
-    { title: "Cleaning, Destoning & Sorting", desc: "Multi-stage mechanical cleaning, gravity de-stoning, aspiration, and high-intensity magnetic metal separation." },
-    { title: "Micro-Reduction Steam Sterilization", desc: "Saturated steam treatment eliminating Salmonella, E. Coli, yeast, and mold without degrading volatile essential oils." },
-    { title: "Controlled Temperature Milling", desc: "Precision pin-milling under cool temperatures preventing thermal dissipation of active curcumin and essential aromas." },
-    { title: "Moisture Barrier Packaging Inspection", desc: "Automated check-weighing, metal detection, and vacuum / nitrogen barrier sealing in food-grade multi-wall bags." },
-    { title: "Accredited Batch Lab Testing & COA", desc: "Export batch sampling tested for moisture, pesticide residue, heavy metals, and microbiological counts with certified COA." },
-    { title: "Customs & Statutory Port Clearance", desc: "Issuance of official Phytosanitary certificate, Certificate of Origin, and container sealing supervision at discharge port." }
+    { title: "Origin & Sourcing", desc: "Growing region and origin details are confirmed for each order." },
+    { title: "Physical Parameters", desc: "Moisture, extraneous matter, grading and ASTA color are specified in the contract." },
+    { title: "Cleaning & Sorting", desc: "Cleaning grade (for example machine cleaned or sortex cleaned) is agreed per product." },
+    { title: "Microbiological Treatment", desc: "Steam treatment and microbiological limits can be discussed on request." },
+    { title: "Grinding & Mesh Size", desc: "Mesh size and powder format are specified per order." },
+    { title: "Packaging", desc: "Packaging type, liners and net weights are agreed per order." },
+    { title: "Laboratory Testing & COA", desc: "Tests such as moisture, pesticide residues, heavy metals and microbiology can be requested, with the laboratory and limits agreed in the contract." },
+    { title: "Export Documentation", desc: "Phytosanitary Certificate and Certificate of Origin are arranged where the importing country requires them." }
   ];
 
   return (
@@ -28,19 +28,19 @@ export const QualityPage: React.FC<QualityPageProps> = ({ onRequestQuote }) => {
           <span>QUALITY & COMPLIANCE PROTOCOL</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-bold font-serif text-[#fdfcf0] tracking-tight">
-          Food Safety Standards & Quality Verification
+          Quality & Specifications
         </h1>
         <p className="text-[#a3b899] text-sm sm:text-base font-light leading-relaxed">
-          Falcon International Traders enforces strict quality control systems guaranteeing international microbiological safety, zero artificial Sudan dyes, and complete consignment batch traceability.
+          Quality parameters, testing and documentation are agreed with each buyer and recorded in the sales contract. The topics below are what we typically discuss before an order is confirmed.
         </p>
       </div>
 
       {/* Quality SOP Grid */}
       <div className="space-y-6">
         <div className="border-b border-[#154736]/70 pb-3">
-          <span className="text-xs font-mono text-[#f2a900] uppercase tracking-wider block">Standard Operating Procedure</span>
+          <span className="text-xs font-mono text-[#f2a900] uppercase tracking-wider block">Specification Checklist</span>
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#fdfcf0]">
-            Our 8-Step Export Quality Workflow
+            Quality Topics We Agree With Buyers
           </h2>
         </div>
 
@@ -69,7 +69,7 @@ export const QualityPage: React.FC<QualityPageProps> = ({ onRequestQuote }) => {
               Consignment Documentation
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#fdfcf0]">
-              Statutory Export Clearances & Guarantees
+              Export Documentation
             </h2>
           </div>
 
@@ -107,7 +107,7 @@ export const QualityPage: React.FC<QualityPageProps> = ({ onRequestQuote }) => {
           Require Specific Destination Testing Protocols?
         </h3>
         <p className="text-[#a3b899] text-sm max-w-xl mx-auto font-light">
-          Whether you require steam sterilization parameter certificates or pesticide multiresidue GC-MS lab testing, we customize lot testing to your importing authority.
+          If your importing authority requires specific tests, such as pesticide multi-residue analysis, tell us when you request a quote so they can be agreed in the contract.
         </p>
         <button
           onClick={() => onRequestQuote('Technical Testing Inquiry')}

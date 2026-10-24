@@ -5,7 +5,7 @@ import {
   productMutationSchema,
   aiRecommendationOutputSchema
 } from '../server/validators';
-import { dbAdapter } from '../server/db';
+import { dbAdapter, enquiryAuditSnapshot } from '../server/db';
 
 async function runTests() {
   console.log('🧪 [FALCON BACKEND TEST SUITE] Starting test execution...\n');
@@ -209,6 +209,30 @@ async function runTests() {
 
     const validAiRes = aiRecommendationOutputSchema.safeParse(completeValidAiOutput);
     assert.strictEqual(validAiRes.success, true);
+  });
+
+  // 9. Audit log minimisation
+  await test('enquiryAuditSnapshot keeps workflow fields and drops buyer personal data', () => {
+    const snapshot = enquiryAuditSnapshot({
+      enquiryReference: 'FAL-2026-00999',
+      fullName: 'Jane Buyer',
+      email: 'jane@example.com',
+      whatsapp: '+44 7700 900000',
+      companyName: 'Example Foods Ltd',
+      country: 'United Kingdom',
+      message: 'Call me on my mobile',
+      productName: 'Premium Turmeric Powder',
+      estimatedQuantity: '5 Metric Tons',
+      status: 'Contacted',
+      internalNotes: 'Spoke to Jane'
+    });
+    const serialised = JSON.stringify(snapshot);
+    for (const pii of ['Jane', 'jane@example.com', '7700', 'Example Foods', 'mobile']) {
+      assert.strictEqual(serialised.includes(pii), false, `audit snapshot leaked "${pii}"`);
+    }
+    assert.strictEqual(snapshot?.enquiryReference, 'FAL-2026-00999');
+    assert.strictEqual(snapshot?.status, 'Contacted');
+    assert.strictEqual(enquiryAuditSnapshot(null), null);
   });
 
   console.log(`\n==================================================`);

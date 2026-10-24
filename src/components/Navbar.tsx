@@ -122,25 +122,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestQuote }) => {
           </div>
           
           <div className="flex items-center gap-4 text-xs">
-            <a 
-              href={`mailto:${COMPANY_INFO.email}`} 
-              className="hidden md:flex items-center gap-1 text-[#a3b899] hover:text-[#f2a900] transition-colors"
-            >
-              <Mail className="w-3 h-3 text-[#f2a900]" />
-              <span>{COMPANY_INFO.email}</span>
-            </a>
-            <a 
-              href={COMPANY_INFO.socials.whatsapp} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="flex items-center gap-1 bg-[#082018] hover:bg-[#0e3529] text-[#fdfcf0] px-2 py-0.5 rounded text-[11px] font-medium border border-[#154736] transition-colors"
-            >
-              <Phone className="w-2.5 h-2.5 text-[#f2a900]" />
-              <span>WhatsApp Trade Desk</span>
-            </a>
+            {COMPANY_INFO.email && (
+              <a 
+                href={`mailto:${COMPANY_INFO.email}`} 
+                className="hidden md:flex items-center gap-1 text-[#a3b899] hover:text-[#f2a900] transition-colors"
+              >
+                <Mail className="w-3 h-3 text-[#f2a900]" />
+                <span>{COMPANY_INFO.email}</span>
+              </a>
+            )}
+            {COMPANY_INFO.socials.whatsapp && (
+              <a 
+                href={COMPANY_INFO.socials.whatsapp} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-1 bg-[#082018] hover:bg-[#0e3529] text-[#fdfcf0] px-2 py-0.5 rounded text-[11px] font-medium border border-[#154736] transition-colors"
+              >
+                <Phone className="w-2.5 h-2.5 text-[#f2a900]" />
+                <span>WhatsApp Trade Desk</span>
+              </a>
+            )}
             <Link
               to="/admin/login"
-              className="text-[#a3b899]/50 hover:text-[#f2a900] text-[11px] transition-colors flex items-center gap-1"
+              className="text-[#a3b899] hover:text-[#f2a900] text-[11px] transition-colors flex items-center gap-1"
               title="Staff Portal Login"
             >
               <Lock className="w-2.5 h-2.5" />
@@ -263,9 +267,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestQuote }) => {
             >
               Request a B2B Quote
             </button>
-            <div className="text-center text-xs text-[#a3b899]">
-              Export Desk: <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#f2a900]">{COMPANY_INFO.email}</a>
-            </div>
+            {COMPANY_INFO.email && (
+              <div className="text-center text-xs text-[#a3b899]">
+                Export Desk: <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#f2a900]">{COMPANY_INFO.email}</a>
+              </div>
+            )}
           </div>
         </div>
       )}

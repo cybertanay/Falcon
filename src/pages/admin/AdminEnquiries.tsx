@@ -327,8 +327,9 @@ export const AdminEnquiries: React.FC = () => {
             <div className="space-y-4 pt-2 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">Pipeline Status</label>
+                  <label htmlFor="enquiry-pipeline-status" className="block text-[#f2a900] font-mono mb-1">Pipeline Status</label>
                   <select
+ id="enquiry-pipeline-status"
                     value={statusVal}
                     onChange={(e) => setStatusVal(e.target.value as EnquiryStatus)}
                     className="w-full bg-[#030d0a] text-[#fdfcf0] p-2.5 rounded-xl border border-[#154736] focus:border-[#f2a900] focus:outline-none"
@@ -344,8 +345,9 @@ export const AdminEnquiries: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">Assigned Sales Desk Officer</label>
+                  <label htmlFor="enquiry-assigned-sales-desk-officer" className="block text-[#f2a900] font-mono mb-1">Assigned Sales Desk Officer</label>
                   <input
+ id="enquiry-assigned-sales-desk-officer"
                     type="text"
                     value={assignedStaff}
                     onChange={(e) => setAssignedStaff(e.target.value)}
@@ -356,8 +358,9 @@ export const AdminEnquiries: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-[#f2a900] font-mono mb-1">Internal Notes & Quotation Log</label>
+                <label htmlFor="enquiry-internal-notes-quotation-log" className="block text-[#f2a900] font-mono mb-1">Internal Notes & Quotation Log</label>
                 <textarea
+ id="enquiry-internal-notes-quotation-log"
                   rows={3}
                   value={internalNotes}
                   onChange={(e) => setInternalNotes(e.target.value)}

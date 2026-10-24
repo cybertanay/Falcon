@@ -32,7 +32,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onRequestQuote }) => {
           {
             icon: Compass,
             title: "Direct Regional Sourcing",
-            description: "Procuring directly from verified agricultural mandis and grower networks across Andhra Pradesh, Telangana, Gujarat, and Cochin to ensure origin traceability and unadulterated botanical purity."
+            description: "Sourcing from established spice growing regions such as Andhra Pradesh, Telangana, Gujarat and Kerala, with origin details provided for each order."
           },
           {
             icon: ShieldCheck,
@@ -42,7 +42,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onRequestQuote }) => {
           {
             icon: Target,
             title: "Contractual & Shipping Integrity",
-            description: "Ensuring containerized consignments (FCL/LCL) are handled with multi-stage hygienic steam sterilization, fumigation certification, and prompt surrender of statutory export documentation."
+            description: "Agreeing treatment, fumigation and export documentation requirements for each containerized consignment (FCL/LCL) in the sales contract."
           }
         ].map((pillar, idx) => {
           const Icon = pillar.icon;
@@ -72,7 +72,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onRequestQuote }) => {
             How We Partner With International Food Businesses
           </h2>
           <p className="text-[#a3b899] text-sm sm:text-base leading-relaxed font-light">
-            In international agricultural trade, consistency of parameters between sample dispatch and container discharge is critical. Falcon International Traders focuses on rigorous batch sampling, physical impurity removal (destoning, magnetic grading), and moisture-barrier packaging.
+            In international agricultural trade, consistency of parameters between sample dispatch and container discharge is critical. Falcon International Traders agrees sampling, cleaning and packaging requirements with each buyer before an order is confirmed.
           </p>
         </div>
 
@@ -80,8 +80,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onRequestQuote }) => {
           <div className="bg-[#030d0a] p-5 rounded-xl border border-[#154736]/60 flex items-start gap-3">
             <CheckCircle2 className="w-5 h-5 text-[#f2a900] shrink-0 mt-0.5" />
             <div>
-              <span className="font-semibold text-[#fdfcf0] block mb-1">Pre-Shipment COA Testing</span>
-              <span>Every batch is tested against moisture limits, microbiological levels, and active component ranges with certified laboratory analytical certificates.</span>
+              <span className="font-semibold text-[#fdfcf0] block mb-1">Certificates of Analysis</span>
+              <span>A Certificate of Analysis covering the parameters agreed in the contract, such as moisture, microbiology and active components, can be provided.</span>
             </div>
           </div>
 
@@ -104,8 +104,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onRequestQuote }) => {
           <div className="bg-[#030d0a] p-5 rounded-xl border border-[#154736]/60 flex items-start gap-3">
             <CheckCircle2 className="w-5 h-5 text-[#f2a900] shrink-0 mt-0.5" />
             <div>
-              <span className="font-semibold text-[#fdfcf0] block mb-1">Zero False Claims Policy</span>
-              <span>We provide only verified data, honest MOQ requirements, realistic container timelines, and complete statutory inspection documentation.</span>
+              <span className="font-semibold text-[#fdfcf0] block mb-1">Clear Commercial Terms</span>
+              <span>Specifications, MOQ, timelines and documents are confirmed in writing in each quotation and sales contract.</span>
             </div>
           </div>
         </div>

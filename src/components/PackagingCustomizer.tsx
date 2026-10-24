@@ -7,7 +7,7 @@ interface PackagingCustomizerProps {
 
 export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequestQuote }) => {
   const [brandName, setBrandName] = useState('YOUR BRAND NAME');
-  const [spiceName, setSpiceName] = useState('ORGANIC TURMERIC POWDER');
+  const [spiceName, setSpiceName] = useState('TURMERIC POWDER');
   const [format, setFormat] = useState<'pouch' | 'bag' | 'jute'>('pouch');
   const [netWeight, setNetWeight] = useState('500g e');
   const [bgColor, setBgColor] = useState('bg-stone-900');
@@ -46,10 +46,11 @@ export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequ
 
           <div className="space-y-3 pt-2">
             <div>
-              <label className="block text-xs font-semibold text-[#f2a900] mb-1">
+              <label htmlFor="pack-your-brand-company-name" className="block text-xs font-semibold text-[#f2a900] mb-1">
                 Your Brand / Company Name
               </label>
               <input
+ id="pack-your-brand-company-name"
                 type="text"
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value.toUpperCase())}
@@ -59,10 +60,11 @@ export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequ
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#f2a900] mb-1">
+              <label htmlFor="pack-spice-name-variant" className="block text-xs font-semibold text-[#f2a900] mb-1">
                 Spice Name & Variant
               </label>
               <input
+ id="pack-spice-name-variant"
                 type="text"
                 value={spiceName}
                 onChange={(e) => setSpiceName(e.target.value.toUpperCase())}
@@ -73,10 +75,11 @@ export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequ
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-[#f2a900] mb-1">
+                <label htmlFor="pack-packaging-format" className="block text-xs font-semibold text-[#f2a900] mb-1">
                   Packaging Format
                 </label>
                 <select
+ id="pack-packaging-format"
                   value={format}
                   onChange={(e: any) => setFormat(e.target.value)}
                   className="w-full bg-[#05140f] text-[#fdfcf0] px-3 py-2 rounded-lg border border-[#154736] focus:border-[#f2a900] focus:outline-none text-xs"
@@ -88,10 +91,11 @@ export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequ
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#f2a900] mb-1">
+                <label htmlFor="pack-net-weight-label" className="block text-xs font-semibold text-[#f2a900] mb-1">
                   Net Weight Label
                 </label>
                 <input
+ id="pack-net-weight-label"
                   type="text"
                   value={netWeight}
                   onChange={(e) => setNetWeight(e.target.value)}
@@ -102,10 +106,10 @@ export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequ
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#f2a900] mb-1">
+              <span id="pack-background-style" className="block text-xs font-semibold text-[#f2a900] mb-1">
                 Pouch Background Style
-              </label>
-              <div className="flex items-center gap-2">
+              </span>
+              <div className="flex items-center gap-2" role="group" aria-labelledby="pack-background-style">
                 {[
                   { name: 'Matte Obsidian', class: 'bg-stone-900 border-stone-700' },
                   { name: 'Earthy Green', class: 'bg-[#082018] border-[#154736]' },
@@ -114,6 +118,8 @@ export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequ
                 ].map((col) => (
                   <button
                     key={col.name}
+                    type="button"
+                    aria-pressed={bgColor === col.class}
                     onClick={() => setBgColor(col.class)}
                     className={`px-3 py-1.5 rounded-md text-xs border font-medium transition-all ${
                       bgColor === col.class ? 'ring-2 ring-[#f2a900] text-[#f2a900]' : 'text-[#a3b899] hover:text-[#fdfcf0]'
@@ -164,7 +170,7 @@ export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequ
               </div>
 
               <span className="text-[10px] text-[#a3b899] block tracking-wider font-light">
-                100% PURE INDIAN SPICE • EXPORT GRADE
+                PRODUCT OF INDIA
               </span>
             </div>
 

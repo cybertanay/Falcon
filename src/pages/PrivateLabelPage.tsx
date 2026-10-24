@@ -14,13 +14,13 @@ export const PrivateLabelPage: React.FC<PrivateLabelPageProps> = ({ onRequestQuo
       <div className="text-center max-w-3xl mx-auto space-y-4">
         <div className="inline-flex items-center gap-1.5 text-xs font-mono text-[#f2a900] uppercase tracking-widest bg-[#05140f] px-3.5 py-1 rounded-full border border-[#f2a900]/30">
           <Tag className="w-3.5 h-3.5" />
-          <span>OEM CONTRACT MANUFACTURING</span>
+          <span>PRIVATE LABEL & OEM PACKAGING</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-bold font-serif text-[#fdfcf0] tracking-tight">
           Private Label & Retail Packaging Solutions
         </h1>
         <p className="text-[#a3b899] text-sm sm:text-base font-light leading-relaxed">
-          Falcon International Traders supports international supermarkets, retail brands, and food manufacturers with end-to-end private-label spice packaging, custom blending, and OEM manufacturing.
+          Falcon International Traders can discuss private-label spice packaging and custom blends for retail brands and food manufacturers. Scope, minimum runs and responsibilities are agreed per project.
         </p>
       </div>
 
@@ -38,7 +38,7 @@ export const PrivateLabelPage: React.FC<PrivateLabelPageProps> = ({ onRequestQuo
             { step: "01", title: "Brand Concept", desc: "Customer artwork, logo branding, and destination regulatory requirements." },
             { step: "02", title: "Product Formulation", desc: "Select spice variety, active compound potency, and mesh fineness." },
             { step: "03", title: "Packaging Selection", desc: "Stand-up zipper pouches, glass jars, composite cans, or vacuum foil packs." },
-            { step: "04", title: "Hygienic Filling", desc: "Steam sterilization, check-weighing, metal detection, and lot coding." },
+            { step: "04", title: "Hygienic Filling", desc: "Filling, weighing and lot coding as agreed for the project." },
             { step: "05", title: "Containerized Export", desc: "Sealed sea-freight container dispatch with phytosanitary clearance." }
           ].map((wf) => (
             <div key={wf.step} className="bg-[#030d0a] p-5 rounded-2xl border border-[#154736]/70 space-y-2">

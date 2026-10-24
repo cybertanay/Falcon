@@ -7,10 +7,10 @@ export const AdminSettings: React.FC = () => {
     name: 'Falcon International Traders',
     tagline: 'Indian Agro-Commodities & Spice Export Trading Desk',
     positioning: '',
-    email: 'export@falconspices.com',
-    whatsapp: '+91 98765 43210',
-    phone: '+91 98765 43210',
-    address: 'Navi Mumbai / Cochin Port Hub, India',
+    email: '',
+    whatsapp: '',
+    phone: '',
+    address: '',
     websiteUrl: 'https://falconinternationaltraders.com',
     socials: {}
   });
@@ -107,8 +107,9 @@ export const AdminSettings: React.FC = () => {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-[#f2a900] font-mono mb-1">Company Trading Name</label>
+            <label htmlFor="settings-company-trading-name" className="block text-[#f2a900] font-mono mb-1">Company Trading Name</label>
             <input
+ id="settings-company-trading-name"
               type="text"
               required
               value={settings.name}
@@ -118,8 +119,9 @@ export const AdminSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[#f2a900] font-mono mb-1">Official Website URL</label>
+            <label htmlFor="settings-official-website-url" className="block text-[#f2a900] font-mono mb-1">Official Website URL</label>
             <input
+ id="settings-official-website-url"
               type="url"
               required
               value={settings.websiteUrl}
@@ -130,8 +132,9 @@ export const AdminSettings: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-[#f2a900] font-mono mb-1">Brand Tagline</label>
+          <label htmlFor="settings-brand-tagline" className="block text-[#f2a900] font-mono mb-1">Brand Tagline</label>
           <input
+ id="settings-brand-tagline"
             type="text"
             value={settings.tagline}
             onChange={(e) => setSettings({ ...settings, tagline: e.target.value })}
@@ -140,8 +143,9 @@ export const AdminSettings: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-[#f2a900] font-mono mb-1">Official Positioning Statement</label>
+          <label htmlFor="settings-official-positioning-statement" className="block text-[#f2a900] font-mono mb-1">Official Positioning Statement</label>
           <textarea
+ id="settings-official-positioning-statement"
             rows={3}
             value={settings.positioning}
             onChange={(e) => setSettings({ ...settings, positioning: e.target.value })}
@@ -151,8 +155,9 @@ export const AdminSettings: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-[#f2a900] font-mono mb-1">Commercial Email</label>
+            <label htmlFor="settings-commercial-email" className="block text-[#f2a900] font-mono mb-1">Commercial Email</label>
             <input
+ id="settings-commercial-email"
               type="email"
               required
               value={settings.email}
@@ -162,8 +167,9 @@ export const AdminSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[#f2a900] font-mono mb-1">Official WhatsApp Desk</label>
+            <label htmlFor="settings-official-whatsapp-desk" className="block text-[#f2a900] font-mono mb-1">Official WhatsApp Desk</label>
             <input
+ id="settings-official-whatsapp-desk"
               type="text"
               required
               value={settings.whatsapp}
@@ -173,8 +179,9 @@ export const AdminSettings: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[#f2a900] font-mono mb-1">Phone Number</label>
+            <label htmlFor="settings-phone-number" className="block text-[#f2a900] font-mono mb-1">Phone Number</label>
             <input
+ id="settings-phone-number"
               type="text"
               value={settings.phone}
               onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
@@ -184,8 +191,9 @@ export const AdminSettings: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-[#f2a900] font-mono mb-1">Physical Trading Hub & Port Address</label>
+          <label htmlFor="settings-physical-trading-hub-port-addr" className="block text-[#f2a900] font-mono mb-1">Physical Trading Hub & Port Address</label>
           <input
+ id="settings-physical-trading-hub-port-addr"
             type="text"
             required
             value={settings.address}

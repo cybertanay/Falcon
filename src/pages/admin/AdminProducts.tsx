@@ -29,7 +29,7 @@ export const AdminProducts: React.FC = () => {
     minimumOrderQuantity: '1 Metric Ton',
     storageConditions: 'Hygienic warehouse storage away from direct sunlight',
     shelfLife: '24 Months',
-    image: '/src/assets/images/turmeric_product_1786195278080.jpg',
+    image: '/images/turmeric_product_1786195278080.jpg',
     featured: false,
     published: true
   });
@@ -83,7 +83,7 @@ export const AdminProducts: React.FC = () => {
       minimumOrderQuantity: '1 Metric Ton',
       storageConditions: 'Hygienic warehouse storage away from direct sunlight',
       shelfLife: '24 Months',
-      image: '/src/assets/images/turmeric_product_1786195278080.jpg',
+      image: '/images/turmeric_product_1786195278080.jpg',
       featured: false,
       published: true
     });
@@ -380,8 +380,9 @@ export const AdminProducts: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">Product Name *</label>
+                  <label htmlFor="product-product-name" className="block text-[#f2a900] font-mono mb-1">Product Name *</label>
                   <input
+ id="product-product-name"
                     type="text"
                     required
                     value={formData.name}
@@ -396,8 +397,9 @@ export const AdminProducts: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">URL Slug *</label>
+                  <label htmlFor="product-url-slug" className="block text-[#f2a900] font-mono mb-1">URL Slug *</label>
                   <input
+ id="product-url-slug"
                     type="text"
                     required
                     value={formData.slug}
@@ -410,8 +412,9 @@ export const AdminProducts: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">Category</label>
+                  <label htmlFor="product-category" className="block text-[#f2a900] font-mono mb-1">Category</label>
                   <select
+ id="product-category"
                     value={formData.category}
                     onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value as any }))}
                     className="w-full bg-[#030d0a] text-[#fdfcf0] p-2.5 rounded-xl border border-[#154736] focus:border-[#f2a900] focus:outline-none"
@@ -424,8 +427,9 @@ export const AdminProducts: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">Origin</label>
+                  <label htmlFor="product-origin" className="block text-[#f2a900] font-mono mb-1">Origin</label>
                   <input
+ id="product-origin"
                     type="text"
                     value={formData.origin}
                     onChange={(e) => setFormData(prev => ({ ...prev, origin: e.target.value }))}
@@ -434,8 +438,9 @@ export const AdminProducts: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">Minimum Order Qty</label>
+                  <label htmlFor="product-minimum-order-qty" className="block text-[#f2a900] font-mono mb-1">Minimum Order Qty</label>
                   <input
+ id="product-minimum-order-qty"
                     type="text"
                     value={formData.minimumOrderQuantity}
                     onChange={(e) => setFormData(prev => ({ ...prev, minimumOrderQuantity: e.target.value }))}
@@ -446,8 +451,9 @@ export const AdminProducts: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">Botanical Name</label>
+                  <label htmlFor="product-botanical-name" className="block text-[#f2a900] font-mono mb-1">Botanical Name</label>
                   <input
+ id="product-botanical-name"
                     type="text"
                     value={formData.botanicalName}
                     onChange={(e) => setFormData(prev => ({ ...prev, botanicalName: e.target.value }))}
@@ -457,8 +463,9 @@ export const AdminProducts: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[#f2a900] font-mono mb-1">Key Active Component</label>
+                  <label htmlFor="product-key-active-component" className="block text-[#f2a900] font-mono mb-1">Key Active Component</label>
                   <input
+ id="product-key-active-component"
                     type="text"
                     value={formData.keyActiveComponent}
                     onChange={(e) => setFormData(prev => ({ ...prev, keyActiveComponent: e.target.value }))}
@@ -469,8 +476,9 @@ export const AdminProducts: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-[#f2a900] font-mono mb-1">Short Description</label>
+                <label htmlFor="product-short-description" className="block text-[#f2a900] font-mono mb-1">Short Description</label>
                 <textarea
+ id="product-short-description"
                   rows={2}
                   value={formData.shortDescription}
                   onChange={(e) => setFormData(prev => ({ ...prev, shortDescription: e.target.value }))}
@@ -480,11 +488,12 @@ export const AdminProducts: React.FC = () => {
 
               {/* Image Upload Area */}
               <div className="space-y-2 bg-[#030d0a] p-3.5 rounded-xl border border-[#154736]">
-                <label className="block text-[#f2a900] font-mono mb-1">Product Image (Object Storage Upload)</label>
+                <label htmlFor="product-image-upload" className="block text-[#f2a900] font-mono mb-1">Product Image (Object Storage Upload)</label>
                 <div className="flex items-center gap-3">
-                  <img src={formData.image} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-[#154736]" />
+                  <img src={formData.image} alt="Current product image preview" className="w-12 h-12 rounded-lg object-cover border border-[#154736]" />
                   <div className="flex-1">
                     <input
+                      id="product-image-upload"
                       type="file"
                       accept="image/*"
                       onChange={handleImageFileChange}

@@ -138,6 +138,25 @@ function fromDbEnquiry(row: any): Enquiry {
   };
 }
 
+/**
+ * Audit-log view of an enquiry with the buyer's personal data left out.
+ * Audit logs are kept long-term and are not deleted with the enquiry, so storing
+ * names, emails, phone numbers or free-text messages there would make erasure
+ * requests impossible to honour. The reference and workflow fields are enough
+ * to reconstruct who changed what.
+ */
+export function enquiryAuditSnapshot(e: Partial<Enquiry> | null | undefined) {
+  if (!e) return null;
+  return {
+    enquiryReference: e.enquiryReference,
+    productName: e.productName,
+    estimatedQuantity: e.estimatedQuantity,
+    status: e.status,
+    assignedStaff: e.assignedStaff ?? null,
+    internalNotesLength: (e.internalNotes || '').length
+  };
+}
+
 const currentFilename = fileURLToPath(import.meta.url);
 const currentDirname = path.dirname(currentFilename);
 const LOCAL_DB_FILE = path.resolve(currentDirname, '..', 'data_store.json');
@@ -699,8 +718,8 @@ export class DatabaseAdapter {
         action: 'ENQUIRY_UPDATE',
         entity: 'enquiries',
         entityId: id,
-        oldValue: oldEnquiry,
-        newValue: updated,
+        oldValue: enquiryAuditSnapshot(oldEnquiry),
+        newValue: enquiryAuditSnapshot(updated),
         ipAddress
       });
 
@@ -726,8 +745,8 @@ export class DatabaseAdapter {
       action: 'ENQUIRY_UPDATE',
       entity: 'enquiries',
       entityId: id,
-      oldValue: oldEnquiry,
-      newValue: updated,
+      oldValue: enquiryAuditSnapshot(oldEnquiry),
+      newValue: enquiryAuditSnapshot(updated),
       ipAddress
     });
 
@@ -751,7 +770,7 @@ export class DatabaseAdapter {
         action: 'ENQUIRY_DELETE',
         entity: 'enquiries',
         entityId: id,
-        oldValue: oldEnquiry,
+        oldValue: enquiryAuditSnapshot(oldEnquiry),
         newValue: null,
         ipAddress
       });
@@ -772,7 +791,7 @@ export class DatabaseAdapter {
       action: 'ENQUIRY_DELETE',
       entity: 'enquiries',
       entityId: id,
-      oldValue: oldEnquiry,
+      oldValue: enquiryAuditSnapshot(oldEnquiry),
       newValue: null,
       ipAddress
     });

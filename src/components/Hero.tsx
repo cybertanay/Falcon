@@ -44,7 +44,7 @@ export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
 
             {/* Supporting Statement */}
             <p className="text-sm sm:text-base lg:text-lg text-[#a3b899] max-w-2xl leading-relaxed font-light">
-              Supplying high-grade wholesale Indian spices, customized mesh powders, steam-sterilized lots, and export-compliant private labeling directly to international food manufacturers, importers, and distributors.
+              Wholesale Indian spices, powders in custom mesh sizes and private-label packaging for international food manufacturers, importers and distributors.
             </p>
 
             {/* Action Buttons */}
@@ -64,23 +64,25 @@ export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
                 <span>Explore Products</span>
               </Link>
 
-              <a
-                href={COMPANY_INFO.socials.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#05140f] hover:bg-[#0b2317] text-[#f2a900] border border-[#154736] font-medium px-4 py-4 rounded-lg flex items-center justify-center gap-2 text-sm transition-all"
-                title="Direct WhatsApp Export Enquiry"
-              >
-                <Phone className="w-4 h-4 text-[#f2a900]" />
-                <span className="hidden sm:inline">WhatsApp Desk</span>
-              </a>
+              {COMPANY_INFO.socials.whatsapp && (
+                <a
+                  href={COMPANY_INFO.socials.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#05140f] hover:bg-[#0b2317] text-[#f2a900] border border-[#154736] font-medium px-4 py-4 rounded-lg flex items-center justify-center gap-2 text-sm transition-all"
+                  aria-label="Contact the export desk on WhatsApp (opens in a new tab)"
+                >
+                  <Phone className="w-4 h-4 text-[#f2a900]" aria-hidden="true" />
+                  <span className="hidden sm:inline">WhatsApp Desk</span>
+                </a>
+              )}
             </div>
 
             {/* Trust Highlights Strip */}
             <div className="pt-6 border-t border-[#154736]/60 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-[#a3b899]">
               <div className="flex items-center gap-2 bg-[#05140f]/60 p-2.5 rounded-lg border border-[#154736]/40">
                 <ShieldCheck className="w-4 h-4 text-[#f2a900] shrink-0" />
-                <span>Micro-Sterilization</span>
+                <span>Specifications Per Order</span>
               </div>
               <div className="flex items-center gap-2 bg-[#05140f]/60 p-2.5 rounded-lg border border-[#154736]/40">
                 <Globe className="w-4 h-4 text-[#f2a900] shrink-0" />
@@ -100,8 +102,8 @@ export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
               
               {/* Macro Spice Visual Banner */}
               <img
-                src="/src/assets/images/hero_spices_banner_1786195263727.jpg"
-                alt="Falcon International Traders Premium Indian Spices"
+                src="/images/hero_spices_banner_1786195263727.jpg"
+                alt="Illustrative image: bowls of turmeric powder, cumin seeds and black peppercorns with dried red chillies, garlic and green cardamom on a dark slate surface"
                 className="w-full h-80 sm:h-96 lg:h-[440px] object-cover transition-transform duration-700 group-hover:scale-105"
               />
 
@@ -111,7 +113,7 @@ export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
               {/* Floating Live Spec Tag */}
               <div className="absolute top-4 left-4 glass-panel px-3.5 py-1.5 rounded-lg text-xs font-mono text-[#f2a900] border border-[#f2a900]/30 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#f2a900] animate-ping" />
-                <span>EXPORT READY • 2026 CONSIGNMENTS</span>
+                <span>B2B EXPORT ENQUIRIES</span>
               </div>
 
               {/* Bottom Card Content */}
@@ -120,10 +122,10 @@ export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
                   Commodity Standard
                 </span>
                 <h2 className="text-base font-serif font-bold text-[#fdfcf0]">
-                  Pure Indian Origin Spices
+                  Indian Origin Spices
                 </h2>
                 <p className="text-xs text-[#a3b899] font-light">
-                  Direct farm procurement from Andhra Pradesh, Telangana, Gujarat & Kerala port hubs.
+                  Sourced from growing regions including Andhra Pradesh, Telangana, Gujarat and Kerala.
                 </p>
               </div>
 

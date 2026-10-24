@@ -1,6 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { Product } from '../types';
-import { COMPANY_INFO } from '../data/company';
+import { COMPANY_INFO, CONTACT_PENDING_TEXT } from '../data/company';
 import { trackEvent } from './analytics';
 
 export function generateProductSpecPDF(product: Product): boolean {
@@ -34,7 +34,8 @@ export function generateProductSpecPDF(product: Product): boolean {
     doc.setFontSize(9);
     doc.setTextColor(163, 184, 153);
     doc.text('Agricultural Commodities & Indian Spices Export Desk', margin, 24);
-    doc.text('Navi Mumbai / Cochin Port Hub, India | export@falconspices.com', margin, 29);
+    const contactLine = [COMPANY_INFO.address, COMPANY_INFO.email].filter(Boolean).join(' | ') || CONTACT_PENDING_TEXT;
+    doc.text(contactLine, margin, 29);
 
     // Document Meta (Right aligned)
     const docDate = new Date().toISOString().split('T')[0];
@@ -44,7 +45,7 @@ export function generateProductSpecPDF(product: Product): boolean {
     doc.text(`DOC REF: ${docRef}`, pageWidth - margin, 22, { align: 'right' });
     doc.setTextColor(253, 252, 240);
     doc.text(`ISSUE DATE: ${docDate}`, pageWidth - margin, 27, { align: 'right' });
-    doc.text('VERSION: 2.4 (EXPORT GRADE)', pageWidth - margin, 32, { align: 'right' });
+    doc.text('STATUS: INDICATIVE', pageWidth - margin, 32, { align: 'right' });
 
     y = 50;
 
@@ -75,7 +76,7 @@ export function generateProductSpecPDF(product: Product): boolean {
     doc.setTextColor(242, 169, 0);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
-    doc.text('OFFICIAL EXPORT SPECIFICATION & PARAMETERS', margin + 3, y + 5);
+    doc.text('INDICATIVE EXPORT SPECIFICATION & PARAMETERS', margin + 3, y + 5);
     y += 9;
 
     const specs = [
@@ -143,7 +144,7 @@ export function generateProductSpecPDF(product: Product): boolean {
 
     y += 12;
 
-    // Section 3: Statutory Certification & Quality Guarantee
+    // Section 3: Documentation and contractual status (wording kept conditional until management confirms)
     doc.setDrawColor(242, 169, 0);
     doc.setLineWidth(0.5);
     doc.rect(margin, y, pageWidth - (margin * 2), 22);
@@ -151,14 +152,14 @@ export function generateProductSpecPDF(product: Product): boolean {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8.5);
     doc.setTextColor(5, 20, 15);
-    doc.text('Consignment Quality Clearances & Statutory Documentation:', margin + 3, y + 5);
+    doc.text('Documentation & Contract Status:', margin + 3, y + 5);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(60, 60, 60);
-    doc.text('• Every export consignment is issued with an official batch Certificate of Analysis (COA) and Statutory Phytosanitary Certificate.', margin + 3, y + 10);
-    doc.text('• Multi-stage micro-reduction steam sterilization applied to meet destination-country microbiological parameters.', margin + 3, y + 14);
-    doc.text('• Certified container fumigation certificate and Certificate of Origin (COO) furnished with shipping documents.', margin + 3, y + 18);
+    doc.text('• Values in this sheet are indicative. Binding specifications are those stated in the agreed sales contract.', margin + 3, y + 10);
+    doc.text('• A Certificate of Analysis, Phytosanitary Certificate and treatment can be arranged per order where agreed or required.', margin + 3, y + 14);
+    doc.text('• The buyer is responsible for confirming import requirements in the destination country.', margin + 3, y + 18);
 
     // Footer
     const footerY = pageHeight - 12;
@@ -168,7 +169,7 @@ export function generateProductSpecPDF(product: Product): boolean {
 
     doc.setFontSize(7);
     doc.setTextColor(120, 120, 120);
-    doc.text('Falcon International Traders | Confidential Export Technical Specification | For Contractual Inquiry Purposes Only', margin, footerY);
+    doc.text('Falcon International Traders | Indicative Technical Specification | Not a contractual document', margin, footerY);
     doc.text(`Page 1 of 1`, pageWidth - margin, footerY, { align: 'right' });
 
     // Save and track

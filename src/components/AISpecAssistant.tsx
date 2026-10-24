@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles, FileText, CheckCircle2, AlertCircle, ShieldAlert, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { trackEvent } from '../lib/analytics';
 
 interface AISpecAssistantProps {
@@ -40,7 +41,7 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
       const data = await res.json();
       if (res.ok && data.success && data.recommendation) {
         setRecommendation(data.recommendation);
-        trackEvent('ai_assistant_used', { productInterest, targetMarket });
+        trackEvent('ai_assistant_used', { productInterest });
       } else {
         setErrorMessage(data.error || 'The AI Export Advisor is currently unavailable. Please connect directly with our export desk.');
       }
@@ -62,7 +63,7 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#f2a900] to-[#b37a00] p-0.5 flex items-center justify-center shrink-0 shadow">
             <div className="w-full h-full bg-[#05140f] rounded-[7px] flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-[#f2a900]" />
+              <Sparkles className="w-5 h-5 text-[#f2a900]" aria-hidden="true" />
             </div>
           </div>
           <div>
@@ -83,10 +84,11 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
         <form onSubmit={handleGenerateSpec} className="grid grid-cols-1 md:grid-cols-3 gap-4">
           
           <div>
-            <label className="block text-xs font-medium text-[#f2a900] mb-1">
-              Spice Product *
+            <label htmlFor="ai-product" className="block text-xs font-medium text-[#f2a900] mb-1">
+              Spice Product <span aria-hidden="true">*</span>
             </label>
             <select
+              id="ai-product"
               value={productInterest}
               onChange={(e) => setProductInterest(e.target.value)}
               className="w-full bg-[#05140f] text-[#fdfcf0] px-3.5 py-2.5 rounded-lg border border-[#154736] focus:border-[#f2a900] focus:outline-none text-sm"
@@ -101,10 +103,11 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#f2a900] mb-1">
-              Destination Market / Port *
+            <label htmlFor="ai-market" className="block text-xs font-medium text-[#f2a900] mb-1">
+              Destination Market / Port <span aria-hidden="true">*</span>
             </label>
             <input
+              id="ai-market"
               type="text"
               required
               maxLength={100}
@@ -116,10 +119,12 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-[#f2a900] mb-1">
-              End-Use / Formulation Requirement *
+            <label htmlFor="ai-requirement" className="block text-xs font-medium text-[#f2a900] mb-1">
+              End-Use / Formulation Requirement <span aria-hidden="true">*</span>
             </label>
             <input
+              id="ai-requirement"
+              aria-describedby="ai-privacy-notice"
               type="text"
               required
               maxLength={500}
@@ -130,6 +135,12 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
             />
           </div>
 
+          <p id="ai-privacy-notice" className="md:col-span-3 text-[11px] text-[#a3b899] leading-relaxed">
+            Your three answers are sent to Google's Gemini AI service to generate this guidance. Please do not
+            include names, contact details or confidential commercial information. Falcon does not store these
+            answers. See our{' '}
+            <Link to="/privacy" className="text-[#f2a900] underline underline-offset-2">Privacy Policy</Link>.
+          </p>
           <div className="md:col-span-3 flex justify-end">
             <button
               type="submit"
@@ -151,13 +162,13 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
 
         {/* Error State — Real & Actionable */}
         {errorMessage && (
-          <div className="mt-6 p-5 bg-[#05140f] rounded-xl border border-[#c41e3a]/50 text-[#fdfcf0] space-y-3 animate-fade-in">
+          <div role="alert" className="mt-6 p-5 bg-[#05140f] rounded-xl border border-[#c41e3a]/50 text-[#fdfcf0] space-y-3 animate-fade-in">
             <div className="flex items-center gap-2 text-[#ff8080] font-semibold text-sm">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <span>{errorMessage}</span>
             </div>
             <p className="text-xs text-[#a3b899] font-light">
-              Our export trade team can formulate official specification sheets, COAs, and micro-analysis data sheets tailored to your destination country.
+              Our export team can discuss specifications, Certificates of Analysis and test requirements for your destination market.
             </p>
             <button
               onClick={() => onRequestQuote(productInterest)}
@@ -171,7 +182,7 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
 
         {/* Structured AI Recommendation Output */}
         {recommendation && (
-          <div className="mt-6 p-6 bg-[#05140f] rounded-xl border border-[#f2a900]/40 text-[#fdfcf0] space-y-5 animate-fade-in">
+          <div role="status" className="mt-6 p-6 bg-[#05140f] rounded-xl border border-[#f2a900]/40 text-[#fdfcf0] space-y-5 animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#154736] pb-3 gap-2">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-[#f2a900]" />
@@ -236,7 +247,7 @@ export const AISpecAssistant: React.FC<AISpecAssistantProps> = ({ onRequestQuote
 
             <div className="pt-2 border-t border-[#154736] flex flex-col sm:flex-row items-center justify-between gap-3">
               <span className="text-[11px] text-[#a3b899]">
-                Ready to receive a certified proforma quote based on this specification?
+                Want a quotation based on these requirements?
               </span>
               <button
                 onClick={() => onRequestQuote(productInterest)}
