@@ -21,6 +21,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
   const [copiedLink, setCopiedLink] = useState(false);
 
   useEffect(() => {
+    if (product) document.title = `${product.name} | Falcon International Traders`;
+  }, [product]);
+
+  useEffect(() => {
     if (!slug) return;
 
     // First try matching in current loaded products
@@ -105,14 +109,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
     "name": product.name,
     "image": product.image,
     "description": product.shortDescription,
-    "category": product.category,
-    "offers": {
-      "@type": "AggregateOffer",
-      "priceCurrency": "USD",
-      "price": "Upon Quotation",
-      "itemCondition": "https://schema.org/NewCondition",
-      "availability": "https://schema.org/InStock"
-    }
+    "category": product.category
+    // No "offers": prices are quotation-only and stock availability is not tracked
   };
 
   return (
@@ -154,7 +152,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
           <div className="relative rounded-2xl overflow-hidden border border-[#f2a900]/30 shadow-2xl bg-[#05140f]">
             <img
               src={selectedImage || product.image}
-              alt={product.name}
+              alt={`${product.name} (illustrative image)`}
               className="w-full h-80 sm:h-96 object-cover transition-transform duration-500 hover:scale-105"
             />
             <div className="absolute top-4 left-4 bg-[#f2a900] text-[#030d0a] text-xs font-bold px-3 py-1.5 rounded-lg shadow">
@@ -171,12 +169,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
               {product.gallery.map((img, idx) => (
                 <button
                   key={idx}
+                  type="button"
+                  aria-label={`Show image ${idx + 1} of ${product.gallery.length} for ${product.name}`}
+                  aria-pressed={selectedImage === img}
                   onClick={() => setSelectedImage(img)}
                   className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
                     selectedImage === img ? 'border-[#f2a900] scale-105 shadow-md' : 'border-[#154736] opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                  <img src={img} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -246,7 +247,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
                 </div>
               ))}
             </div>
-            <p className="text-[11px] text-[#a3b899]/70 italic pt-1">
+            <p className="text-[11px] text-[#a3b899] italic pt-1">
               * Custom private label pouch sizes, branded master cartons, and container packing configurations are customized to client specifications.
             </p>
           </div>

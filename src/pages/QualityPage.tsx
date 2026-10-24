@@ -28,7 +28,7 @@ export const QualityPage: React.FC<QualityPageProps> = ({ onRequestQuote }) => {
           <span>QUALITY & COMPLIANCE PROTOCOL</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-bold font-serif text-[#fdfcf0] tracking-tight">
-          Food Safety Standards & Quality Verification
+          Quality & Specifications
         </h1>
         <p className="text-[#a3b899] text-sm sm:text-base font-light leading-relaxed">
           Quality parameters, testing and documentation are agreed with each buyer and recorded in the sales contract. The topics below are what we typically discuss before an order is confirmed.

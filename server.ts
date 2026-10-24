@@ -177,6 +177,12 @@ async function startServer() {
     next();
   });
 
+  // Keep the staff dashboard and admin API out of search engines
+  app.use(['/admin', '/api/admin'], (_req, res, next) => {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    next();
+  });
+
   // Static uploads
   app.use('/uploads', express.static(UPLOADS_DIR));
 

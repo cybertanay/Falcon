@@ -144,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onRequestQuote }) => {
             )}
             <Link
               to="/admin/login"
-              className="text-[#a3b899]/50 hover:text-[#f2a900] text-[11px] transition-colors flex items-center gap-1"
+              className="text-[#a3b899] hover:text-[#f2a900] text-[11px] transition-colors flex items-center gap-1"
               title="Staff Portal Login"
             >
               <Lock className="w-2.5 h-2.5" />

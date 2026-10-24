@@ -6,6 +6,7 @@ import { Footer } from './components/Footer';
 import { QuoteModal } from './components/QuoteModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { ScrollToTop } from './components/ScrollToTop';
+import { RouteMeta } from './components/RouteMeta';
 import { CloudFieldBackground } from './components/CloudFieldBackground';
 
 import { HomePage } from './pages/HomePage';
@@ -71,6 +72,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <RouteMeta />
 
       <Routes>
         {/* Public Website Routes */}

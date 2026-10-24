@@ -173,7 +173,7 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
         </div>
 
         {/* Bottom Bar & Legal */}
-        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#a3b899]/70">
+        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#a3b899]">
           <p>© {new Date().getFullYear()} Falcon International Traders. All rights reserved.</p>
           
           <div className="flex items-center gap-6">
@@ -197,7 +197,7 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
         </div>
 
         {/* Editorial Subtext */}
-        <div className="text-center pt-8 text-[11px] font-mono tracking-widest text-[#a3b899]/40 uppercase">
+        <div className="text-center pt-8 text-[11px] font-mono tracking-widest text-[#a3b899] uppercase">
           FROM INDIA TO GLOBAL PORTS — B2B BULK COMMODITIES
         </div>
       </div>
