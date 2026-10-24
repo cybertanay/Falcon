@@ -44,7 +44,7 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
 
             <div className="pt-2 flex items-center gap-2 text-xs text-[#f2a900] font-medium bg-[#05140f] p-3 rounded-lg border border-[#154736]/70 max-w-md">
               <ShieldCheck className="w-4 h-4 text-[#f2a900] shrink-0" />
-              <span>Direct Wholesale • Micro-sterilization • Statutory Phytosanitary COA</span>
+              <span>B2B Wholesale • Specifications Per Order • Export Documentation</span>
             </div>
           </div>
 
@@ -117,19 +117,19 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
                 </Link>
               </li>
               <li>
-                <Link to="/products/dehydrated-garlic" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                <Link to="/products/garlic-powder-dehydrated" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
                   <span>Dehydrated Garlic</span>
                   <ArrowUpRight className="w-3 h-3 text-[#154736]" />
                 </Link>
               </li>
               <li>
-                <Link to="/products/black-pepper" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                <Link to="/products/black-pepper-tellicherry" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
                   <span>Tellicherry Black Pepper</span>
                   <ArrowUpRight className="w-3 h-3 text-[#154736]" />
                 </Link>
               </li>
               <li>
-                <Link to="/products/green-cardamom" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
+                <Link to="/products/green-cardamom-bold" className="hover:text-[#f2a900] transition-colors flex items-center justify-between">
                   <span>Green Cardamom Pods</span>
                   <ArrowUpRight className="w-3 h-3 text-[#154736]" />
                 </Link>
@@ -189,7 +189,7 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
 
         {/* Editorial Subtext */}
         <div className="text-center pt-8 text-[11px] font-mono tracking-widest text-[#a3b899]/40 uppercase">
-          FROM INDIA TO GLOBAL PORTS — QUALITY ASSURED BULK COMMODITIES
+          FROM INDIA TO GLOBAL PORTS — B2B BULK COMMODITIES
         </div>
       </div>
     </footer>

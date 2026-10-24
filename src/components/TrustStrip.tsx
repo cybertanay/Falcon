@@ -5,8 +5,8 @@ export const TrustStrip: React.FC = () => {
   const items = [
     {
       icon: ShieldCheck,
-      title: "Quality Assured",
-      description: "Micro-sterilized & ASTA tested"
+      title: "Agreed Specifications",
+      description: "Parameters set per order"
     },
     {
       icon: PackageCheck,
@@ -16,7 +16,7 @@ export const TrustStrip: React.FC = () => {
     {
       icon: Ship,
       title: "Worldwide Shipping",
-      description: "Phytosanitary & COA Docs"
+      description: "Export documents on request"
     },
     {
       icon: Tag,

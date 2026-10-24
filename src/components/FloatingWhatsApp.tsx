@@ -20,7 +20,7 @@ export const FloatingWhatsApp: React.FC = () => {
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-[#f2a900] animate-ping"></div>
               <span className="text-xs font-bold text-[#f2a900] uppercase tracking-wider">
-                Export Desk Online
+                Export Desk on WhatsApp
               </span>
             </div>
             <button

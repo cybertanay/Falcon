@@ -10,11 +10,11 @@ export const ExportPage: React.FC<ExportPageProps> = ({ onRequestQuote }) => {
     { num: "01", title: "Buyer Requirement", desc: "Buyer submits technical specifications, target destination port, and volume estimation." },
     { num: "02", title: "Product Specification", desc: "Our trade team confirms active botanical grade, ASTA color value, and mesh parameters." },
     { num: "03", title: "Contract & Quotation", desc: "Detailed FOB/CIF pricing, payment terms, and container packing configurations agreed." },
-    { num: "04", title: "Pre-Shipment Samples", desc: "Certified lot samples (100g - 500g) dispatched via express courier with preliminary COA." },
-    { num: "05", title: "Production & Milling", desc: "Hygienic destoning, micro-reduction steam sterilization, and temperature-controlled milling." },
-    { num: "06", title: "Quality Testing", desc: "Accredited laboratory analysis verifying zero Sudan dyes, low moisture, and microbiological parameters." },
-    { num: "07", title: "Statutory Documentation", desc: "Issuance of Commercial Invoice, Packing List, Phytosanitary Certificate, Bill of Lading, and COO." },
-    { num: "08", title: "Container Vessel Dispatch", desc: "Container stuffing, fumigation, port customs clearance at Nhava Sheva / Cochin, and vessel departure." }
+    { num: "04", title: "Pre-Shipment Samples", desc: "Samples (typically 100g - 500g) can be sent by courier for evaluation, on request." },
+    { num: "05", title: "Order Preparation", desc: "Cleaning, grinding, treatment and packing as agreed in the contract." },
+    { num: "06", title: "Quality Testing", desc: "Testing of the parameters agreed in the contract, with a Certificate of Analysis where agreed." },
+    { num: "07", title: "Statutory Documentation", desc: "Commercial Invoice, Packing List and Bill of Lading, plus Phytosanitary Certificate and Certificate of Origin where required." },
+    { num: "08", title: "Container Vessel Dispatch", desc: "Container stuffing, fumigation where required, Indian export customs clearance and vessel departure." }
   ];
 
   return (
@@ -30,7 +30,7 @@ export const ExportPage: React.FC<ExportPageProps> = ({ onRequestQuote }) => {
           Export Workflow & Packaging Specifications
         </h1>
         <p className="text-[#a3b899] text-sm sm:text-base font-light leading-relaxed">
-          From initial sample dispatch to vessel departure and customs documentation surrender, experience a transparent, streamlined B2B export workflow.
+          A typical sequence from enquiry to vessel departure. Each step and its timing are confirmed in the quotation and sales contract.
         </p>
       </div>
 

@@ -224,7 +224,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
               <ShieldCheck className="w-7 h-7 text-[#f2a900] shrink-0" />
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-wider block text-[#a3b899]">
-                  Verified Bioactive / Active Potency Parameter
+                  Indicative Active Component Range
                 </span>
                 <span className="text-base sm:text-lg font-bold text-[#fdfcf0] font-mono">
                   {product.specifications.keyActiveComponent}
@@ -266,7 +266,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
               className="bg-[#05140f] hover:bg-[#0b2317] text-[#fdfcf0] border border-[#154736] font-semibold px-6 py-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all"
             >
               <FileText className="w-4 h-4 text-[#f2a900]" />
-              <span>Request Lab Samples (100g - 500g)</span>
+              <span>Request Samples (100g - 500g)</span>
             </button>
           </div>
 
@@ -287,7 +287,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ products, 
           </div>
 
           <div className="text-xs bg-[#0b2317] text-[#f2a900] px-3.5 py-1.5 rounded-lg border border-[#f2a900]/30 font-mono">
-            Steam-Sterilization & Micro COA Guaranteed
+            Indicative values. Final specification confirmed in contract
           </div>
         </div>
 

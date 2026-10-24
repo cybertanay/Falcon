@@ -6,7 +6,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     name: "Premium Turmeric Powder",
     slug: "turmeric-powder",
     shortDescription: "Vibrant golden Indian turmeric powder with high natural Curcumin content and characteristic warm earthy aroma.",
-    fullDescription: "Falcon International Traders supplies premium grade Indian Turmeric Powder (Curcuma longa) directly sourced from pristine turmeric growing regions of Andhra Pradesh, Telangana (Nizamabad), and Tamil Nadu (Erode). Processed in ultra-modern hygienic units with controlled temperatures to retain natural volatile oils, bright golden saffron color, and rich bioactive Curcumin.",
+    fullDescription: "Falcon International Traders supplies Indian Turmeric Powder (Curcuma longa) from turmeric growing regions such as Andhra Pradesh, Telangana (Nizamabad) and Tamil Nadu (Erode). Grade, curcumin range, mesh size and processing are agreed with each buyer and confirmed in the sales contract.",
     category: "Powders",
     image: "/src/assets/images/turmeric_product_1786195278080.jpg",
     gallery: [
@@ -48,8 +48,8 @@ export const INITIAL_PRODUCTS: Product[] = [
         answer: "We supply Turmeric powder standardizing from 2.5% up to 5.0%+ Curcumin depending on buyer specifications for spice blends, dietary supplements, or culinary use."
       },
       {
-        question: "Is steam sterilization available for EU / US market compliance?",
-        answer: "Yes, we provide micro-sterilized steam-treated turmeric powder meeting stringent microbiological parameters required by EU, US FDA, and Gulf standards."
+        question: "Can steam-treated turmeric be supplied?",
+        answer: "Steam treatment can be discussed on request. Microbiological limits are agreed per order and confirmed in the contract and Certificate of Analysis. Buyers remain responsible for confirming the import requirements of their market."
       }
     ],
     createdAt: new Date().toISOString(),
@@ -60,7 +60,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     name: "Indian Red Chilli Powder & Whole",
     slug: "red-chilli-powder",
     shortDescription: "High-grade Indian Red Chilli (Teja S17 / Byadgi / Guntur S334) available in tailored heat units and brilliant natural red color.",
-    fullDescription: "Indian Red Chilli is world-renowned for its intense fiery heat and deep natural color. Falcon International Traders exports premium Red Chilli Powder and Whole Chillies (With Stem / Stemless). Whether you require high ASTA color with mild pungency (Byadgi style) or intense pungency for food manufacturing (Teja S17 style), we tailor specifications precisely to your formulation.",
+    fullDescription: "Indian Red Chilli is world-renowned for its intense fiery heat and deep natural color. Falcon International Traders exports premium Red Chilli Powder and Whole Chillies (With Stem / Stemless). Whether you require high ASTA color with mild pungency (Byadgi style) or intense pungency for food manufacturing (Teja S17 style), specifications are discussed with each buyer and confirmed in the sales contract.",
     category: "Powders",
     image: "/src/assets/images/chilli_product_1786195293751.jpg",
     gallery: [
@@ -102,8 +102,8 @@ export const INITIAL_PRODUCTS: Product[] = [
         answer: "Yes, we blend selected chilli varieties to achieve specific Scoville Heat Units (SHU) from 20,000 SHU up to 90,000 SHU with consistent ASTA color."
       },
       {
-        question: "Do you guarantee Aflatoxin and Sudan Red dye safety?",
-        answer: "Absolutely. Every export batch undergoes HPLC testing certified by accredited laboratories confirming zero Sudan dyes and Aflatoxin levels well within EU/FDA regulations."
+        question: "Can you provide test reports for Aflatoxin and Sudan dyes?",
+        answer: "Laboratory test reports for parameters such as aflatoxin and Sudan dyes can be requested for an order. The tests, laboratory and acceptance limits are agreed in the sales contract."
       }
     ],
     createdAt: new Date().toISOString(),
@@ -114,7 +114,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     name: "Cumin Seeds & Ground Powder",
     slug: "cumin-seeds-powder",
     shortDescription: "Bold Gujarat grade cumin seeds (99% to 99.5% purity) and fresh ground cumin powder rich in essential cuminol oils.",
-    fullDescription: "Cumin (Cuminum cyminum) is one of the most widely traded global food seasonings. Sourced directly from Gujarat and Rajasthan spice mandis, Falcon International Traders provides Machine-Cleaned and Sortex-Cleaned Cumin Seeds alongside ground cumin powder. Characterized by high volatile oil content (>2.5%) and rich earthy-warm fragrance.",
+    fullDescription: "Cumin (Cuminum cyminum) is one of the most widely traded global food seasonings. Sourced from the Gujarat and Rajasthan growing regions, Falcon International Traders provides Machine-Cleaned and Sortex-Cleaned Cumin Seeds alongside ground cumin powder. Characterized by high volatile oil content (>2.5%) and rich earthy-warm fragrance.",
     category: "Whole Spices",
     image: "/src/assets/images/cumin_product_1786195311107.jpg",
     gallery: [
@@ -162,7 +162,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     name: "Dehydrated Garlic Powder & Granules",
     slug: "garlic-powder-dehydrated",
     shortDescription: "Pure dehydrated garlic powder, granules, and flakes ideal for food processing, seasonings, sauces, snacks, and meat curing.",
-    fullDescription: "Falcon International Traders supplies premium Dehydrated Garlic Powder and Granules manufactured from freshly harvested white garlic bulbs. Free from artificial preservatives or anti-caking additives, our garlic powder delivers sharp, authentic pungency and robust flavor profile essential for industrial food manufacturers, sausage/meat processors, and spice blenders.",
+    fullDescription: "Falcon International Traders supplies Dehydrated Garlic Powder and Granules made from white garlic, for food manufacturers, meat processors and spice blenders. Additive content (for example anti-caking agents) is specified per order.",
     category: "Dehydrated Ingredients",
     image: "/src/assets/images/garlic_product_1786195323982.jpg",
     gallery: [
@@ -198,7 +198,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     faq: [
       {
         question: "Does your garlic powder contain anti-caking agents?",
-        answer: "We supply 100% pure garlic powder without additives by default. Silicon dioxide or food-grade anti-caking agents can be blended upon specific buyer request for humid climate distribution."
+        answer: "Additives are specified per order. Garlic powder without additives, or with a food-grade anti-caking agent such as silicon dioxide, can be quoted on request."
       }
     ],
     createdAt: new Date().toISOString(),
@@ -243,8 +243,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     availableFormats: ["TGSEB (Tellicherry Garbled Special Extra Bold)", "TGB (Tellicherry Garbled Bold)", "MG1 (Malabar Garbled Grade 1)", "Coarse Crushed (10-18 Mesh)", "Fine Powder"],
     faq: [
       {
-        question: "What bulk density specifications do you guarantee?",
-        answer: "We supply Malabar MG1 at 500-550 g/l and Tellicherry TGSEB at 570+ g/l guaranteed density."
+        question: "What bulk density can you supply?",
+        answer: "Indicative bulk density is around 500-550 g/l for Malabar MG1 and 570 g/l or more for Tellicherry TGSEB. The agreed density is stated in the sales contract."
       }
     ],
     createdAt: new Date().toISOString(),
@@ -252,10 +252,10 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: "prod-green-cardamom",
-    name: "Allegppey Green Cardamom Pods",
+    name: "Alleppey Green Cardamom Pods",
     slug: "green-cardamom-bold",
     shortDescription: "Aromatic Queen of Spices — 7mm & 8mm+ Extra Bold Alleppey Green Cardamom pods with intense piney essential oil aroma.",
-    fullDescription: "Indian Green Cardamom (Elettaria cardamomum) from Western Ghats rainforest estates is globally legendary for its vivid natural green color, robust husk, and rich essential oils. Carefully handpicked, sun/machine dried, and graded by seed size (6mm, 7mm, 8mm Extra Bold). Perfect for luxury confectionery, tea blends, Arabic coffee, and fine culinary formulations.",
+    fullDescription: "Indian Green Cardamom (Elettaria cardamomum) from the Western Ghats, known for its natural green color and essential oils, graded by pod size (6mm, 7mm, 8mm Extra Bold). Perfect for luxury confectionery, tea blends, Arabic coffee, and fine culinary formulations.",
     category: "Whole Spices",
     image: "https://images.unsplash.com/photo-1608797178974-15b35a640532?auto=format&fit=crop&q=80&w=1000",
     gallery: [
@@ -289,7 +289,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     faq: [
       {
         question: "How do you preserve the green pod color during export shipping?",
-        answer: "We use moisture-barrier vacuum packaging with food-grade desiccant packs inside double-corrugated cartons to shield from ambient heat and humidity."
+        answer: "Moisture-barrier packaging options, such as vacuum packs with desiccant inside double-corrugated cartons, can be specified per order."
       }
     ],
     createdAt: new Date().toISOString(),
@@ -297,23 +297,24 @@ export const INITIAL_PRODUCTS: Product[] = [
   }
 ];
 
-// Export Quality Commitments (Statutory clearances provided per consignment)
+// Export documentation available on request. Wording is deliberately conditional:
+// management must confirm which documents and tests are routinely provided before
+// stronger claims are published.
 export const EXPORT_COMPLIANCE_STANDARDS = [
   {
     title: "Phytosanitary & Export Clearance",
-    description: "Consignment-wise statutory inspection certificates and quarantine clearances issued through authorized port inspection authorities."
+    description: "Phytosanitary certificates and export clearance documents are arranged through the relevant Indian authorities where the importing country requires them."
   },
   {
-    title: "Laboratory Certificate of Analysis (COA)",
-    description: "Every shipment is accompanied by batch laboratory analytical certificates verifying moisture, purity, active components, and microbiological counts."
+    title: "Certificate of Analysis (COA)",
+    description: "A Certificate of Analysis covering the parameters agreed in the sales contract can be provided for a consignment."
   },
   {
-    title: "Steam Sterilization & Micro-Reduction",
-    description: "Multi-stage hygienic steam sterilization to satisfy stringent EU, US FDA, and Gulf microbiological parameters without chemical fumigants."
+    title: "Microbiological Treatment",
+    description: "Steam treatment or other microbiological reduction can be discussed on request. Limits are agreed per order."
   },
   {
     title: "Fumigation & Origin Documentation",
-    description: "Authorized methyl bromide / phosphine container fumigation with statutory certificate and Chamber of Commerce Certificate of Origin."
+    description: "Fumigation certificates and a Certificate of Origin can be arranged where the importing country or the buyer requires them."
   }
 ];
-

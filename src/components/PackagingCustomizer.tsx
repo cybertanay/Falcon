@@ -7,7 +7,7 @@ interface PackagingCustomizerProps {
 
 export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequestQuote }) => {
   const [brandName, setBrandName] = useState('YOUR BRAND NAME');
-  const [spiceName, setSpiceName] = useState('ORGANIC TURMERIC POWDER');
+  const [spiceName, setSpiceName] = useState('TURMERIC POWDER');
   const [format, setFormat] = useState<'pouch' | 'bag' | 'jute'>('pouch');
   const [netWeight, setNetWeight] = useState('500g e');
   const [bgColor, setBgColor] = useState('bg-stone-900');
@@ -164,7 +164,7 @@ export const PackagingCustomizer: React.FC<PackagingCustomizerProps> = ({ onRequ
               </div>
 
               <span className="text-[10px] text-[#a3b899] block tracking-wider font-light">
-                100% PURE INDIAN SPICE • EXPORT GRADE
+                PRODUCT OF INDIA
               </span>
             </div>
 

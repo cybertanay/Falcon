@@ -123,8 +123,8 @@ export async function sendEnquiryEmails(payload: EnquiryEmailPayload): Promise<{
 
               <h4 style="color: #05140f; margin-bottom: 8px;">Next Steps:</h4>
               <ul style="padding-left: 20px; margin-top: 0; color: #555555;">
-                <li>Our export desk will review destination compliance requirements and current FOB / CIF pricing.</li>
-                <li>An official proforma quotation and Certificate of Analysis (COA) template will be sent to your email within 24 business hours.</li>
+                <li>Our export desk will review your requirements and reply by email.</li>
+                <li>This confirmation is not a quotation or an accepted order. Prices, specifications and terms apply only once confirmed in a written quotation and sales contract.</li>
                 <li>If your order requires immediate coordination or sample dispatch, you can reply directly to this email or contact us via WhatsApp at +91 98765 43210.</li>
               </ul>
 

@@ -41,7 +41,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
             WE SOURCE. WE SPECIFY. WE EXPORT.
           </AnimatedHeading>
           <p className="text-[#a3b899] text-base sm:text-lg lg:text-xl font-light leading-relaxed pt-4 max-w-3xl mx-auto">
-            Direct origin procurement from India's primary spice hubs. Every consignment is tailored to buyer laboratory specifications, microbiological sterilization standards, and containerized logistics.
+            Indian spices sourced from India's main growing regions, with specifications, testing and logistics agreed with each buyer before shipment.
           </p>
         </div>
       </section>
@@ -57,7 +57,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
               Export Product Range
             </h2>
             <p className="text-[#a3b899] text-sm max-w-xl font-light">
-              Laboratory-tested Indian spice powders and whole seeds meeting European, North American, and Middle Eastern import regulations.
+              Indian spice powders and whole seeds, with specifications agreed per order for your destination market.
             </p>
           </div>
 
@@ -105,18 +105,18 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
           {[
             {
               icon: ShieldCheck,
-              title: "Verified Quality Parameters",
-              description: "Lot-wise laboratory testing for moisture, active volatile oils, curcumin, capsaicin, and Sudan dye clearance."
+              title: "Agreed Quality Parameters",
+              description: "Parameters such as moisture, volatile oils, curcumin, capsaicin and Sudan dyes are agreed per order, with test reports available on request."
             },
             {
               icon: FileCheck,
-              title: "Statutory Documentation",
-              description: "Complete export paperwork: Bill of Lading, Phytosanitary Certificate, Certificate of Origin, and batch COA."
+              title: "Export Documentation",
+              description: "Shipping documents such as Bill of Lading and Certificate of Origin, with Phytosanitary Certificate and COA arranged where required."
             },
             {
               icon: Layers,
-              title: "Steam Sterilization",
-              description: "Multi-stage hygienic steam sterilization to fulfill EU, US FDA, and Gulf microbiological parameters without radiation."
+              title: "Microbiological Treatment",
+              description: "Steam treatment can be discussed on request. Microbiological limits are agreed per order for the destination market."
             },
             {
               icon: Package,
@@ -131,7 +131,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, onRequestQuote }) 
             {
               icon: CheckCircle2,
               title: "OEM & Private Label",
-              description: "Full private-label branding with custom barcode, nutrition panels, and multi-lingual customer packaging artwork."
+              description: "Private-label packaging with customer-supplied branding, barcodes and artwork, discussed per project."
             }
           ].map((item, idx) => {
             const Icon = item.icon;

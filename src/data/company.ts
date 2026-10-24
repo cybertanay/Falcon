@@ -32,22 +32,22 @@ export const GLOBAL_DESTINATIONS = [
 export const GENERAL_FAQS = [
   {
     question: "What is your standard Minimum Order Quantity (MOQ)?",
-    answer: "Our standard export MOQ starts from 1 Metric Ton (1,000 kg) for high-grade specialty spice powders and whole seeds, up to full container loads (FCL 20ft / 40ft) for commercial volume contracts. Sample shipments can be arranged for quality clearance."
+    answer: "Indicative minimum order quantities start from 1 Metric Ton (1,000 kg) for most spice powders and whole seeds, up to full container loads (FCL 20ft / 40ft). The MOQ for each order is confirmed in the quotation. Samples can be discussed on request."
   },
   {
     question: "Do you accommodate OEM and custom private-label packaging?",
-    answer: "Yes. Falcon International Traders accommodates private-label requirements including retail pouches (100g to 1kg), vacuum foil barrier packs, and bulk multi-wall export sacks (25kg - 50kg) with customer-specified branding, labeling, and barcode compliance."
+    answer: "Private-label requests can be discussed, including retail pouches (100g to 1kg), vacuum foil packs and bulk export sacks (25kg - 50kg) with customer branding. The buyer is responsible for the content and regulatory compliance of its own labels and artwork unless otherwise agreed in writing."
   },
   {
-    question: "How do you handle technical specifications and quality verification?",
-    answer: "Every export lot is tested against destination-market parameters such as moisture limits, active chemical component percentages (e.g. Curcumin, Capsaicin), mesh size, and microbiological counts. Consignment Certificates of Analysis (COA) are provided."
+    question: "How are technical specifications and quality confirmed?",
+    answer: "Specifications such as moisture, active components (e.g. curcumin, capsaicin), mesh size and microbiological limits are agreed for each order in the sales contract. A Certificate of Analysis for the agreed parameters can be provided."
   },
   {
     question: "What export documentation is provided with international shipments?",
-    answer: "We furnish complete statutory export documentation: Commercial Invoice, Detailed Packing List, Bill of Lading (B/L), Certificate of Origin (COO), Phytosanitary Certificate, Certificate of Analysis (COA), and Fumigation Certificate per importing country regulations."
+    answer: "Shipping documents typically include a Commercial Invoice, Packing List and Bill of Lading. A Certificate of Origin, Phytosanitary Certificate, Certificate of Analysis and Fumigation Certificate can be arranged where required. The documents for each order are listed in the sales contract."
   },
   {
-    question: "Can we request certified pre-shipment laboratory samples?",
-    answer: "Yes, certified lot samples (100g - 500g) are dispatched via international express courier along with preliminary analytical data sheets to facilitate buyer laboratory testing and contract sign-off."
+    question: "Can we request pre-shipment samples?",
+    answer: "Samples (typically 100g - 500g) can be requested for buyer evaluation. Sample availability, cost, courier and any accompanying analysis are confirmed when you request them."
   }
 ];
