@@ -102,7 +102,7 @@ export const Hero: React.FC<HeroProps> = ({ onRequestQuote }) => {
               
               {/* Macro Spice Visual Banner */}
               <img
-                src="/src/assets/images/hero_spices_banner_1786195263727.jpg"
+                src="/images/hero_spices_banner_1786195263727.jpg"
                 alt="Illustrative image: bowls of turmeric powder, cumin seeds and black peppercorns with dried red chillies, garlic and green cardamom on a dark slate surface"
                 className="w-full h-80 sm:h-96 lg:h-[440px] object-cover transition-transform duration-700 group-hover:scale-105"
               />

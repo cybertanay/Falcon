@@ -8,9 +8,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     shortDescription: "Vibrant golden Indian turmeric powder with high natural Curcumin content and characteristic warm earthy aroma.",
     fullDescription: "Falcon International Traders supplies Indian Turmeric Powder (Curcuma longa) from turmeric growing regions such as Andhra Pradesh, Telangana (Nizamabad) and Tamil Nadu (Erode). Grade, curcumin range, mesh size and processing are agreed with each buyer and confirmed in the sales contract.",
     category: "Powders",
-    image: "/src/assets/images/turmeric_product_1786195278080.jpg",
+    image: "/images/turmeric_product_1786195278080.jpg",
     gallery: [
-      "/src/assets/images/turmeric_product_1786195278080.jpg",
+      "/images/turmeric_product_1786195278080.jpg",
       "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=1000",
       "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=1000"
     ],
@@ -62,9 +62,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     shortDescription: "High-grade Indian Red Chilli (Teja S17 / Byadgi / Guntur S334) available in tailored heat units and brilliant natural red color.",
     fullDescription: "Indian Red Chilli is world-renowned for its intense fiery heat and deep natural color. Falcon International Traders exports premium Red Chilli Powder and Whole Chillies (With Stem / Stemless). Whether you require high ASTA color with mild pungency (Byadgi style) or intense pungency for food manufacturing (Teja S17 style), specifications are discussed with each buyer and confirmed in the sales contract.",
     category: "Powders",
-    image: "/src/assets/images/chilli_product_1786195293751.jpg",
+    image: "/images/chilli_product_1786195293751.jpg",
     gallery: [
-      "/src/assets/images/chilli_product_1786195293751.jpg",
+      "/images/chilli_product_1786195293751.jpg",
       "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?auto=format&fit=crop&q=80&w=1000",
       "https://images.unsplash.com/photo-1599909581977-80257c23789b?auto=format&fit=crop&q=80&w=1000"
     ],
@@ -116,9 +116,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     shortDescription: "Bold Gujarat grade cumin seeds (99% to 99.5% purity) and fresh ground cumin powder rich in essential cuminol oils.",
     fullDescription: "Cumin (Cuminum cyminum) is one of the most widely traded global food seasonings. Sourced from the Gujarat and Rajasthan growing regions, Falcon International Traders provides Machine-Cleaned and Sortex-Cleaned Cumin Seeds alongside ground cumin powder. Characterized by high volatile oil content (>2.5%) and rich earthy-warm fragrance.",
     category: "Whole Spices",
-    image: "/src/assets/images/cumin_product_1786195311107.jpg",
+    image: "/images/cumin_product_1786195311107.jpg",
     gallery: [
-      "/src/assets/images/cumin_product_1786195311107.jpg",
+      "/images/cumin_product_1786195311107.jpg",
       "https://images.unsplash.com/photo-1509358271058-acd05cc93224?auto=format&fit=crop&q=80&w=1000"
     ],
     origin: "Unjha (Gujarat) / Rajasthan (India)",
@@ -164,9 +164,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     shortDescription: "Pure dehydrated garlic powder, granules, and flakes ideal for food processing, seasonings, sauces, snacks, and meat curing.",
     fullDescription: "Falcon International Traders supplies Dehydrated Garlic Powder and Granules made from white garlic, for food manufacturers, meat processors and spice blenders. Additive content (for example anti-caking agents) is specified per order.",
     category: "Dehydrated Ingredients",
-    image: "/src/assets/images/garlic_product_1786195323982.jpg",
+    image: "/images/garlic_product_1786195323982.jpg",
     gallery: [
-      "/src/assets/images/garlic_product_1786195323982.jpg",
+      "/images/garlic_product_1786195323982.jpg",
       "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&q=80&w=1000"
     ],
     origin: "Mandsaur (Madhya Pradesh) / Gujarat (India)",

@@ -29,7 +29,7 @@ export const AdminProducts: React.FC = () => {
     minimumOrderQuantity: '1 Metric Ton',
     storageConditions: 'Hygienic warehouse storage away from direct sunlight',
     shelfLife: '24 Months',
-    image: '/src/assets/images/turmeric_product_1786195278080.jpg',
+    image: '/images/turmeric_product_1786195278080.jpg',
     featured: false,
     published: true
   });
@@ -83,7 +83,7 @@ export const AdminProducts: React.FC = () => {
       minimumOrderQuantity: '1 Metric Ton',
       storageConditions: 'Hygienic warehouse storage away from direct sunlight',
       shelfLife: '24 Months',
-      image: '/src/assets/images/turmeric_product_1786195278080.jpg',
+      image: '/images/turmeric_product_1786195278080.jpg',
       featured: false,
       published: true
     });

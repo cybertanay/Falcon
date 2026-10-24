@@ -10,7 +10,7 @@ import { COMPANY_INFO } from '../data/company';
  *
  * Written from the application's actual data flows (see the audit report, Oct 2026):
  * enquiry forms -> Express API -> Supabase (PostgreSQL) + Resend email; AI advisor -> Gemini;
- * fonts from Google Fonts; some product photos from Unsplash. If any of these change,
+ * fonts are self-hosted; some product photos from Unsplash. If any of these change,
  * update this page in the same change.
  */
 export const PrivacyPolicyPage: React.FC = () => {
@@ -137,11 +137,6 @@ export const PrivacyPolicyPage: React.FC = () => {
               <td className="p-2.5">Google (Gemini API)</td>
               <td className="p-2.5">Generates AI specification guidance</td>
               <td className="p-2.5">Only the three answers typed into the AI advisor</td>
-            </tr>
-            <tr>
-              <td className="p-2.5">Google Fonts</td>
-              <td className="p-2.5">Delivers the typefaces used on this site</td>
-              <td className="p-2.5">Your IP address and browser information, sent by your browser when a page loads</td>
             </tr>
             <tr>
               <td className="p-2.5">Unsplash</td>
