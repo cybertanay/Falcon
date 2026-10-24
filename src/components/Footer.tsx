@@ -183,6 +183,9 @@ export const Footer: React.FC<FooterProps> = ({ onRequestQuote }) => {
             <Link to="/terms" className="hover:text-[#f2a900] transition-colors">
               Terms & Conditions
             </Link>
+            <Link to="/order-policy" className="hover:text-[#f2a900] transition-colors">
+              Order & Claims Policy
+            </Link>
             <a href="/sitemap.xml" className="hover:text-[#f2a900] transition-colors" target="_blank" rel="noopener noreferrer">
               Sitemap
             </a>

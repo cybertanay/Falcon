@@ -18,6 +18,7 @@ import { PrivateLabelPage } from './pages/PrivateLabelPage';
 import { ContactPage } from './pages/ContactPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsConditionsPage } from './pages/TermsConditionsPage';
+import { OrderPolicyPage } from './pages/OrderPolicyPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 // Admin Architecture
@@ -84,6 +85,7 @@ export default function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms" element={<TermsConditionsPage />} />
+          <Route path="/order-policy" element={<OrderPolicyPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 

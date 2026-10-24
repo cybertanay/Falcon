@@ -705,7 +705,10 @@ Sitemap: ${APP_URL}/sitemap.xml
         '/quality',
         '/export',
         '/private-label',
-        '/contact'
+        '/contact',
+        '/privacy',
+        '/terms',
+        '/order-policy'
       ];
 
       const xml = `<?xml version="1.0" encoding="UTF-8"?>
