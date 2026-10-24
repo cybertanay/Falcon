@@ -89,7 +89,7 @@ export async function uploadProductImage(
   if (supabase) {
     try {
       const bucketName = process.env.SUPABASE_STORAGE_BUCKET || 'product-images';
-      
+
       const { data, error } = await supabase.storage
         .from(bucketName)
         .upload(safeFilename, buffer, {
